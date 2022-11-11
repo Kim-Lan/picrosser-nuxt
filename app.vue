@@ -1,5 +1,7 @@
 <script setup>
 import { NSwitch } from 'naive-ui'
+
+const colorMode = useColorMode();
 </script>
 
 <template>
@@ -8,8 +10,9 @@ import { NSwitch } from 'naive-ui'
       <h1>Picrosser</h1>
       <nav>
         <NuxtLink to="/">Home</NuxtLink>
+        <NuxtLink to="/settings">Settings</NuxtLink>
       </nav>
-      <n-switch id="dark-mode-switch">
+      <n-switch id="dark-mode-switch" @click="$colorMode.preference=!$colorMode.preference">
         <template #icon>
           <Icon name="dark-mode" />
           <!-- <n-icon :component="DarkModeFilled" /> -->
@@ -23,6 +26,14 @@ import { NSwitch } from 'naive-ui'
 </template>
 
 <style>
+.dark-mode body {
+  background-color: darkgrey;
+}
+
+.light-mode body {
+  background-color: white;
+}
+
 main {
   padding: 0px 20px;
 }
