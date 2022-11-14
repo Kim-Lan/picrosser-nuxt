@@ -20,12 +20,21 @@ function toggleColorMode () {
 </script>
 
 <template>
-  <main>
-    <nav class="navbar bg-neutral w-screen py-3 px-5 border-b-2 border-slate-800">
-      <div class="text-2xl text-primary font-black tracking-wide font-sans">Picrosser</div>
+  <main class="min-h-screen">
+    <nav class="navbar flex flex-row justify-between bg-neutral w-screen py-3 px-7 border-b-2 border-slate-800">
+      <div class="antialiased text-2xl text-primary font-black tracking-wide font-sans">Picrosser</div>
+      <div>
+        <label class="swap swap-rotate text-base-200 hover:text-primary">
+          <input type="checkbox" />
+          <Icon name="light-mode" size="1.5em" class="swap-on" />
+          <Icon name="dark-mode" size="1.5em" class="swap-off" />
+        </label>
+      </div>
     </nav>
 
-    <div class="p-8">
+    <div
+      class="p-8 min-h-full"
+    >
       <NuxtPage />
     </div>
   </main>

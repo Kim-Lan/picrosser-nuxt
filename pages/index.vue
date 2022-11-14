@@ -4,8 +4,8 @@ const sizes = [5, 10, 15, 20, 25];
 </script>
 
 <template>
-  <div class="flex-col">
-    <div class="btn-group">
+  <div class="flex flex-col items-center gap-10 w-full">
+    <div class="btn-group flex-1">
       <input
         v-for="(size, index) in sizes"
         :key="index"
@@ -17,7 +17,9 @@ const sizes = [5, 10, 15, 20, 25];
         class="btn"
       />
     </div>
-    <Puzzle :width="puzzleSize" :height="puzzleSize" />
+    <div class="flex-1">
+      <Puzzle :width="puzzleSize" :height="puzzleSize" />
+    </div>
   </div>
 </template>
 
