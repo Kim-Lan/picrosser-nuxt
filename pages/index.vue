@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    Page: home
+    <Puzzle :width="10" :height="10" />
   </div>
 </template>
 
