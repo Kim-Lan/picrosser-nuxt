@@ -1,22 +1,5 @@
 <script setup>
 const colorMode = useColorMode();
-const buttonColor = computed(() => {
-  if (colorMode.preference === 'light') {
-    return "#262626";
-  } else {
-    return "#e6f2ff";
-  }
-});
-
-function toggleColorMode () {
-  if (colorMode.preference === 'light') {
-    colorMode.preference = 'dark';
-    buttonColor.value = "#e6f2ff";
-  } else {
-    colorMode.preference = 'light';
-    buttonColor.value = "#262626";
-  }
-};
 </script>
 
 <template>
@@ -25,9 +8,9 @@ function toggleColorMode () {
       <div class="antialiased text-2xl text-primary font-black tracking-wide font-sans">Picrosser</div>
       <div>
         <label class="swap swap-rotate text-base-200 hover:text-primary">
-          <input type="checkbox" />
-          <Icon name="light-mode" size="1.5em" class="swap-on" />
-          <Icon name="dark-mode" size="1.5em" class="swap-off" />
+          <input v-model="colorMode.preference" type="checkbox" true-value="dark" false-value="light" />
+          <Icon name="dark-mode" size="1.5em" class="swap-on" />
+          <Icon name="light-mode" size="1.5em" class="swap-off" />
         </label>
       </div>
     </nav>
