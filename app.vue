@@ -21,42 +21,27 @@ function toggleColorMode () {
 
 <template>
   <main>
-    <header>
-      <nav>
-        <NuxtLink to="/"><h1>Picrosser</h1></NuxtLink>
-      </nav>
+    <nav class="navbar bg-neutral w-screen py-3 px-5 border-b-2 border-slate-800">
+      <div class="text-2xl text-primary font-black tracking-wide font-sans">Picrosser</div>
+    </nav>
 
-      <va-button :color="buttonColor" @click="toggleColorMode">
-        <Icon name="carbon:brightness-contrast" style="margin-right: 5px" />
-        Toggle Theme
-      </va-button>
-    </header>
-
-    <div>
+    <div class="p-8">
       <NuxtPage />
     </div>
   </main>
 </template>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
 body {
-  background-color: #e6f2ff;
-  color: #262626;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: hsl(var(--b2));
 }
 
 .dark-mode body {
-  background-color: #262626;
+  background-color: hsl(var(--n));
   color: white;
-}
-
-main {
-  padding: 20px;
-}
-
-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
 }
 </style>

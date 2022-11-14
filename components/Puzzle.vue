@@ -12,9 +12,8 @@ const props = defineProps({
 });
 
 const cellSize = computed(() => {
-  return (50 / Math.max(props.height, props.width)) + 'vmin'
+  return Math.min((60 / Math.max(props.height, props.width)), 5) + 'vmin'
 });
-const cellGap = '1px';
 </script>
 
 <template>
@@ -62,10 +61,10 @@ const cellGap = '1px';
 
 <style scoped lang="scss">
 $grid-bg: white;
-$grid-border: black;
+$grid-border: #1e293b;
 $grid-hover: bisque;
 $thin-border: 0.5px solid $grid-border;
-$thick-border: 3px solid $grid-border;
+$thick-border: 2px solid $grid-border;
 
 .puzzle-container {
   display: grid;
