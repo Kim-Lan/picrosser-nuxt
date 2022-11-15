@@ -1,18 +1,29 @@
 <script setup>
-const colorMode = useColorMode();
+const sizes = [5, 10, 15, 20, 25];
 </script>
 
 <template>
   <main class="min-h-screen">
     <nav class="navbar flex flex-row justify-between bg-neutral w-screen py-3 px-7 border-b-2 border-slate-800">
-      <div class="antialiased text-2xl text-primary font-black tracking-wide font-sans">Picrosser</div>
-      <div>
-        <label class="swap swap-rotate text-base-200 hover:text-primary">
-          <input v-model="colorMode.preference" type="checkbox" true-value="dark" false-value="light" />
-          <Icon name="dark-mode" size="1.5em" class="swap-on" />
-          <Icon name="light-mode" size="1.5em" class="swap-off" />
-        </label>
+      <div class="btn btn-ghost normal-case antialiased text-2xl text-primary font-black tracking-wide font-sans hover:text-slate-200">
+        <NuxtLink to="/">
+          Picrosser
+        </NuxtLink>
       </div>
+      <div class="btn-group">
+        <input
+          v-for="(size, index) in sizes"
+          :key="index"
+          v-model="puzzleSize"
+          type="radio"
+          name="puzzle-size"
+          :data-title="size + 'x' + size"
+          :value="size"
+          class="btn bg-neutral border-none dark:bg-slate-200 dark:text-neutral dark:hover:bg-slate-300"
+        />
+      </div>
+      <div>5x5</div>
+      <DarkModeToggle />
     </nav>
 
     <div
@@ -32,7 +43,7 @@ body {
   background-color: hsl(var(--b2));
 }
 
-.dark-mode body {
+.dark body {
   background-color: hsl(var(--n));
   color: white;
 }

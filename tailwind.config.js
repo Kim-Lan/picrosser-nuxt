@@ -1,12 +1,21 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
+  content: [
+    "./components/**/*.{js,vue,ts}",
+    "./layouts/**/*.vue",
+    "./pages/**/*.vue",
+    "./plugins/**/*.{js,ts}",
+    "./nuxt.config.{js,ts}",
+    "./app.vue"
+  ],
   plugins: [
-    require('daisyui')
+    require('daisyui'),
+    require('tailwindcss-dark-mode')
   ],
   theme: {
     fontFamily: {
-      sans: ['Ubuntu', 'sans-serif']
+      sans: ['Ubuntu', 'Open Sans', 'sans-serif']
     }
   },
   daisyui: {
@@ -20,5 +29,6 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  darkMode: 'class'
 }

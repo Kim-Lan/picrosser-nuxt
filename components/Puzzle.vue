@@ -12,8 +12,19 @@ const props = defineProps({
 });
 
 const cellSize = computed(() => {
-  return Math.min((60 / Math.max(props.height, props.width)), 5) + 'vmin'
+  return Math.max(Math.min((80 / Math.max(props.height, props.width)), 5), 1) + 'vmin'
 });
+
+const cellState = ref('');
+function toggleCellState () {
+  if (cellState.value === '') {
+    console.log("changing cell state");
+    cellState.value = 'filled';
+  } else {
+    cellState.value = '';
+  }
+  console.log("current state: " + cellState.value);
+}
 </script>
 
 <template>
@@ -25,7 +36,9 @@ const cellSize = computed(() => {
         :class="{ firstRow: n <= props.width,
                   firstCol: (n - 1) % props.width == 0,
                   fiveRow: Math.ceil(n / props.height) % 5 == 0,
-                  fiveCol: n % 5 == 0 }"
+                  fiveCol: n % 5 == 0,
+                  filled: cellState.value === 'filled' }"
+        @click.prevent="toggleCellState"
       >
         <!-- {{ n }} -->
       </div>
@@ -60,8 +73,8 @@ const cellSize = computed(() => {
 </template>
 
 <style scoped lang="scss">
-$grid-bg: white;
-$grid-border: #1e293b;
+$grid-bg: #F5F5F4;
+$grid-border: #334155;
 $grid-hover: bisque;
 $thin-border: 0.5px solid $grid-border;
 $thick-border: 2px solid $grid-border;
@@ -101,10 +114,21 @@ $thick-border: 2px solid $grid-border;
   background-color: white;
   border: $thin-border;
   //border-radius: 10%;
+  position: relative;
 
   &:hover {
     background-color: $grid-hover;
   }
+}
+
+.filled::before {
+    display: block;
+    position: absolute;
+    background-color: $grid-border;
+    width: 100%;
+    height: 100%;
+    content: '';
+    border: 0.5px solid antiquewhite;
 }
 
 div.fiveRow {
