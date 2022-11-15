@@ -1,5 +1,5 @@
 <script setup>
-const sizes = [5, 10, 15, 20, 25];
+
 </script>
 
 <template>
@@ -10,19 +10,7 @@ const sizes = [5, 10, 15, 20, 25];
           Picrosser
         </NuxtLink>
       </div>
-      <div class="btn-group">
-        <input
-          v-for="(size, index) in sizes"
-          :key="index"
-          v-model="puzzleSize"
-          type="radio"
-          name="puzzle-size"
-          :data-title="size + 'x' + size"
-          :value="size"
-          class="btn bg-neutral border-none dark:bg-slate-200 dark:text-neutral dark:hover:bg-slate-300"
-        />
-      </div>
-      <div>5x5</div>
+      <SizeSelector />
       <DarkModeToggle />
     </nav>
 
