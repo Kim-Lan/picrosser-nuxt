@@ -10,8 +10,7 @@ module.exports = {
     "./app.vue"
   ],
   plugins: [
-    require('daisyui'),
-    require('tailwindcss-dark-mode')
+    require('daisyui')
   ],
   theme: {
     fontFamily: {
