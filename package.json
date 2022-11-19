@@ -26,6 +26,7 @@
     "vue-axe": "^2.4.4"
   },
   "dependencies": {
-    "@pinia/nuxt": "^0.4.3"
+    "@pinia/nuxt": "^0.4.3",
+    "lodash": "^4.17.21"
   }
 }
