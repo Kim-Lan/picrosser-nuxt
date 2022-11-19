@@ -1,6 +1,6 @@
 <script setup>
 const route = useRoute();
-const stopwatch = useStopwatch(route.params.width);
+const stopwatch = useStopwatch(route.params.width, route.params.height);
 </script>
 
 <template>

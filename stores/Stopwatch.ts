@@ -1,3 +1,6 @@
+/* eslint-disable space-in-parens */
+import { useStorage } from '@vueuse/core'
+
 interface StopwatchState {
   startTimestamp: number
   pauseTimestamp: number
@@ -9,13 +12,13 @@ interface StopwatchState {
 
 const { timestamp: now } = useTimestamp({ controls: true });
 
-export const useStopwatch = (size: number) => defineStore(`stopwatch/${size}x${size}`, {
+export const useStopwatch = ( width: number, height:number ) => defineStore(`stopwatch/${width}x${height}`, {
   state: (): StopwatchState => {
-    return {
-      startTimestamp: now.value,
+    return useStorage(`stopwatch/${width}x${height}`, {
+      startTimestamp: 0,
       pauseTimestamp: 0,
       pausedTime: 0
-    }
+    })
   },
   persist: true,
   getters: {
@@ -24,7 +27,7 @@ export const useStopwatch = (size: number) => defineStore(`stopwatch/${size}x${s
       return (this.isRunning ? 0 : (now.value - this.pauseTimestamp));
     },
     elapsedTime(): number {
-      return now.value - this.startTimestamp - this.pausedTime - this.currentPause
+      return (this.isRunning || this.currentPause ? now.value - this.startTimestamp - this.pausedTime - this.currentPause : 0)
     }
   },
   actions: {

@@ -3,9 +3,6 @@ const sizes = [5, 10, 15, 20, 25];
 
 const route = useRoute();
 
-function getPath (size) {
-  return '/puzzle/size/' + size;
-}
 </script>
 
 <template>
@@ -14,9 +11,9 @@ function getPath (size) {
       v-for="(size, index) in sizes"
       :key="index"
       class="btn text-base-200 hover:bg-primary"
-      :class="{ selected: $route.params.size == size }"
+      :class="{ selected: $route.params.width === size && $route.params.height === size }"
     >
-      <NuxtLink :to="getPath(size)">{{ size }} x {{ size }}</NuxtLink>
+      <NuxtLink :to="size + 'x' + size">{{ size }} x {{ size }}</NuxtLink>
     </li>
   </ul>
 </template>
