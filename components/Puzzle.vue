@@ -15,33 +15,19 @@ const cellSize = computed(() => {
   return Math.max(Math.min((80 / Math.max(props.height, props.width)), 5), 1) + 'vmin'
 });
 
-const cellState = ref('');
-function toggleCellState () {
-  if (cellState.value === '') {
-    console.log("changing cell state");
-    cellState.value = 'filled';
-  } else {
-    cellState.value = '';
-  }
-  console.log("current state: " + cellState.value);
-}
 </script>
 
 <template>
   <div class="puzzle-container">
     <div class="puzzle-grid">
-      <div
+      <PuzzleCell
         v-for="n in props.width * props.height"
         :key="n"
         :class="{ firstRow: n <= props.width,
                   firstCol: (n - 1) % props.width == 0,
                   fiveRow: Math.ceil(n / props.height) % 5 == 0,
-                  fiveCol: n % 5 == 0,
-                  filled: cellState.value === 'filled' }"
-        @click.prevent="toggleCellState"
-      >
-        <!-- {{ n }} -->
-      </div>
+                  fiveCol: n % 5 == 0}"
+      />
     </div>
 
     <div class="col-keys">
@@ -72,7 +58,7 @@ function toggleCellState () {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 $grid-bg: #F5F5F4;
 $grid-border: #334155;
 $grid-hover: bisque;

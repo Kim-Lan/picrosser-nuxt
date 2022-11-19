@@ -1,4 +1,6 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
+import { resolve } from 'pathe'
+
 export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
@@ -10,6 +12,18 @@ export default defineNuxtConfig({
     }]
   ],
   buildModules: ['@nuxtjs/html-validator'],
+  hooks: {
+    'pages:extend' (routes) {
+      routes.push({
+        path: '/:width(\\d+)x:height(\\d+)',
+        file: resolve(__dirname, 'pages/puzzle.vue')
+      },
+      {
+        path: '/:width(\\d+)x:height(\\d+)/:id?',
+        file: resolve(__dirname, 'pages/puzzle.vue')
+      })
+    }
+  },
   colorMode: {
     classSuffix: ''
   },

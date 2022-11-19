@@ -1,4 +1,4 @@
-const PUZZLE_STORE = `puzzle/${width}x${height}`;
+/* eslint-disable space-in-parens */
 
 interface PuzzleState {
   width: number
@@ -7,17 +7,20 @@ interface PuzzleState {
   userGrid: array
   userKeys: array
   actionHistory: array
+  solved: boolean
 }
 
-export const usePuzzle = ( width: number, height: number ) => defineStore(PUZZLE_STORE, {
+export const usePuzzle = ( width: number, height: number ) => defineStore(`puzzle/${width}x${height}`, {
   state: (): PuzzleState => {
-    return useLocalStorage(PUZZLE_STORE, {
+    return {
       width: 5,
       height: 5,
       id: '',
       userGrid: [],
       userKeys: [],
-      actionHistory: []
-    })
-  }
+      actionHistory: [],
+      solved: false
+    }
+  },
+  persist: true
 });

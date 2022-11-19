@@ -13,7 +13,7 @@ function getPath (size) {
     <li
       v-for="(size, index) in sizes"
       :key="index"
-      class="btn text-base-200"
+      class="btn text-base-200 hover:bg-primary"
       :class="{ selected: $route.params.size == size }"
     >
       <NuxtLink :to="getPath(size)">{{ size }} x {{ size }}</NuxtLink>
