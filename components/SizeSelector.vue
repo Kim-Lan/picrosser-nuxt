@@ -8,17 +8,17 @@ const route = useRoute();
 <template>
   <ul>
     <li
-      v-for="(size, index) in sizes"
-      :key="index"
+      v-for="size in sizes"
+      :key="size"
       class="btn text-base-200 hover:bg-primary"
-      :class="{ selected: $route.params.width === size && $route.params.height === size }"
+      :class="{ selected: Number($route.params.width) === size && Number($route.params.height) === size }"
     >
       <NuxtLink :to="size + 'x' + size">{{ size }} x {{ size }}</NuxtLink>
     </li>
   </ul>
 </template>
 
-<style scoped>
+<style>
 .selected {
   background-color: hsl(var(--p));
 }

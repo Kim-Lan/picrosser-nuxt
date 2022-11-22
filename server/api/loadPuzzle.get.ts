@@ -8,16 +8,16 @@ const DIR_SIZES = [0, 0, 500016, 0, 0];
 export default defineEventHandler((event) => {
   const { width, height } = getQuery(event);
   if (SIZES.includes(Number(width)) && width === height) {
-    const goal = getPuzzle(width);
+    const { puzzleID, goal } = getPuzzle(width);
     const solution = solutionGrid(goal, width);
     const { rowKeys, colKeys } = getKeys(solution);
     return {
+      puzzleID,
       rowKeys,
       colKeys,
       solution,
       goal
     }
-    return goal;
   } else {
     return 'invalid dimensions'
   }
@@ -30,5 +30,8 @@ function getPuzzle(width) {
   const files = fs.readdirSync(dir);
   const file = files[index];
   console.log('picked file ' + file);
-  return fs.readFileSync(dir + '/' + file).toString();
+  return {
+    puzzleID: path.basename(file, '.txt'),
+    goal: fs.readFileSync(dir + '/' + file).toString()
+  }
 }

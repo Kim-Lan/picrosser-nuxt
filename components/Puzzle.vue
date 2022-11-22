@@ -1,6 +1,10 @@
 <script setup>
 
 const props = defineProps({
+  puzzleID: {
+    type: String,
+    default: ''
+  },
   width: {
     type: Number,
     default: 5
