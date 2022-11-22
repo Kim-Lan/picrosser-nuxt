@@ -1,2 +1,0 @@
-GET http://localhost:3000/api/loadPuzzle.get?width=15&height=15
-
