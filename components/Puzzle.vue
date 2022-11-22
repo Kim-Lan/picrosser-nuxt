@@ -8,12 +8,28 @@ const props = defineProps({
   height: {
     type: Number,
     default: 5
+  },
+  rowKeys: {
+    type: Array,
+    default: () => []
+  },
+  colKeys: {
+    type: Array,
+    default: () => []
+  },
+  solution: {
+    type: Array,
+    default: () => []
   }
 });
 
 const cellSize = computed(() => {
   return Math.max(Math.min((80 / Math.max(props.height, props.width)), 5), 1) + 'vmin'
 });
+
+function updateState(index, state) {
+
+}
 
 </script>
 
@@ -23,38 +39,19 @@ const cellSize = computed(() => {
       <PuzzleCell
         v-for="n in props.width * props.height"
         :key="n"
+        :index="n"
         :class="{ firstRow: n <= props.width,
                   firstCol: (n - 1) % props.width == 0,
                   fiveRow: Math.ceil(n / props.height) % 5 == 0,
                   fiveCol: n % 5 == 0}"
+        @cell-change="updateState"
       />
     </div>
 
-    <div class="col-keys">
-      <div v-for="n in props.width" :key="n">
-      </div>
-    </div>
-
-    <!-- <KeyContainer
-      v-for="obj in keyNames"
-      :key="obj.name"
-      :name="obj.name"
-      :direction="obj.direction"
-    >
-      <div
-        v-for="n in fiveGroupDimension"
-        :key="n"
-        class="five-key-group"
-      >
-        <KeyGroup
-          v-for="k in 5"
-          :key="k"
-          ref="keyGroups"
-          :direction="obj.direction"
-          :group-i-d="5 * (n - 1) + k - 1"
-        />
-      </div>
-    </KeyContainer> -->
+    <KeyContainer :direction="'row'" :keys="rowKeys" />
+    <KeyContainer :direction="'row'" :keys="rowKeys" />
+    <KeyContainer :direction="'col'" :keys="colKeys" />
+    <KeyContainer :direction="'col'" :keys="colKeys" />
   </div>
 </template>
 
@@ -115,6 +112,7 @@ $thick-border: 2px solid $grid-border;
     height: 100%;
     content: '';
     border: 0.5px solid antiquewhite;
+    pointer-events: none;
 }
 
 div.fiveRow {

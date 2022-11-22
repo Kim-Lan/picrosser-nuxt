@@ -20,7 +20,6 @@ export const useStopwatch = ( width: number, height:number ) => defineStore(`sto
       pausedTime: 0
     })
   },
-  persist: true,
   getters: {
     isRunning: state => state.startTimestamp && !state.pauseTimestamp,
     currentPause(): number {

@@ -1,5 +1,13 @@
 <script setup>
+const props = defineProps({
+  index: {
+    type: Number,
+    default: 0
+  }
+});
+
 const cellState = ref('');
+const emit = defineEmits(['cellChange']);
 
 function toggleCellState () {
   if (cellState.value === '') {
@@ -9,14 +17,15 @@ function toggleCellState () {
     cellState.value = '';
   }
   console.log("current state: " + cellState.value);
+  emit('cellChange', props.index, cellState.value);
 }
 
 </script>
 
 <template>
   <div
-
-    @click.stop.prevent="toggleCellState"
+    :class="cellState"
+    @pointerdown.prevent="toggleCellState"
   >
     <!-- {{ n }} -->
   </div>

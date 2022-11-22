@@ -1,6 +1,9 @@
 <script setup>
 const route = useRoute();
 const stopwatch = useStopwatch(route.params.width, route.params.height);
+
+const currentID = ref('');
+const isSolved = ref(false);
 </script>
 
 <template>
@@ -15,6 +18,6 @@ const stopwatch = useStopwatch(route.params.width, route.params.height);
       <button type="button" class="btn" @mousedown="stopwatch.reset">Reset</button>
     </div>
     <div>{{ route.params.width }} x {{ route.params.height }}</div>
-    //<Puzzle :width="Number(route.params.width)" :height="Number(route.params.height)" />
+    <Puzzle :width="Number(route.params.width)" :height="Number(route.params.height)" />
   </div>
 </template>

@@ -10,17 +10,19 @@ interface PuzzleState {
   solved: boolean
 }
 
-export const usePuzzle = ( width: number, height: number ) => defineStore(`puzzle/${width}x${height}`, {
-  state: (): PuzzleState => {
-    return {
-      width: 5,
-      height: 5,
-      id: '',
-      userGrid: [],
-      userKeys: [],
-      actionHistory: [],
-      solved: false
-    }
-  },
-  persist: true
+export const usePuzzle = ( width: number, height: number ) => defineStore(`puzzle/${width}x${height}`, () => {
+  const width = ref(5);
+  const height = ref(5);
+  const id = ref('');
+  const userGrid = ref([]);
+  const userKeys = ref([]);
+  const actionHistory = ref([]);
+  const solved = ref(false);
+
+  function newPuzzle() {
+    solved.value = false;
+    userGrid.value = [];
+    userKeys.value = [];
+    actionHistory.value = [];
+  }
 });
