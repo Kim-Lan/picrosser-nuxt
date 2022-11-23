@@ -28,7 +28,7 @@ const props = defineProps({
 });
 
 const cellSize = computed(() => {
-  return Math.max(Math.min((80 / Math.max(props.height, props.width)), 5), 1) + 'vmin'
+  return Math.max(Math.min((50 / Math.max(props.height, props.width)), 5), 0.5) + 'vmin'
 });
 
 function updateState(index, state) {
@@ -44,49 +44,36 @@ function updateState(index, state) {
         v-for="n in props.width * props.height"
         :key="n"
         :index="n"
-        :class="{ firstRow: n <= props.width,
-                  firstCol: (n - 1) % props.width == 0,
-                  fiveRow: Math.ceil(n / props.height) % 5 == 0,
-                  fiveCol: n % 5 == 0}"
+        :class="{
+          'first-row': n <= props.width,
+          'first-col': (n - 1) % props.width === 0,
+          'five-row': Math.ceil(n / props.height) % 5 === 0,
+          'five-col': n % 5 === 0
+        }"
         @cell-change="updateState"
       />
     </div>
 
-    <KeyContainer :direction="'row'" :keys="rowKeys" />
-    <KeyContainer :direction="'row'" :keys="rowKeys" />
-    <KeyContainer :direction="'col'" :keys="colKeys" />
-    <KeyContainer :direction="'col'" :keys="colKeys" />
+    <KeyContainer id="left-keys" :direction="'row'" :keys="rowKeys" />
+    <KeyContainer id="right-keys" :direction="'row'" :keys="rowKeys" />
+    <KeyContainer id="top-keys" :direction="'col'" :keys="colKeys" />
+    <KeyContainer id="bottom-keys" :direction="'col'" :keys="colKeys" />
   </div>
 </template>
 
 <style lang="scss">
-$grid-bg: #F5F5F4;
-$grid-border: #334155;
-$grid-hover: bisque;
-$thin-border: 0.5px solid $grid-border;
-$thick-border: 2px solid $grid-border;
+@import '~/assets/styles/variables.scss';
 
 .puzzle-container {
   display: grid;
   grid-template: auto auto auto / auto auto auto;
-  gap: 2px;
-}
-
-.col-keys {
-  grid-area: 1 / 2;
-  display: flex;
-  flex-direction: row;
-
-  div {
-    min-width: v-bind('cellSize');
-    min-height: v-bind('cellSize');
-    border: $thin-border;
-    background-color: $grid-bg;
-  }
+  font-size: calc(0.6 * v-bind('cellSize'));
+  border-collapse: collapse;
 }
 
 .puzzle-grid {
   grid-area: 2 / 2;
+  border-collapse: collapse;
 
   display: grid;
   grid-template-rows: repeat(v-bind('props.height'), v-bind('cellSize'));
@@ -94,14 +81,13 @@ $thick-border: 2px solid $grid-border;
   background-color: $grid-border;
   width: fit-content;
   height: fit-content;
-  //border-radius: 10%;
 }
 
 .puzzle-grid div {
   background-color: white;
   border: $thin-border;
-  //border-radius: 10%;
   position: relative;
+  border-collapse: collapse;
 
   &:hover {
     background-color: $grid-hover;
@@ -109,29 +95,49 @@ $thick-border: 2px solid $grid-border;
 }
 
 .filled::before {
-    display: block;
-    position: absolute;
-    background-color: $grid-border;
-    width: 100%;
-    height: 100%;
-    content: '';
-    border: 0.5px solid antiquewhite;
-    pointer-events: none;
+  display: block;
+  position: absolute;
+  background-color: $grid-border;
+  width: 100%;
+  height: 100%;
+  content: '';
+  border: 0.5px solid antiquewhite;
+  pointer-events: none;
 }
 
-div.fiveRow {
+div.five-row {
   border-bottom: $thick-border;
 }
 
-div.fiveCol {
+div.five-col {
   border-right: $thick-border;
 }
 
-div.firstRow {
+div.first-row {
   border-top: $thick-border;
 }
 
-div.firstCol {
+div.first-col {
   border-left: $thick-border;
+}
+
+#top-keys {
+  grid-area: 1 / 2;
+  border-top: $thick-border;
+}
+
+#bottom-keys {
+  grid-area: 3 / 2;
+  border-bottom: $thick-border;
+}
+
+#left-keys {
+  grid-area: 2 / 1;
+  border-left: $thick-border;
+}
+
+#right-keys {
+  grid-area: 2 / 3;
+  border-right: $thick-border;
 }
 </style>

@@ -24,7 +24,8 @@ export default defineNuxtConfig({
   colorMode: {
     classSuffix: ''
   },
-  css: ['~/assets/styles/global.css'],
+  css: ['~/assets/styles/main.css',
+    '~/assets/styles/variables.scss'],
   postcss: {
     plugins: {
       tailwindcss: {},

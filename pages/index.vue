@@ -13,4 +13,6 @@ const sizes = [5, 10, 15, 20, 25];
   </div>
 </template>
 
-<style scoped></style>
+<style>
+
+</style>
