@@ -1,23 +1,12 @@
 <script setup>
 const route = useRoute();
-const stopwatch = useStopwatch(route.params.width, route.params.height);
+const width = route.params.height;
+const height = route.params.width;
+const stopwatch = useStopwatch(width, height);
+const puzzle = ref(null);
 
-const currentID = ref('');
-const isSolved = ref(false);
-const rowKeys = ref([]);
-const colKeys = ref([]);
-const solution = ref([]);
-
-async function newPuzzleHandler() {
-  if (currentID.value === '' || isSolved.value === true) {
-    const response = await useFetch('http://localhost:3000/api/loadPuzzle?width=' + route.params.width + '&height=' + route.params.height,
-      { query: { width: route.params.width, height: route.params.height } });
-    const newPuzzle = response.data.value;
-    currentID.value = newPuzzle.puzzleID;
-    rowKeys.value = newPuzzle.rowKeys;
-    colKeys.value = newPuzzle.colKeys;
-    solution.value = newPuzzle.solution;
-  }
+function newPuzzleHandler() {
+  puzzle.value.loadPuzzle();
 }
 </script>
 
@@ -32,14 +21,11 @@ async function newPuzzleHandler() {
       <button type="button" class="btn" @mousedown="stopwatch.resume">Resume</button>
       <button type="button" class="btn" @mousedown="stopwatch.reset">Reset</button>
     </div>
-    <div>{{ route.params.width }} x {{ route.params.height }}</div>
-    <Puzzle
-      :puzzle-i-d="currentID"
-      :width="Number(route.params.width)"
-      :height="Number(route.params.height)"
-      :row-keys="rowKeys"
-      :col-keys="colKeys"
-      :solution="solution"
+    <div>{{ width }} x {{ height }}</div>
+    <PuzzleComponent
+      ref="puzzle"
+      :width="Number(width)"
+      :height="Number(height)"
     />
   </div>
 </template>

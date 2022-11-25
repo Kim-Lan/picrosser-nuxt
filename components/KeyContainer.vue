@@ -24,9 +24,16 @@ const props = defineProps({
         'five-col': direction === 'col' && (groupIndex + 1) % 5 === 0
       }"
     >
-      <div v-for="(key, index) in group" :key="index" class="key-item">
+      <Key
+        v-for="(key, index) in group"
+        :key="index"
+        class="key-item"
+        :group-index="groupIndex"
+        :key-index="index"
+        :key-value="key"
+      >
         {{ key }}
-      </div>
+      </Key>
     </div>
   </div>
 </template>
@@ -37,6 +44,7 @@ const props = defineProps({
 .key-container {
   border-collapse: collapse;
   border: $thin-border;
+  background-color: white;
 }
 
 .row-keys {
@@ -54,11 +62,8 @@ const props = defineProps({
     }
 
     .key-item {
-      display: flex;
-      justify-content: center;
-      align-items: center;
       padding: 0px 3px;
-      height: 100%;
+      //height: 100%;
     }
   }
 }
@@ -78,7 +83,6 @@ const props = defineProps({
 
     .key-item {
       padding: 0px;
-      text-align: center;
     }
   }
 }
@@ -86,24 +90,25 @@ const props = defineProps({
 .key-group {
   flex: 1 1 0px;
 
-  &.clickable:hover {
-    background-color: lavenderblush;
-  }
+  // &.clickable:hover {
+  //   background-color: lavenderblush;
+  // }
 }
 
 .key-item {
-  &:not(.clickable) {
-    pointer-events: none;
-  }
+  //   &:not(.clickable) {
+  //     pointer-events: none;
+  //   }
+  //
+  //   &.clickable:not(.pressed):hover {
+  //     background-color: lavenderblush;
+  //   }
+  //
+  //   &.pressed {
+  //     color: steelblue lightsteelblue;
+  //   }
 
-  &.clickable:not(.pressed):hover {
-    background-color: lavenderblush;
-  }
-
-  &.pressed {
-    color: steelblue lightsteelblue;
-  }
-
+  text-align: center;
   cursor: default;
 }
 </style>

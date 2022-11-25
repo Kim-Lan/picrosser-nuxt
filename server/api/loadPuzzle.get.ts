@@ -15,8 +15,7 @@ export default defineEventHandler((event) => {
       puzzleID,
       rowKeys,
       colKeys,
-      solution,
-      goal
+      solution
     }
   } else {
     return 'invalid dimensions'

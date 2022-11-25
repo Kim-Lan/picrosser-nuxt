@@ -3,26 +3,39 @@
 interface PuzzleState {
   width: number
   height: number
-  id: string
+  puzzleID: string
   userGrid: array
   userKeys: array
   actionHistory: array
   solved: boolean
 }
 
-export const usePuzzle = ( width: number, height: number ) => defineStore(`puzzle/${width}x${height}`, () => {
-  const width = ref(5);
-  const height = ref(5);
-  const id = ref('');
+export const usePuzzle = ( w: number, h: number ) => defineStore(`puzzle/${w}x${h}`, () => {
+  const width = ref(w);
+  const height = ref(h);
+  const puzzleID = ref('');
   const userGrid = ref([]);
   const userKeys = ref([]);
   const actionHistory = ref([]);
   const solved = ref(false);
 
-  function newPuzzle() {
+  function newPuzzle(id: string) {
     solved.value = false;
-    userGrid.value = [];
+    userGrid.value = createGrid(width.value, height.value);
+    printGrid(userGrid.value);
     userKeys.value = [];
     actionHistory.value = [];
+    puzzleID.value = id;
   }
-});
+
+  return {
+    width,
+    height,
+    puzzleID,
+    userGrid,
+    userKeys,
+    actionHistory,
+    solved,
+    newPuzzle
+  }
+})();

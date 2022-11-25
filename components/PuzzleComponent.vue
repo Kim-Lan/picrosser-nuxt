@@ -1,5 +1,4 @@
 <script setup>
-
 const props = defineProps({
   puzzleID: {
     type: String,
@@ -27,12 +26,43 @@ const props = defineProps({
   }
 });
 
+defineExpose({ loadPuzzle })
+
+const puzzle = usePuzzle(props.width, props.height);
+
+const currentID = ref('');
+const isSolved = ref(false);
+const rowKeys = ref([]);
+const colKeys = ref([]);
+const solution = ref([]);
+
+function newPuzzleHandler() {
+  if (currentID.value === '' || isSolved.value === true) {
+    loadPuzzle();
+  } else {
+    alert('new puzzle?');
+  }
+}
+
+async function loadPuzzle() {
+  const response = await useFetch('http://localhost:3000/api/loadPuzzle',
+    { query: { width: props.width, height: props.height } });
+  const data = response.data.value;
+  puzzle.newPuzzle(data.puzzleID);
+  currentID.value = data.puzzleID;
+  rowKeys.value = data.rowKeys;
+  colKeys.value = data.colKeys;
+  solution.value = data.solution;
+}
+
 const cellSize = computed(() => {
   return Math.max(Math.min((50 / Math.max(props.height, props.width)), 5), 0.5) + 'vmin'
 });
 
 function updateState(index, state) {
-
+  const [row, col] = convertIndexTo2D(index, props.width);
+  puzzle.userGrid[row][col] = state;
+  printGrid(puzzle.userGrid);
 }
 
 </script>
@@ -42,8 +72,8 @@ function updateState(index, state) {
     <div class="puzzle-grid">
       <PuzzleCell
         v-for="n in props.width * props.height"
-        :key="n"
-        :index="n"
+        :key="n - 1"
+        :index="n - 1"
         :class="{
           'first-row': n <= props.width,
           'first-col': (n - 1) % props.width === 0,
@@ -87,7 +117,6 @@ function updateState(index, state) {
   background-color: white;
   border: $thin-border;
   position: relative;
-  border-collapse: collapse;
 
   &:hover {
     background-color: $grid-hover;
@@ -123,21 +152,21 @@ div.first-col {
 
 #top-keys {
   grid-area: 1 / 2;
-  border-top: $thick-border;
+  border-top: $thicker-border;
 }
 
 #bottom-keys {
   grid-area: 3 / 2;
-  border-bottom: $thick-border;
+  border-bottom: $thicker-border;
 }
 
 #left-keys {
   grid-area: 2 / 1;
-  border-left: $thick-border;
+  border-left: $thicker-border;
 }
 
 #right-keys {
   grid-area: 2 / 3;
-  border-right: $thick-border;
+  border-right: $thicker-border;
 }
 </style>
