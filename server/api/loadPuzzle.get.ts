@@ -1,4 +1,6 @@
 import { customAlphabet } from 'nanoid'
+import { printGrid } from '~/server/utils/grid'
+import { printArray } from '~/server/utils/arrayHelpers'
 import { getKeys } from '~/server/utils/picross'
 import { generate, bitGenerate } from '~/server/utils/picross-generate'
 
@@ -16,6 +18,9 @@ export default defineEventHandler((event) => {
     const solution = (width == 5) ? bitGenerate(width) : generate(height, width);
     const { rowKeys, colKeys } = getKeys(solution);
     console.log("returning puzzle");
+    printArray(rowKeys);
+    printArray(colKeys);
+    printGrid(solution);
     return {
       puzzleID,
       rowKeys,

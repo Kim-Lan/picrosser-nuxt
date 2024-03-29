@@ -28,7 +28,7 @@ function chooseCells(height, width) {
 
       if (hasSpace(chosen2D, index)) {
           const [row, col] = convertIndexTo2D(index, height, width);
-          chosen2D[row][col] = 1;
+          chosen2D[row][col] = '1';
           chosen1D.push(index);
       }
   }
@@ -51,7 +51,7 @@ export function bitGenerate(size) {
 function checkUnique(grid) {
   const __dirname = path.resolve(path.dirname(''));
   console.log("checking");
-  printGrid(grid);
+  //printGrid(grid);
   const data = gridToNon(grid);
   const filepath = path.join(__dirname, 'server', 'generate', 'test.non');
   const naughtypath = path.join(__dirname, 'server', 'modules', 'naughty');

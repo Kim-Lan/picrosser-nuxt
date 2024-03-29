@@ -46,7 +46,6 @@ async function loadPuzzle() {
   colKeys.value = data.colKeys;
   solution.value = data.solution;
   puzzle.newPuzzle(props.height, props.width, puzzleID.value);
-  printGrid(solution.value);
   return puzzleID.value;
 }
 
