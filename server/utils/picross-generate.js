@@ -1,17 +1,16 @@
 import fs from 'fs'
 import path from 'path'
-import _ from 'lodash'
+import chunk from 'lodash.chunk'
 import { execSync } from 'child_process'
 import { createGrid, convertIndexTo2D, printGrid } from './grid.js'
-import { hasEmpty, hasSpace } from './picross.js'
-import { range } from './arrayHelpers.js'
+import { hasEmpty, hasSpace, getKeys, getGoalString, gridToNon } from './picross.js'
+import { range, printArray } from './arrayHelpers.js'
 
 export function generate(height, width) {
   let solution;
   do {
       solution = chooseCells(height, width);
-      count++;
-      console.log(count);
+      printGrid(solution);
   } while (hasEmpty(solution) || !checkUnique(solution));
   return solution;
 }
@@ -45,19 +44,37 @@ export function bitGenerate(size) {
     console.log("dec " + dec);
     binString = dec.toString(2);
     solution1D = binString.padStart(size**2, '0').split('').reverse();
-    solution2D = _.chunk(solution1D, size);
+    solution2D = chunk(solution1D, size);
   }
   while(hasEmpty(solution2D) || hasFull(solution2D) || !checkUnique(solution2D));
   return solution2D;
 }
 
-function checkUnique(grid) {
+export function checkUnique(grid) {
   const __dirname = path.resolve(path.dirname(''));
   const data = gridToNon(grid);
-  const filepath = path.join(__dirname, 'server', 'generate', 'test.non');
-  const naughtypath = path.join(__dirname, 'server', 'modules', 'naughty');
-  fs.writeFileSync(filepath, data);
-  const check1 = (execSync(naughtypath + ' -u < ' + filepath)).toString();
-  fs.unlinkSync(filepath);
+  const testPath = path.join(__dirname, 'server', 'generate', 'test.non');
+  const naughtyPath = path.join(__dirname, 'server', 'modules', 'naughty');
+  fs.writeFileSync(testPath, data);
+  const check1 = (execSync(naughtyPath + ' -u < ' + testPath)).toString();
+  //fs.unlinkSync(testPath);
   return check1.includes('UNIQUE');
+}
+
+export function getPuzzleJSON(grid, id) {
+  printGrid(grid);
+  const { rowKeys, colKeys } = getKeys(grid);
+  printArray(rowKeys);
+  printArray(colKeys);
+  const width = colKeys.length;
+  const height = rowKeys.length;
+  const goal = getGoalString(grid);
+  return {
+    id,
+    width,
+    height,
+    rowKeys,
+    colKeys,
+    goal
+  }
 }
