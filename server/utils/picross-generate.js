@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import _ from 'lodash'
 import { execSync } from 'child_process'
-import { createGrid, convertIndexTo2D } from './grid.js'
+import { createGrid, convertIndexTo2D, printGrid } from './grid.js'
 import { hasEmpty, hasSpace } from './picross.js'
 import { range } from './arrayHelpers.js'
 
@@ -10,6 +10,8 @@ export function generate(height, width) {
   let solution;
   do {
       solution = chooseCells(height, width);
+      count++;
+      console.log(count);
   } while (hasEmpty(solution) || !checkUnique(solution));
   return solution;
 }
@@ -22,7 +24,7 @@ function chooseCells(height, width) {
   const chosen2D = createGrid(height, width);
   const indexArray = total !== undefined ? range(total) : [];
 
-  while (chosen1D.length < total / 2 && indexArray.length > 0) {
+  while (chosen1D.length < Math.round(total / 2) && indexArray.length > 0) {
       const chosenIndex = Math.floor(Math.random() * indexArray.length);
       const index = indexArray.splice(chosenIndex, 1)[0];
 
@@ -32,7 +34,8 @@ function chooseCells(height, width) {
           chosen1D.push(index);
       }
   }
-  return chosen1D.length === Math.round(total / 2) ? chosen2D : [];
+  //return chosen1D.length === Math.round(total / 2) ? chosen2D : [];
+  return chosen2D;
 }
 
 export function bitGenerate(size) {
@@ -50,8 +53,6 @@ export function bitGenerate(size) {
 
 function checkUnique(grid) {
   const __dirname = path.resolve(path.dirname(''));
-  console.log("checking");
-  //printGrid(grid);
   const data = gridToNon(grid);
   const filepath = path.join(__dirname, 'server', 'generate', 'test.non');
   const naughtypath = path.join(__dirname, 'server', 'modules', 'naughty');
@@ -59,12 +60,4 @@ function checkUnique(grid) {
   const check1 = (execSync(naughtypath + ' -u < ' + filepath)).toString();
   fs.unlinkSync(filepath);
   return check1.includes('UNIQUE');
-  // if (check1.includes('UNIQUE')) {
-  //   const check2 = (execSync('./modules/pbnsolve -u -b ' + path)).toString();
-  //   fs.unlinkSync(path);
-  //   return check2.includes('unique');
-  // } else {
-  //   fs.unlinkSync(path);
-  //   return false;
-  // }
 }
