@@ -4,7 +4,6 @@ import { resolve } from 'path'
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
-    'nuxt-mongoose',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
     'nuxt-icon',
@@ -28,11 +27,6 @@ export default defineNuxtConfig({
   //     })
   //   }
   // },
-  mongoose: {
-    uri: 'process.env.MONGODB_URI',
-    options: {},
-    modelsDir: 'models'
-  },
   vite: {
     vue: {
       template: {
@@ -44,6 +38,12 @@ export default defineNuxtConfig({
     transpile: ['vuetify'],
   },
   buildModules: ['@nuxtjs/html-validator'],
+  runtimeConfig: {
+    mongoUrl: process.env.MONGODB_URL,
+  },
+  nitro: {
+    plugins: ['~/server/database.ts']
+  },
   colorMode: {
     classSuffix: ''
   },
