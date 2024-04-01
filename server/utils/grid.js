@@ -27,6 +27,10 @@ export function convertIndexTo2D(index, width) {
   return [rowIndex, colIndex];
 }
 
+export function convert2DToIndex(rowIndex, colIndex, width) { 
+  return rowIndex * width + colIndex;
+}
+
 export function copyGrid(grid) {
   const copy = [];
   for (let i = 0; i < grid.length; i++) {

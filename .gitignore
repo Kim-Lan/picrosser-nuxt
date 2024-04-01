@@ -21,6 +21,7 @@ logs
 .env.*
 !.env.example
 
+server/modules
 server/generate/test.non
 server/generate/JSON
 server/generate/id_list.txt

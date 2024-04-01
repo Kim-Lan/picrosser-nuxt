@@ -2,12 +2,17 @@ import fs from 'fs'
 import path from 'path'
 import chunk from 'lodash.chunk'
 import { hasEmpty, hasFull, getGoalString, getKeys } from '../utils/picross.js'
-import { checkUnique, getPuzzleJSON } from '../utils/picross-generate.js'
+import { checkUnique, getPuzzleJSON, generate } from '../utils/picross-generate.js'
 import { printGrid } from '../utils/grid.js'
+import mongoose from 'mongoose'
 import { customAlphabet } from 'nanoid'
 const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 15);
 
 function bitwiseGenerate(size) {
+  if (size > 7) {
+    console.log('size is too big for bitwise generation');
+    return;
+  }
   const __dirname = path.resolve(path.dirname(''));
   const indexPath = path.join(__dirname, 'server', 'generate', 'index.txt');
   const indexFile = fs.readFileSync(indexPath);
@@ -48,4 +53,5 @@ function checkFileExistsSync(filepath) {
   return flag;
 }
 
-bitwiseGenerate(5);
+//bitwiseGenerate(5);
+generate(25, 25);

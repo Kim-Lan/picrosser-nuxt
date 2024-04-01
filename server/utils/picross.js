@@ -2,11 +2,13 @@ import { getColumn, convertIndexTo2D, copyGrid } from './grid.js'
 import { arraySum } from './arrayHelpers.js'
 import chunk from "lodash.chunk"
 
+const FILLED_VALUE = '1';
+
 export function getBlocks(arr) {
   const result = [];
   let current = 0;
   for (let i = 0; i < arr.length; i++) {
-    if (arr[i] === '1') {
+    if (arr[i] === FILLED_VALUE) {
       current++;
     } else if (current > 0) {
       result.push(current);
@@ -67,27 +69,28 @@ export function hasFull(grid) {
   return false;
 }
 
-export function hasSpace(grid, index) {
+export function hasSpace(grid, row, col) {
   const height = grid.length;
   const width = grid[0].length;
-  const [row, col] = convertIndexTo2D(index, height, width);
 
   const rowSum = arraySum(grid[row]);
   const colSum = arraySum(getColumn(grid, col));
-  if (rowSum >= (height - 1) * 2) {
+  if (rowSum >= (height - 1)) {
       return false;
-  } else if (colSum >= (width - 1) * 2) {
+  } else if (colSum >= (width - 1)) {
       return false;
   }
+  return true;
+}
 
+export function checkMaxBlocks(grid, row, col, maxRowBlocks, maxColBlocks) {
   const temp = copyGrid(grid);
-  temp[row][col] = 2;
+  temp[row][col] = FILLED_VALUE;
   const rowBlocks = getBlocks(temp[row]);
   const colBlocks = getBlocks(getColumn(temp, col));
-  if (rowBlocks.length > 5 || colBlocks.length > 5) {
+  if (rowBlocks.length > maxRowBlocks || colBlocks.length > maxColBlocks) {
       return false;
   }
-
   return true;
 }
 

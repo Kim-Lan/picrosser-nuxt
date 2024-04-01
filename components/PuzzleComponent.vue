@@ -25,7 +25,7 @@ const colKeys = ref([]);
 const solution = ref([]);
 
 const cellSize = computed(() => {
-  return Math.max(Math.min((50 / Math.max(props.height, props.width)), 5), 0.5) + 'vmin'
+  return Math.max(Math.min((50 / Math.max(props.height, props.width)), 5), 1) + 'vmin'
 });
 
 // async function newPuzzleHandler() {
