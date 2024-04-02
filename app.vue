@@ -16,7 +16,7 @@ function navigatePlay() {
 
 <template>
   <v-app>
-    <v-app-bar :elevation="0" class="bg-blue-grey-darken-4">
+    <v-app-bar :elevation="0" scroll-behavior="collpase" scroll-threshold="100" class="bg-blue-grey-darken-4">
       <v-app-bar-title>
         <NuxtLink to="/">
           Picrosser

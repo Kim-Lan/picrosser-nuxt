@@ -4,6 +4,14 @@ const props = defineProps({
     type: Number,
     default: 0
   }
+  // rowIndex: {
+  //   type: Number,
+  //   default: 0
+  // },
+  // colIndex: {
+  //   type: Number,
+  //   default: 0
+  // }
 });
 
 defineExpose({ reset });
@@ -12,6 +20,13 @@ const mouse = useMouse();
 
 const cellState = ref('');
 const emit = defineEmits(['cellChange']);
+
+const top = computed(() => {
+  return ((props.rowIndex * 16) + 1) + 'px'
+});
+const left = computed(() => {
+  return ((props.colIndex * 16) + 1) + 'px'
+});
 
 function onPointerDown(event) {
   mouse.onPressed(event);
@@ -69,5 +84,4 @@ function emitCellChange() {
 </template>
 
 <style>
-
 </style>

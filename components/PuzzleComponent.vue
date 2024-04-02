@@ -7,6 +7,10 @@ const props = defineProps({
   width: {
     type: Number,
     default: 5
+  },
+  cellSize: {
+    type: Number,
+    default: 15
   }
 });
 
@@ -25,7 +29,44 @@ const colKeys = ref([]);
 const solution = ref([]);
 
 const cellSize = computed(() => {
-  return Math.max(Math.min((50 / Math.max(props.height, props.width)), 5), 1) + 'vmin'
+  // return Math.max(Math.min((50 / Math.max(props.height, props.width)), 5), 1) + 'vmin'
+  if (props.width === 5) {
+    return 25;
+  } else if (props.width === 10) {
+    return 20;
+  } else if (props.width === 15) {
+    return 20;
+  } else if (props.width === 20) {
+    return 15;
+  } else if (props.width === 25) {
+    return 15;
+  }
+});
+const cellSizeString = computed(() => {
+  if (props.width === 5) {
+    return 25 + 'px';
+  } else if (props.width === 10) {
+    return 22 + 'px';
+  } else if (props.width === 15) {
+    return 20 + 'px';
+  } else if (props.width === 20) {
+    return 18 + 'px';
+  } else if (props.width === 25) {
+    return 15 + 'px';
+  }
+});
+// const cellSizeString = computed(() => {
+//   return 15 + 'px'
+// });
+// const cellSizeString = computed(() => {
+//   return 2.5 + 'vmin'
+// });
+
+const gridWidth = computed(() => {
+  return ((props.width * (props.cellSize)) + 2)+ 'px'
+});
+const gridHeight = computed(() => {
+  return ((props.height * (props.cellSize)) + 2) + 'px'
 });
 
 // async function newPuzzleHandler() {
@@ -99,16 +140,17 @@ function checkSolution() {
           'first-row': n <= props.width,
           'first-col': (n - 1) % props.width === 0,
           'five-row': Math.ceil(n / props.height) % 5 === 0,
-          'five-col': n % 5 === 0
+          'five-col': n % 5 === 0,
+          'last-row': n > (props.height * props.width) - props.width,
+          'last-col': n % props.width === 0
         }"
         @cell-change="updateState"
       />
     </div>
-
-    <KeyContainer id="left-keys" :direction="'row'" :keys="rowKeys" @contextmenu.prevent />
-    <KeyContainer id="right-keys" :direction="'row'" :keys="rowKeys" @contextmenu.prevent />
-    <KeyContainer id="top-keys" :direction="'col'" :keys="colKeys" @contextmenu.prevent />
-    <KeyContainer id="bottom-keys" :direction="'col'" :keys="colKeys" @contextmenu.prevent />
+    <KeyContainer id="left-keys" :direction="'row'" :keys="rowKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @contextmenu.prevent />
+    <KeyContainer id="right-keys" :direction="'row'" :keys="rowKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @contextmenu.prevent />
+    <KeyContainer id="top-keys" :direction="'col'" :keys="colKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @contextmenu.prevent />
+    <KeyContainer id="bottom-keys" :direction="'col'" :keys="colKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @contextmenu.prevent />
   </div>
 </template>
 
@@ -116,43 +158,56 @@ function checkSolution() {
 @import '~/assets/styles/variables.scss';
 
 .puzzle-container {
+  box-sizing: border-box;
   display: grid;
   grid-template: auto auto auto / auto auto auto;
-  font-size: calc(0.6 * v-bind('cellSize'));
+  line-height: calc(v-bind('cellSizeString') - 2px);
+  font-size: 10pt;
   border-collapse: collapse;
   color: $grid-border;
+  // gap: 1px;
 }
 
 .puzzle-grid {
+  box-sizing: border-box;
   grid-area: 2 / 2;
   border-collapse: collapse;
+  background-color: $grid-border;
+
+  border: $thick-border;
 
   display: grid;
-  grid-template-rows: repeat(v-bind('props.height'), v-bind('cellSize'));
-  grid-template-columns: repeat(v-bind('props.width'), v-bind('cellSize'));
-  background-color: $grid-border;
-  width: fit-content;
-  height: fit-content;
-}
+  grid-template-rows: repeat(v-bind('props.height'), v-bind('cellSizeString'));
+  grid-template-columns: repeat(v-bind('props.width'), v-bind('cellSizeString'));
 
-.puzzle-grid div {
-  background-color: white;
-  border: $thin-border;
-  position: relative;
+  div {
+    box-sizing: border-box;
+    background-color: white;
+    position: relative;
 
-  &:hover {
-    background-color: $grid-hover;
+    &:not(.last-row) {
+      border-bottom: $thin-border;
+    }
+
+    &:not(.last-col) {
+      border-right: $thin-border;
+    }
+
+    &:hover {
+      background-color: $grid-hover;
+    }
   }
 }
 
 .filled::before {
+  box-sizing: border-box;
   display: block;
   position: absolute;
   background-color: $grid-border;
   width: 100%;
   height: 100%;
   content: '';
-  border: 0.5px solid antiquewhite;
+  border: 1px solid white;
   pointer-events: none;
 }
 
@@ -168,38 +223,15 @@ function checkSolution() {
 }
 
 div.five-row {
-  border-bottom: $thick-border;
+  &:not(.last-row) {
+    border-bottom: $thick-border;
+  }
 }
 
 div.five-col {
-  border-right: $thick-border;
+  &:not(.last-col) {
+    border-right: $thick-border;
+  }
 }
 
-div.first-row {
-  border-top: $thick-border;
-}
-
-div.first-col {
-  border-left: $thick-border;
-}
-
-#top-keys {
-  grid-area: 1 / 2;
-  border-top: $thicker-border;
-}
-
-#bottom-keys {
-  grid-area: 3 / 2;
-  border-bottom: $thicker-border;
-}
-
-#left-keys {
-  grid-area: 2 / 1;
-  border-left: $thicker-border;
-}
-
-#right-keys {
-  grid-area: 2 / 3;
-  border-right: $thicker-border;
-}
 </style>

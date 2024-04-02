@@ -9,9 +9,9 @@ module.exports = {
     "./nuxt.config.{js,ts}",
     "./app.vue"
   ],
-  plugins: [
-    require('daisyui')
-  ],
+  // plugins: [
+  //   require('daisyui')
+  // ],
   theme: {
     screens: {
       sm: '480px',
