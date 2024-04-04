@@ -22,24 +22,44 @@ const props = defineProps({
   }
 });
 
+const emit = defineEmits(['keyPressed']);
+defineExpose({ pressKey });
+
+const keyGroups = ref([]);
+
+function onKeyPressed(groupIndex, keyIndex, isPressed) {
+  emit('keyPressed', props.direction, groupIndex, keyIndex, isPressed);
+}
+
+function pressKey(groupIndex, keyIndex, isPressed) {
+  for (const group of keyGroups.value) {
+    if (group.getGroupIndex() === groupIndex) {
+      group.pressKey(keyIndex, isPressed);
+    }
+  }
+}
+
 </script>
 
 <template>
   <div class="key-container" :class="[direction === 'row' ? 'row-keys' : 'col-keys']">
     <KeyGroup
       v-for="(group, groupIndex) in keys"
+      ref="keyGroups"
       :key="groupIndex"
+      :direction="direction"
       :group-index="groupIndex"
       :keys="group"
-      :cell-size="props.cellSize"
+      :cell-size="cellSize"
+      @key-pressed="onKeyPressed"
       class="key-group"
       :class="{
         'first-row': direction === 'row' && groupIndex === 0,
         'first-col': direction === 'col' && groupIndex === 0,
         'five-row': direction === 'row' && (groupIndex + 1) % 5 === 0,
         'five-col': direction === 'col' && (groupIndex + 1) % 5 === 0,
-        'last-row': direction === 'row' && (groupIndex + 1) % props.height === 0,
-        'last-col': direction === 'col' && (groupIndex + 1) % props.width === 0
+        'last-row': direction === 'row' && (groupIndex + 1) % height === 0,
+        'last-col': direction === 'col' && (groupIndex + 1) % width === 0
       }"
     />
   </div>
@@ -55,6 +75,12 @@ const props = defineProps({
   box-sizing: border-box;
 }
 
+.v-theme--dark {
+  .key-container {
+    background-color: antiquewhite;
+  }
+}
+
 .row-keys {
   display: grid;
   grid-template-rows: repeat(v-bind('props.height'), v-bind('props.cellSize'));
@@ -63,8 +89,8 @@ const props = defineProps({
   .key-group {
     display: flex;
     flex-direction: row;
-    gap: 6px;
-    padding: 0px 4px;
+    // gap: 6px;
+    // padding: 0px 4px;
     align-items: center;
 
     &:not(.last-row) {
@@ -119,13 +145,17 @@ const props = defineProps({
   //   &.clickable:not(.pressed):hover {
   //     background-color: lavenderblush;
   //   }
-  //
-  //   &.pressed {
-  //     color: steelblue lightsteelblue;
-  //   }
 
   text-align: center;
   cursor: default;
+  font-family: 'Sofia Sans Condensed', sans-serif;
+  font-weight: 500;
+  // width: fit-content;
+  width: v-bind('props.cellSize');
+
+  &.pressed {
+    color: #B0BEC5;
+  }
 }
 
 #top-keys {

@@ -16,13 +16,13 @@ function navigatePlay() {
 
 <template>
   <v-app>
-    <v-app-bar :elevation="0" scroll-behavior="collpase" scroll-threshold="100" class="bg-blue-grey-darken-4">
-      <v-app-bar-title>
+    <v-app-bar :elevation="0" color="blue-grey-darken-4" class="font-mono" style="position: relative;">
+      <v-app-bar-title class="font-weight-bold">
         <NuxtLink to="/">
           Picrosser
         </NuxtLink>
       </v-app-bar-title>
-      <v-btn class="mx-2" @click="navigatePlay">
+      <v-btn class="mx-2 font-weight-bold" @click="navigatePlay">
         Play
       </v-btn>
       <DarkModeToggle />
@@ -37,7 +37,7 @@ function navigatePlay() {
     >
       <Settings />
     </v-navigation-drawer>
-    <v-main>
+    <v-main style="--v-layout-top: 0px;">
       <NuxtPage />
     </v-main>
   </v-app>
@@ -81,5 +81,4 @@ function navigatePlay() {
 </template>
 
 <style>
-
 </style>

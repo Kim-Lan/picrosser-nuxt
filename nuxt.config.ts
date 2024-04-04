@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     'nuxt-icon',
     '@vueuse/nuxt',
+    '@nuxt/eslint',
     ['@pinia/nuxt', {
       autoImports: ['defineStore', 'acceptHMRUpdate']
     }],
@@ -33,6 +34,9 @@ export default defineNuxtConfig({
         transformAssetUrls,
       },
     },
+  },
+  eslint: {
+
   },
   build: {
     transpile: ['vuetify'],

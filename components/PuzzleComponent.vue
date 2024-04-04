@@ -7,20 +7,20 @@ const props = defineProps({
   width: {
     type: Number,
     default: 5
-  },
-  cellSize: {
-    type: Number,
-    default: 15
   }
 });
 
-defineExpose({ loadPuzzle, resetCells })
-onMounted(() => loadPuzzle());
+defineExpose({ loadPuzzle, resetCells });
+// onMounted(() => loadPuzzle());
 
 const emit = defineEmits(['solved']);
 const puzzle = usePuzzle();
 
 const cells = ref([]);
+const leftKeys = ref(null);
+const rightKeys = ref(null);
+const topKeys = ref(null);
+const bottomKeys = ref(null);
 //const currentID = ref('');
 const puzzleID = ref('');
 const isSolved = ref(false);
@@ -28,20 +28,6 @@ const rowKeys = ref([]);
 const colKeys = ref([]);
 const solution = ref([]);
 
-const cellSize = computed(() => {
-  // return Math.max(Math.min((50 / Math.max(props.height, props.width)), 5), 1) + 'vmin'
-  if (props.width === 5) {
-    return 25;
-  } else if (props.width === 10) {
-    return 20;
-  } else if (props.width === 15) {
-    return 20;
-  } else if (props.width === 20) {
-    return 15;
-  } else if (props.width === 25) {
-    return 15;
-  }
-});
 const cellSizeString = computed(() => {
   if (props.width === 5) {
     return 25 + 'px';
@@ -52,21 +38,22 @@ const cellSizeString = computed(() => {
   } else if (props.width === 20) {
     return 18 + 'px';
   } else if (props.width === 25) {
-    return 15 + 'px';
+    return 16 + 'px';
   }
 });
-// const cellSizeString = computed(() => {
-//   return 15 + 'px'
-// });
-// const cellSizeString = computed(() => {
-//   return 2.5 + 'vmin'
-// });
 
-const gridWidth = computed(() => {
-  return ((props.width * (props.cellSize)) + 2)+ 'px'
-});
-const gridHeight = computed(() => {
-  return ((props.height * (props.cellSize)) + 2) + 'px'
+const fontSizeString = computed(() => {
+  if (props.width === 5) {
+    return 14 + 'pt';
+  } else if (props.width === 10) {
+    return 13 + 'pt';
+  } else if (props.width === 15) {
+    return 12 + 'pt';
+  } else if (props.width === 20) {
+    return 11 + 'pt';
+  } else if (props.width === 25) {
+    return 11 + 'pt';
+  }
 });
 
 // async function newPuzzleHandler() {
@@ -126,6 +113,17 @@ function checkSolution() {
   return true;
 }
 
+function onKeyPressed(direction, groupIndex, keyIndex, isPressed) {
+  console.log(`puzzle detected key press: ${direction} ${groupIndex} ${keyIndex}`);
+  if (direction === 'row') {
+    leftKeys.value.pressKey(groupIndex, keyIndex, isPressed);
+    rightKeys.value.pressKey(groupIndex, keyIndex, isPressed);
+  } else {
+    topKeys.value.pressKey(groupIndex, keyIndex, isPressed);
+    bottomKeys.value.pressKey(groupIndex, keyIndex, isPressed);
+  }
+}
+
 </script>
 
 <template>
@@ -147,10 +145,10 @@ function checkSolution() {
         @cell-change="updateState"
       />
     </div>
-    <KeyContainer id="left-keys" :direction="'row'" :keys="rowKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @contextmenu.prevent />
-    <KeyContainer id="right-keys" :direction="'row'" :keys="rowKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @contextmenu.prevent />
-    <KeyContainer id="top-keys" :direction="'col'" :keys="colKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @contextmenu.prevent />
-    <KeyContainer id="bottom-keys" :direction="'col'" :keys="colKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @contextmenu.prevent />
+    <KeyContainer id="left-keys" ref="leftKeys" :direction="'row'" :keys="rowKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @key-pressed="onKeyPressed" @contextmenu.prevent />
+    <KeyContainer id="right-keys" ref="rightKeys" :direction="'row'" :keys="rowKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @key-pressed="onKeyPressed" @contextmenu.prevent />
+    <KeyContainer id="top-keys" ref="topKeys" :direction="'col'" :keys="colKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @key-pressed="onKeyPressed" @contextmenu.prevent />
+    <KeyContainer id="bottom-keys" ref="bottomKeys" :direction="'col'" :keys="colKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @key-pressed="onKeyPressed" @contextmenu.prevent />
   </div>
 </template>
 
@@ -162,7 +160,7 @@ function checkSolution() {
   display: grid;
   grid-template: auto auto auto / auto auto auto;
   line-height: calc(v-bind('cellSizeString') - 2px);
-  font-size: 10pt;
+  font-size: v-bind('fontSizeString');
   border-collapse: collapse;
   color: $grid-border;
   // gap: 1px;
@@ -199,6 +197,14 @@ function checkSolution() {
   }
 }
 
+.v-theme--dark {
+  .puzzle-grid {
+    div {
+      background-color: antiquewhite;
+    }
+  }
+}
+
 .filled::before {
   box-sizing: border-box;
   display: block;
@@ -209,6 +215,12 @@ function checkSolution() {
   content: '';
   border: 1px solid white;
   pointer-events: none;
+}
+
+.v-theme--dark {
+  .filled::before {
+    border: 1px solid antiquewhite;
+  }
 }
 
 .x::before {

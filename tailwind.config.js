@@ -9,9 +9,9 @@ module.exports = {
     "./nuxt.config.{js,ts}",
     "./app.vue"
   ],
-  // plugins: [
-  //   require('daisyui')
-  // ],
+  plugins: [
+    require('daisyui')
+  ],
   theme: {
     screens: {
       sm: '480px',
@@ -20,7 +20,8 @@ module.exports = {
       xl: '1440px',
     },
     fontFamily: {
-      mono: ['Chivo Mono', 'monospace']
+      mono: ['Chivo Mono', 'monospace'],
+      sans: ['Open Sans', 'sans-serif']
     }
   },
   // daisyui: {

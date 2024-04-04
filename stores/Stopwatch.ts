@@ -2,19 +2,6 @@
 import { useStorage, useTimestamp } from '@vueuse/core'
 import { formatTime } from '~/utils/time'
 
-// interface StopwatchState {
-//   // startTimestamp: number
-//   // pauseTimestamp: number
-//   // pausedTime: number
-//   // elapsedTime?: number
-//   // isRunning?: boolean
-//   // currentPause?: number
-//   startTimestamp: number
-//   endTimestamp: number
-//   elapsedTime: number
-//   isRunning: boolean
-// }
-
 const { timestamp: now } = useTimestamp({ controls: true });
 
 export const useStopwatch = defineStore('stopwatch', () => {
@@ -54,43 +41,3 @@ export const useStopwatch = defineStore('stopwatch', () => {
 {
   persist: true,
 });
-
-// export const useStopwatch = defineStore('stopwatch', {
-//   state: (): StopwatchState => {
-//     return useStorage('stopwatch', {
-//       startTimestamp: 0,
-//       pauseTimestamp: 0,
-//       pausedTime: 0
-//     })
-//   },
-//   getters: {
-//     isRunning: state => state.startTimestamp && !state.pauseTimestamp,
-//     currentPause(): number {
-//       return (this.isRunning ? 0 : (now.value - this.pauseTimestamp));
-//     },
-//     elapsedTime(): number {
-//       return (this.isRunning || this.currentPause ? now.value - this.startTimestamp - this.pausedTime - this.currentPause : 0)
-//     }
-//   },
-//   actions: {
-//     start() {
-//       this.startTimestamp = now.value;
-//       this.pauseTimestamp = 0;
-//       this.pausedTime = 0;
-//     },
-//     pause() {
-//       if (!this.pauseTimestamp) {
-//         this.pauseTimestamp = now.value;
-//       }
-//     },
-//     resume() {
-//       this.pausedTime += this.currentPause;
-//       this.pauseTimestamp = 0;
-//     },
-//     reset() {
-//       this.startTimestamp = 0;
-//       this.pausedTime = 0;
-//       this.pauseTimestamp = 0;
-//     }
-//   }
-// });

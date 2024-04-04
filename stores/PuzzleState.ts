@@ -1,5 +1,6 @@
-/* eslint-disable space-in-parens */
+
 import { createGrid, printGrid } from '~/server/utils/grid'
+import { useStorage } from '@vueuse/core'
 
 // interface PuzzleState {
 //   height: number
@@ -12,8 +13,8 @@ import { createGrid, printGrid } from '~/server/utils/grid'
 // }
 
 export const usePuzzle = defineStore('puzzle', () => {
-  const height = ref(0);
-  const width = ref(0);
+  const height = useStorage('height', 5);
+  const width = useStorage('width', 5);
   const puzzleID = ref('');
   const userGrid = ref([]);
   const userKeys = ref([]);
@@ -56,7 +57,4 @@ export const usePuzzle = defineStore('puzzle', () => {
     resetState,
     setSolved
   }
-},
-{
-  persist: true,
 });

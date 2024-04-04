@@ -17,10 +17,37 @@ const props = defineProps({
     default: ''
   }
 });
+
+defineExpose({ isPressed, setPressed, getKeyIndex });
+const emit = defineEmits(['pressed']);
+
+const pressed=ref(false);
+
+
+function onPointerDown(event) {
+  pressed.value = !pressed.value;
+  emit('pressed', props.keyIndex, pressed.value);
+}
+
+function isPressed() {
+  return pressed.value;
+}
+
+function setPressed(value) {
+  pressed.value = value;
+}
+
+function getKeyIndex() {
+  return props.keyIndex;
+}
+
 </script>
 
 <template>
-  <div>
+  <div
+    :class="{ pressed: pressed }"
+    @pointerdown.prevent="onPointerDown"
+  >
     <slot></slot>
   </div>
 </template>
