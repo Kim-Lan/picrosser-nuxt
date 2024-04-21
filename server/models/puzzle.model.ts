@@ -7,6 +7,5 @@ const PuzzleSchema = new Schema({
   height: Number,
   rowKeys: Array,
   colKeys: Array,
-  goal: String,
-  attempts: [AttemptSchema]
+  goal: String
 });
