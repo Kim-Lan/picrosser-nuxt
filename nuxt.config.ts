@@ -1,5 +1,4 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
-import { resolve } from 'path'
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -15,7 +14,6 @@ export default defineNuxtConfig({
     '@pinia-plugin-persistedstate/nuxt',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
-        // @ts-expect-error
         config.plugins.push(vuetify({ autoImport: true }))
       })
     },
@@ -46,7 +44,7 @@ export default defineNuxtConfig({
     mongoUrl: process.env.MONGODB_URL,
   },
   nitro: {
-    plugins: ['~/server/database.ts']
+    // plugins: ['~/server/database.ts']
   },
   colorMode: {
     classSuffix: ''
