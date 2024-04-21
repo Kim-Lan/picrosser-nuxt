@@ -10,7 +10,7 @@ const props = defineProps({
   }
 });
 
-defineExpose({ loadPuzzle, resetCells });
+defineExpose({ loadPuzzle, reset });
 // onMounted(() => loadPuzzle());
 
 const emit = defineEmits(['solved']);
@@ -88,8 +88,9 @@ function updateState(index, state) {
   }
 }
 
-function resetState() {
+function reset() {
   resetCells();
+  resetKeys();
   puzzle.resetState();
 }
 
@@ -98,6 +99,13 @@ function resetCells() {
   for (const cell of cells.value) {
     cell.reset();
   }
+}
+
+function resetKeys() {
+  leftKeys.value.reset();
+  rightKeys.value.reset();
+  topKeys.value.reset();
+  bottomKeys.value.reset();
 }
 
 function checkSolution() {

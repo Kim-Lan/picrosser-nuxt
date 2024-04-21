@@ -19,7 +19,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['keyPressed']);
-defineExpose({ pressKey, getGroupIndex });
+defineExpose({ pressKey, getGroupIndex, reset });
 
 const keyComponents = ref([]);
 
@@ -49,6 +49,12 @@ function pressKey(keyIndex, isPressed) {
 
 function getGroupIndex() {
   return props.groupIndex;
+}
+
+function reset() {
+  for (const key of keyComponents.value) {
+    key.setPressed(false);
+  }
 }
 
 

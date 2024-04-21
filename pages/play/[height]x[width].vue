@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 const route = useRoute();
-let height = route.params.height;
-let width = route.params.width;
+const height = route.params.height;
+const width = route.params.width;
 // const sizes = ['5x5', '10x10', '15x15', '20x20', '25x25'];
 const sizes = [
   {
@@ -43,7 +43,7 @@ async function newPuzzleHandler() {
     navigateTo(`/play/${selectedSize.value}x${selectedSize.value}`);
   } else {
     const newPuzzleID = await puzzleComponent.value.loadPuzzle();
-    puzzleComponent.value.resetCells();
+    puzzleComponent.value.reset();
     console.log("new puzzle id " + newPuzzleID);
     navigateTo(route.path + '?id=' + newPuzzleID);
     statusMessage.value = 'Keep going!';
@@ -85,7 +85,7 @@ function solved() {
         class="w-60"
       ></v-select> -->
       <div class="flex flex-row items-center gap-5">
-        <v-btn @click="newPuzzleHandler" size="small" elevation="1" color="blue-darken-1" class="font-weight-bold">Start New</v-btn>
+        <v-btn size="small" @click="newPuzzleHandler" elevation="1" color="blue-darken-1" class="font-weight-bold">Start New</v-btn>
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold">Check</v-btn>
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold">Restart</v-btn>
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold">End</v-btn>
