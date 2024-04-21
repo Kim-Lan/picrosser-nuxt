@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    Page: index
+    Press "Play" to start playing!
   </div>
 </template>
 
