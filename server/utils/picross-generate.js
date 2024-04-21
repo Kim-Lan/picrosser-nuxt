@@ -106,8 +106,8 @@ export function bitGenerate(size) {
 export function checkUnique(grid) {
   const __dirname = path.resolve(path.dirname(''));
   const data = gridToNon(grid);
-  const testPath = path.join(__dirname, 'server', 'generate', 'test.non');
-  const naughtyPath = path.join(__dirname, 'server', 'modules', 'naughty');
+  const testPath = path.join(__dirname, 'picrosser.com', 'server', 'generate', 'test.non');
+  const naughtyPath = path.join(__dirname, 'picrosser.com', 'server', 'modules', 'naughty');
   fs.writeFileSync(testPath, data);
   const check1 = (execSync(naughtyPath + ' -u < ' + testPath)).toString();
   //fs.unlinkSync(testPath);
