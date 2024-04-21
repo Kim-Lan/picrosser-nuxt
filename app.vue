@@ -37,7 +37,7 @@ function navigatePlay() {
     >
       <Settings />
     </v-navigation-drawer>
-    <v-main style="--v-layout-top: 0px;">
+    <v-main style="--v-layout-top: 0px;" class="w-full">
       <NuxtPage />
     </v-main>
   </v-app>
