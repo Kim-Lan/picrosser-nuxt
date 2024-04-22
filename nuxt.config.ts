@@ -41,7 +41,13 @@ export default defineNuxtConfig({
   },
   buildModules: ['@nuxtjs/html-validator'],
   runtimeConfig: {
-    mongoUrl: process.env.MONGODB_URL,
+    mongodbUrl: process.env.MONGODB_URL,
+    firebaseApiKey: process.env.FIREBASE_API_KEY,
+    firebaseAuthDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    firebaseProjectId: process.env.FIREBASE_PROJECT_ID,
+    firebaseStorageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    firebaseMessagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+    firebaseAppId: process.env.FIREBASE_APP_ID,
   },
   nitro: {
     // plugins: ['~/server/database.ts']
@@ -58,6 +64,6 @@ export default defineNuxtConfig({
     }
   },
   imports: {
-    dirs: ['stores', 'server/utils', 'utils']
+    dirs: ['server/utils', 'utils']
   }
 })

@@ -1,5 +1,5 @@
 
-import { createGrid, printGrid } from '~/server/utils/grid'
+import { createGrid } from '~/server/utils/grid'
 import { useStorage } from '@vueuse/core'
 
 // interface PuzzleState {

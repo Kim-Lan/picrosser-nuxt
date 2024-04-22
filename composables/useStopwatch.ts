@@ -1,5 +1,4 @@
-/* eslint-disable space-in-parens */
-import { useStorage, useTimestamp } from '@vueuse/core'
+import { useTimestamp } from '@vueuse/core'
 import { formatTime } from '~/utils/time'
 
 const { timestamp: now } = useTimestamp({ controls: true });
