@@ -1,6 +1,8 @@
 <script setup>
-let drawer = ref(false);
-
+import { signInWithEmailAndPassword } from 'firebase/auth';
+const drawer = ref(false);
+const auth = useFirebaseAuth();
+const user = useCurrentUser();
 const puzzle = usePuzzle();
 
 function navigatePlay() {
@@ -10,6 +12,16 @@ function navigatePlay() {
   } else {
     navigateTo('/play/5x5');
   }
+}
+
+function signIn() {
+  const email = "me@kim-lan.com";
+  const password ="password";
+  signInWithEmailAndPassword(auth, email, password);
+}
+
+function signOut() {
+  auth.signOut();
 }
 
 </script>
@@ -36,6 +48,9 @@ function navigatePlay() {
       temporary
     >
       <Settings />
+      <div v-if="user">Account: {{  user.uid }}</div>
+      <v-btn v-if="!user" @click="signIn">Login</v-btn>
+      <v-btn v-if="user" @click="signOut">Logout</v-btn>
     </v-navigation-drawer>
     <v-main style="--v-layout-top: 0px;" class="w-full">
       <NuxtPage />

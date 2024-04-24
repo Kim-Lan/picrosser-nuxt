@@ -8,10 +8,9 @@ export default defineNuxtConfig({
     'nuxt-icon',
     '@vueuse/nuxt',
     '@nuxt/eslint',
-    ['@pinia/nuxt', {
-      autoImports: ['defineStore', 'acceptHMRUpdate']
-    }],
+    '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
+    'nuxt-vuefire',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         config.plugins.push(vuetify({ autoImport: true }))
@@ -42,16 +41,24 @@ export default defineNuxtConfig({
   buildModules: ['@nuxtjs/html-validator'],
   runtimeConfig: {
     mongodbUrl: process.env.MONGODB_URL,
-    firebaseApiKey: process.env.FIREBASE_API_KEY,
-    firebaseAuthDomain: process.env.FIREBASE_AUTH_DOMAIN,
-    firebaseProjectId: process.env.FIREBASE_PROJECT_ID,
-    firebaseStorageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-    firebaseMessagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-    firebaseAppId: process.env.FIREBASE_APP_ID,
+  },
+  vuefire: {
+    auth: {
+      enabled: true
+    },
+    config: {
+      apiKey: process.env.FIREBASE_API_KEY,
+      authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+      appId: process.env.FIREBASE_APP_ID,
+    },
   },
   nitro: {
     // plugins: ['~/server/database.ts']
   },
+  ssr: false,
   colorMode: {
     classSuffix: ''
   },
