@@ -40,7 +40,7 @@ export default defineNuxtConfig({
   },
   buildModules: ['@nuxtjs/html-validator'],
   runtimeConfig: {
-    mongodbUrl: process.env.MONGODB_URL,
+    mongodbUrl: process.env.MONGODB_URI,
   },
   nitro: {
     // plugins: ['~/server/database.ts']
