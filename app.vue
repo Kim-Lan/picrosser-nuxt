@@ -1,7 +1,5 @@
 <script setup>
-import { signInWithEmailAndPassword } from 'firebase/auth';
 const drawer = ref(false);
-const auth = useFirebaseAuth();
 const user = useCurrentUser();
 const puzzle = usePuzzle();
 
@@ -14,16 +12,6 @@ function navigatePlay() {
   }
 }
 
-function signIn() {
-  const email = "me@kim-lan.com";
-  const password ="password";
-  signInWithEmailAndPassword(auth, email, password);
-}
-
-function signOut() {
-  auth.signOut();
-}
-
 </script>
 
 <template>
@@ -34,9 +22,11 @@ function signOut() {
           Picrosser
         </NuxtLink>
       </v-app-bar-title>
-      <v-btn class="mx-2 font-weight-bold" @click="navigatePlay">
-        Play
-      </v-btn>
+      <nav class="max-sm:hidden">
+        <v-btn class="mx-2 font-weight-bold" @click="navigatePlay">
+          Play
+        </v-btn>
+      </nav>
       <DarkModeToggle />
       <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer">
         <Icon name="menu" size="1.75em" />
@@ -52,7 +42,7 @@ function signOut() {
       <v-btn v-if="!user" @click="signIn">Login</v-btn>
       <v-btn v-if="user" @click="signOut">Logout</v-btn>
     </v-navigation-drawer>
-    <v-main style="--v-layout-top: 0px;" class="w-full">
+    <v-main style="--v-layout-top: 16px;" class="w-full">
       <NuxtPage />
     </v-main>
   </v-app>
