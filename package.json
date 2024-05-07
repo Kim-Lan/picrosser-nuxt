@@ -14,6 +14,7 @@
     "@nuxtjs/color-mode": "^3.3.3",
     "@pinia-plugin-persistedstate/nuxt": "^1.2.0",
     "@pinia/nuxt": "^0.5.1",
+    "@sidebase/nuxt-auth": "^0.6.7",
     "@vueuse/core": "^10.9.0",
     "@vueuse/nuxt": "^10.9.0",
     "lodash.chunk": "^4.2.0",
