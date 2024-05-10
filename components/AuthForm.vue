@@ -126,9 +126,9 @@ async function onFormSubmit() {
       </v-btn>
     </div>
 
-    <div class="mt-4 cursor-pointer text-blue-darken-1 text-xs text-right" @click="toggleVariant">
+    <div class="mt-4 cursor-pointer text-blue-darken-1 text-xs text-center underline" @click="toggleVariant">
       {{ variant === 'LOGIN' ? "Don't have an account?" : "Already have an account?" }}
-      <span class="underline">{{ variant === 'LOGIN' ? "Create Account" : "Login" }}</span>
+      {{ variant === 'LOGIN' ? "Create Account" : "Login" }}
     </div>
   </v-form>
 </v-card>
