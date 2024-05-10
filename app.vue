@@ -1,6 +1,5 @@
 <script setup>
 const drawer = ref(false);
-const user = useCurrentUser();
 const puzzle = usePuzzle();
 
 function navigatePlay() {
