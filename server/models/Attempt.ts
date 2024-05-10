@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-const { Scheme } = mongoose;
+const { Schema } = mongoose;
 
 const AttemptSchema = new Schema({
   puzzleID: String,
