@@ -25,6 +25,19 @@ export default defineNuxtConfig({
   //     })
   //   }
   // },
+  auth: {
+    baseURL: process.env.AUTH_ORIGIN,
+    provider: {
+      type: 'authjs'
+    }
+  },
+  runtimeConfig: {
+    mongodbUrl: process.env.MONGODB_URI,
+    authSecret: process.env.AUTH_SECRET,
+  },
+  nitro: {
+    plugins: ['~/server/database.ts']
+  },
   vite: {
     vue: {
       template: {
@@ -33,18 +46,12 @@ export default defineNuxtConfig({
     },
   },
   eslint: {
-
+    
   },
   build: {
     transpile: ['vuetify'],
   },
   buildModules: ['@nuxtjs/html-validator'],
-  runtimeConfig: {
-    mongodbUrl: process.env.MONGODB_URI,
-  },
-  nitro: {
-    // plugins: ['~/server/database.ts']
-  },
   ssr: false,
   colorMode: {
     classSuffix: ''

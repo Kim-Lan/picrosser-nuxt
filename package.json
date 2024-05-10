@@ -20,6 +20,7 @@
     "lodash.chunk": "^4.2.0",
     "mongoose": "^8.2.4",
     "nanoid": "^5.0.6",
+    "next-auth": "^4.21.1",
     "nuxt": "^3.11.1",
     "nuxt-icon": "^0.6.10",
     "pinia": "^2.1.7",

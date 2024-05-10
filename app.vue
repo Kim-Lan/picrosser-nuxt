@@ -37,9 +37,7 @@ function navigatePlay() {
       temporary
     >
       <Settings />
-      <div v-if="user">Account: {{  user.uid }}</div>
-      <v-btn v-if="!user" @click="signIn">Login</v-btn>
-      <v-btn v-if="user" @click="signOut">Logout</v-btn>
+      <v-btn><NuxtLink to="/login">Login</NuxtLink></v-btn>
     </v-navigation-drawer>
     <v-main style="--v-layout-top: 16px;" class="w-full">
       <NuxtPage />
