@@ -1,8 +1,11 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const { data: authData } = useAuth();
+</script>
 
 <template>
   <div>
-    Press "Play" to start playing!
+    <div v-if="authData">Welcome {{  authData.user.username }}!</div>
+    <div>Press "Play" to start playing!</div>
   </div>
 </template>
 

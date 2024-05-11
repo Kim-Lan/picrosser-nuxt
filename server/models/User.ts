@@ -1,11 +1,10 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 
 export interface UserDocument extends Document {
   email: string;
   username: string;
   password: string;
-  attempts: array;
 }
 
 const UserSchema = new Schema({
@@ -27,7 +26,9 @@ const UserSchema = new Schema({
     required: true,
     minLength: [8, "Password must be at least 8 characters long"],
   },
-  attempts: [AttemptSchema]
+},
+{
+  timestamps: true,
 });
 
 export const User = model<UserDocument>('User', UserSchema);

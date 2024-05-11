@@ -18,6 +18,8 @@ const username = ref('');
 const email = ref('');
 const password = ref('');
 
+const { signIn } = useAuth();
+
 async function onFormSubmit() {
   if (variant.value === 'REGISTER') {
     try {
@@ -35,6 +37,10 @@ async function onFormSubmit() {
       }
       if (data.value) {
         console.log('Successfully registered');
+        username.value = '';
+        email.value = '';
+        password.value = '';
+        variant.value = 'LOGIN';
       }
     } catch (error) {
       console.log(error);
@@ -44,6 +50,20 @@ async function onFormSubmit() {
   } else {
     try {
       isLoading.value = true;
+
+      const result = await signIn('credentials', {
+        email: email.value,
+        password: password.value,
+        redirect: false,
+      });
+
+      if (result?.ok && !result.error) {
+        console.log('Successfully Logged In');
+        navigateTo('/');
+      } else {
+        console.log('Something Went Wrong');
+      }
+
     } catch (error) {
       console.log(error);
     } finally {

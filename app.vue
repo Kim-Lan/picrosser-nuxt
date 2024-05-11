@@ -1,5 +1,8 @@
 <script setup>
 const drawer = ref(false);
+
+const { data: authData, signOut } = useAuth();
+
 const puzzle = usePuzzle();
 
 function navigatePlay() {
@@ -9,6 +12,10 @@ function navigatePlay() {
   } else {
     navigateTo('/play/5x5');
   }
+}
+
+async function onLogout() {
+  await signOut();
 }
 
 </script>
@@ -36,8 +43,10 @@ function navigatePlay() {
       location="right"
       temporary
     >
-      <Settings />
-      <v-btn><NuxtLink to="/login">Login</NuxtLink></v-btn>
+      <div v-if="authData">Logged in as {{ authData.user.username }}</div>
+      <!-- <Settings /> -->
+      <v-btn v-if="!authData"><NuxtLink to="/login">Login</NuxtLink></v-btn>
+      <v-btn v-if="authData" @click="onLogout">Logout</v-btn>
     </v-navigation-drawer>
     <v-main style="--v-layout-top: 16px;" class="w-full">
       <NuxtPage />

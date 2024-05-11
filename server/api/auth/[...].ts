@@ -1,26 +1,50 @@
-import { NuxtAuthHandler } from '#auth'
-import CredentialsProvider from 'next-auth/providers/credentials'
+import { NuxtAuthHandler } from '#auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { User } from '~/server/models/User';
+import bcrypt from 'bcrypt';
 
 export default NuxtAuthHandler({
   secret: useRuntimeConfig().authSecret,
   pages: {
-    signIn: "/login",
+    signIn: '/login',
   },
   providers: [
     // @ts-expect-error You need to use .default here for it to work during SSR. May be fixed via Vite at some point
     CredentialsProvider.default({
       name: 'Credentials',
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
+        const user = await User.findOne({ email: credentials.email });
 
+        if (!user) {
+          throw createError({
+            statusCode: 401,
+            statusMessage: 'Unauthorized'
+          });
+        }
+
+        const isValid = await bcrypt.compare(credentials.password, user.password);
+
+        if (!isValid) {
+          throw createError({
+            statusCode: 401,
+            statusMessage: 'Unauthorized'
+          });
+        }
+
+        return {
+          id: user._id,
+          email: user.email,
+          username: user.username,
+        };
       }
     })
   ],
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   callbacks: {
     async jwt({ token, user, account }) {

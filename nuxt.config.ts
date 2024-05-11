@@ -32,7 +32,7 @@ export default defineNuxtConfig({
     }
   },
   runtimeConfig: {
-    mongodbUrl: process.env.MONGODB_URI,
+    mongodbUri: process.env.MONGODB_URI,
     authSecret: process.env.AUTH_SECRET,
   },
   nitro: {
