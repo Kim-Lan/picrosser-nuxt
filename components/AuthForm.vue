@@ -5,6 +5,7 @@ const variant = ref<VARIANT>('LOGIN');
 const showPassword = ref(false);
 
 function toggleVariant() {
+  errorMessage.value = '';
   if (variant.value === 'REGISTER') {
     variant.value = 'LOGIN';
   } else {
