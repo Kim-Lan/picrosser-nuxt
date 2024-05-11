@@ -13,6 +13,7 @@ function toggleVariant() {
 }
 
 const isLoading = ref(false);
+const isValid = ref(false);
 
 const username = ref('');
 const email = ref('');
@@ -20,7 +21,51 @@ const password = ref('');
 
 const { signIn } = useAuth();
 
+const USERNAME_INVALID_CHARACTERS = ' ?;:,.`\'"(){}[]|\\/';
+
+function usernameRules(value) {
+  if (!value) {
+    return 'Username is required';
+  }
+
+  for (let i = 0; i < USERNAME_INVALID_CHARACTERS.length; i++) {
+    if (value.includes(USERNAME_INVALID_CHARACTERS[i])) {
+      return 'Username contains an invalid character';
+    }
+  }
+    
+  if (value.length < 4) {
+    return 'Username must be at least 4 characters long';
+  }
+  return true;
+}
+
+const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+function emailRules(value) {
+  if (!value) {
+    return 'Email is required';
+  } else if (!emailRegex.test(value)) {
+    return 'Invalid email';
+  }
+  return true;
+}
+
+function passwordRules(value) {
+  if (!value) {
+    return 'Password is required';
+  } else if (variant.value === 'REGISTER') {
+    if (value.length < 8) {
+      return 'Password must be at least 8 characters long';
+    }
+  }
+  return true;
+}
+
 async function onFormSubmit() {
+  if (!isValid.value) {
+    return;
+  }
   if (variant.value === 'REGISTER') {
     try {
       isLoading.value = true;
@@ -76,27 +121,27 @@ async function onFormSubmit() {
 <template>
 <v-card class="w-2/5 max-sm:w-full pa-8 pb-12">
   <div class="font-mono text-center text-xl mb-8">Picrosser</div>
-  <v-form @submit.prevent="onFormSubmit">
+  <v-form v-model="isValid" validate-on="submit" @submit.prevent="onFormSubmit">
     <div v-if="variant === 'REGISTER'">Username</div>
     <v-text-field
       v-if="variant === 'REGISTER'"
       v-model="username"
+      :rules="[usernameRules]"
       :disabled="isLoading"
       placeholder="Username"
       type="text"
       density="compact"
       variant="outlined"
-      required
     />
     <div>Email</div>
     <v-text-field
       v-model="email"
+      :rules="[emailRules]"
       :disabled="isLoading"
       placeholder="Email"
       type="email"
       density="compact"
       variant="outlined"
-      required
     />
     <div class="flex flex-row justify-between">
       <div>Password</div>
@@ -110,13 +155,13 @@ async function onFormSubmit() {
     </div>
     <v-text-field
       v-model="password"
+      :rules="[passwordRules]"
       :disabled="isLoading"
       placeholder="Password"
       :type="showPassword ? 'text' : 'password'"
       :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
       density="compact"
       variant="outlined"
-      required
       @click:append-inner="showPassword = !showPassword"
     />
     <v-btn
