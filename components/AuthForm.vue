@@ -89,8 +89,9 @@ async function onFormSubmit() {
         username.value = '';
         email.value = '';
         password.value = '';
-        variant.value = 'LOGIN';
         registerSuccess.value = true;
+        errorMessage.value = '';
+        variant.value = 'LOGIN';
       }
     } catch (error) {
       console.log(error);

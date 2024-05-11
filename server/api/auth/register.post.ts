@@ -1,5 +1,16 @@
 import { User } from '~/server/models/User';
 import bcrypt from 'bcrypt';
+import nodemailer from 'nodemailer';
+
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,
+  auth: {
+    user: 'picrosser.com@gmail.com',
+    pass: useRuntimeConfig().googleAppPassword,
+  },
+});
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
@@ -31,6 +42,13 @@ export default defineEventHandler(async (event) => {
   const hashedPassword = await bcrypt.hash(body.password, salt);
 
   const user = await User.create({ ... body, password: hashedPassword });
+
+  const info = await transporter.sendMail({
+    from: '"Picrosser" <picrosser.com@gmail.com>',
+    to: body.email,
+    subject: '[Picrosser] Successfully Registered',
+    text: `You have successfully registered user: ${body.username}`,
+  });
 
   return {
     id: user._id,
