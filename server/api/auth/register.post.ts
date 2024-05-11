@@ -7,8 +7,7 @@ export default defineEventHandler(async (event) => {
   if (!body.username || !body.email || !body.password) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Bad Request',
-      message: 'Missing required fields',
+      statusMessage: 'Missing required fields',
     })
   }
 
@@ -16,7 +15,7 @@ export default defineEventHandler(async (event) => {
   if (existingUser) {
     throw createError({
       statusCode: 409,
-      statusMessage: 'User already exists',
+      statusMessage: 'Username already taken',
     })
   }
 
