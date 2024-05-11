@@ -12,6 +12,22 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  const existingUser = await User.findOne({ username: body.username });
+  if (existingUser) {
+    throw createError({
+      statusCode: 409,
+      statusMessage: 'User already exists',
+    })
+  }
+
+  const existingEmail = await User.findOne({ email: body.email });
+  if (existingEmail) {
+    throw createError({
+      statusCode: 409,
+      statusMessage: 'Email already in use',
+    })
+  }
+
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(body.password, salt);
 
