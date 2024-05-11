@@ -15,6 +15,7 @@ function toggleVariant() {
 const isLoading = ref(false);
 const isValid = ref(false);
 const registerSuccess = ref(false);
+const errorMessage = ref('');
 
 const username = ref('');
 const email = ref('');
@@ -80,6 +81,7 @@ async function onFormSubmit() {
       });
       if (error.value) {
         console.log(error.value);
+        errorMessage.value = error.value.statusMessage;
       }
       if (data.value) {
         console.log('Successfully registered');
@@ -130,6 +132,13 @@ async function onFormSubmit() {
     text="Successfully Registered"
     class="mb-4"
   ></v-alert>
+  <v-alert
+    v-if="errorMessage"
+    type="error"
+    class="mb-4"
+  >
+    {{ errorMessage }}
+  </v-alert>
   <v-form v-model="isValid" @submit.prevent="onFormSubmit">
     <div v-if="variant === 'REGISTER'">Username</div>
     <v-text-field
