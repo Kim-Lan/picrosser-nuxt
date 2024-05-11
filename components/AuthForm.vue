@@ -14,6 +14,7 @@ function toggleVariant() {
 
 const isLoading = ref(false);
 const isValid = ref(false);
+const registerSuccess = ref(false);
 
 const username = ref('');
 const email = ref('');
@@ -30,7 +31,7 @@ function usernameRules(value) {
 
   for (let i = 0; i < USERNAME_INVALID_CHARACTERS.length; i++) {
     if (value.includes(USERNAME_INVALID_CHARACTERS[i])) {
-      return 'Username contains an invalid character';
+      return 'Username contains invalid character(s)';
     }
   }
     
@@ -86,6 +87,7 @@ async function onFormSubmit() {
         email.value = '';
         password.value = '';
         variant.value = 'LOGIN';
+        registerSuccess.value = true;
       }
     } catch (error) {
       console.log(error);
@@ -104,6 +106,7 @@ async function onFormSubmit() {
 
       if (result?.ok && !result.error) {
         console.log('Successfully Logged In');
+        registerSuccess.value = false;
         navigateTo('/');
       } else {
         console.log('Something Went Wrong');
@@ -121,11 +124,18 @@ async function onFormSubmit() {
 <template>
 <v-card class="w-2/5 max-sm:w-full pa-8 pb-12">
   <div class="font-mono text-center text-xl mb-8">Picrosser</div>
-  <v-form v-model="isValid" validate-on="submit" @submit.prevent="onFormSubmit">
+  <v-alert
+    v-if="registerSuccess"
+    type="success"
+    text="Successfully Registered"
+    class="mb-4"
+  ></v-alert>
+  <v-form v-model="isValid" @submit.prevent="onFormSubmit">
     <div v-if="variant === 'REGISTER'">Username</div>
     <v-text-field
       v-if="variant === 'REGISTER'"
       v-model="username"
+      validate-on="blur"
       :rules="[usernameRules]"
       :disabled="isLoading"
       placeholder="Username"
@@ -136,6 +146,7 @@ async function onFormSubmit() {
     <div>Email</div>
     <v-text-field
       v-model="email"
+      validate-on="blur"
       :rules="[emailRules]"
       :disabled="isLoading"
       placeholder="Email"
@@ -155,6 +166,7 @@ async function onFormSubmit() {
     </div>
     <v-text-field
       v-model="password"
+      validate-on="input"
       :rules="[passwordRules]"
       :disabled="isLoading"
       placeholder="Password"
@@ -169,7 +181,7 @@ async function onFormSubmit() {
       :disabled="isLoading"
       color="blue-darken-1"
       :class="{ 'opacity-50 cursor-not-allowed' : isLoading }"
-      class="w-full">
+      class="w-full mt-4">
       {{ variant === 'LOGIN' ? "Login" : "Register" }}
     </v-btn>
 
