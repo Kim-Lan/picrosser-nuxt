@@ -24,9 +24,9 @@ async function checkVerified() {
 async function onSendVerification() {
   try {
     isLoading.value = true;
-    const response = await $fetch('/api/auth/verifyEmail', {
-      method: 'GET',
-      query: {
+    const response = await $fetch('/api/auth/sendVerificationEmail', {
+      method: 'POST',
+      body: {
         email: authData.value.user.email,
       },
     });

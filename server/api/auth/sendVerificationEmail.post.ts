@@ -33,7 +33,7 @@ function signVerificationToken(email, verificationToken) {
 }
 
 export default defineEventHandler(async (event) => {
-  const { email } = getQuery(event);
+  const { email } = await readBody(event);
 
   if (!email) {
     throw createError({
