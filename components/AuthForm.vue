@@ -229,7 +229,7 @@ async function onFormSubmit() {
       {{ variant === 'LOGIN' ? "Login" : "Register" }}
     </v-btn>
 
-    <div v-if="variant === 'LOGIN'" class="flex flex-row my-4">
+    <!-- <div v-if="variant === 'LOGIN'" class="flex flex-row my-4">
       <div class="w-full flex items-center">
         <div class="w-full border-t border-grey"></div>
       </div>
@@ -245,7 +245,7 @@ async function onFormSubmit() {
       <v-btn>
         Login with Google
       </v-btn>
-    </div>
+    </div> -->
 
     <div class="mt-4 cursor-pointer text-blue-darken-1 text-xs text-center underline" @click="toggleVariant">
       {{ variant === 'LOGIN' ? "Don't have an account?" : "Already have an account?" }}
