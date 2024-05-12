@@ -17,6 +17,12 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Internal Server Error',
     })
   }
+  if (user.verificationTokenExpire < Date.now()) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Token Expired',
+    })
+  }
   if (user.verificationToken && user.verificationToken === verificationToken) {
     user.isVerified = true;
     user.save();

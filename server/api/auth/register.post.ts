@@ -12,17 +12,23 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export default defineEventHandler(async (event) => {
-  const body = await readBody(event);
+async function hashPassword(password) {
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  return hashedPassword;
+}
 
-  if (!body.username || !body.email || !body.password) {
+export default defineEventHandler(async (event) => {
+  const { username, email, password } = await readBody(event);
+
+  if (!username || !email || !password) {
     throw createError({
       statusCode: 400,
       statusMessage: 'Missing required fields',
     })
   }
 
-  const existingUser = await User.findOne({ username: { '$regex': body.username, $options: 'i' }});
+  const existingUser = await User.findOne({ username: { '$regex': username, $options: 'i' }});
   if (existingUser) {
     throw createError({
       statusCode: 409,
@@ -30,7 +36,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const existingEmail = await User.findOne({ email: body.email });
+  const existingEmail = await User.findOne({ email });
   if (existingEmail) {
     throw createError({
       statusCode: 409,
@@ -38,17 +44,16 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(body.password, salt);
+  const hashedPassword = hashPassword(password);
 
-  const user = await User.create({ ... body, password: hashedPassword });
+  const user = await User.create({ username, email , password: hashedPassword });
 
   const info = await transporter.sendMail({
     from: '"Picrosser" <picrosser.com@gmail.com>',
-    to: body.email,
+    to: email,
     subject: '[Picrosser] Successfully Registered',
-    text: `Welcome to Picrosser! \n\nYou have successfully registered with username: ${body.username}`,
-    html: `<h1>Welcome to Picrosser!</h1><p>You have successfully registered with username: ${body.username}</p>`
+    text: `Welcome to Picrosser! \n\nYou have successfully registered with username: ${username}`,
+    html: `<h1>Welcome to Picrosser!</h1><p>You have successfully registered with username: ${username}</p>`
   });
 
   return {

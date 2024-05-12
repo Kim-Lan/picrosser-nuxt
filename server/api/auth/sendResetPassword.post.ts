@@ -43,38 +43,31 @@ export default defineEventHandler(async (event) => {
   }
 
   const user = await User.findOne({ email });
-  if (!user) {
+  if (!user || !user.isVerified) {
     throw createError({
       statusCode: 400,
-      statusMessage: `User with email ${email} not found`,
-    })
-  }
-
-  if (user.isVerified) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'User is already verified',
+      statusMessage: 'Something Went Wrong',
     })
   }
 
   let token = user.verificationToken;
-  if (!token || user.verificationTokenExpire < Date.now()) {
+  if (!user.resetPassword || !token || user.verificationTokenExpire < Date.now()) {
     token = generateVerificationToken();
     const expire = getVerificationTokenExpire();
 
     user.verificationToken = token;
     user.verificationTokenExpire = expire;
+    user.resetPassword = true;
     user.save();
   }
   const jwt = signVerificationToken(email, token);
 
-
   const { info, err } = await transporter.sendMail({
     from: '"Picrosser" <picrosser.com@gmail.com>',
     to: email,
-    subject: '[Picrosser] Verify Email',
-    text: `Picrosser\n\nPlease follow this link to verify your email. Link expires in 24 hours.\n\nhttp://localhost:3000/login/verify/${jwt}`,
-    html: `<h1>Picrosser</h1><p>Please follow this link to verify your email. Link expires in 24 hours.</p><p><a href="http://localhost:3000/login/verify/${jwt}">http://localhost:3000/login/verify/${jwt}</a></p>`,
+    subject: '[Picrosser] Reset Password',
+    text: `Picrosser\n\nPlease follow this link to reset your password. Link expires in 24 hours.\n\nhttp://localhost:3000/login/reset/${jwt}`,
+    html: `<h1>Picrosser</h1><p>Please follow this link to reset your password. Link expires in 24 hours.</p><p><a href="http://localhost:3000/login/reset/${jwt}">http://localhost:3000/login/reset/${jwt}</a></p>`,
   });
   if (err) {
     throw createError({
@@ -83,5 +76,5 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  return 'Verification email sent';
+  return 'Password reset email sent';
 })

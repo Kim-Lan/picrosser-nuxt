@@ -1,22 +1,12 @@
 <script setup lang="ts">
-type VARIANT = 'LOGIN' | 'REGISTER';
-const variant = ref<VARIANT>('LOGIN');
-
-function toggleVariant() {
-  errorMessage.value = '';
-  registerSuccess.value = false;
-  if (variant.value === 'REGISTER') {
-    variant.value = 'LOGIN';
-  } else {
-    variant.value = 'REGISTER';
-  }
-}
+const { signIn } = useAuth();
 
 const isLoading = ref(false);
 const isValid = ref(false);
 const registerSuccess = ref(false);
 const errorMessage = ref('');
 
+const form = ref(null);
 const username = ref('');
 const email = ref('');
 const password = ref('');
@@ -25,7 +15,19 @@ const confirmPassword = ref('');
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 
-const { signIn } = useAuth();
+type VARIANT = 'LOGIN' | 'REGISTER';
+const variant = ref<VARIANT>('LOGIN');
+
+function toggleVariant() {
+  errorMessage.value = '';
+  registerSuccess.value = false;
+  form.value.reset();
+  if (variant.value === 'REGISTER') {
+    variant.value = 'LOGIN';
+  } else {
+    variant.value = 'REGISTER';
+  }
+}
 
 const USERNAME_INVALID_CHARACTERS = ' ?;:,.`\'"(){}[]|\\/';
 
@@ -82,7 +84,7 @@ async function onFormSubmit() {
   if (variant.value === 'REGISTER') {
     try {
       isLoading.value = true;
-      const { data, error } = await useFetch('/api/auth/register', {
+      const { data, error } = await $fetch('/api/auth/register', {
         method: 'POST',
         body: {
           username: username.value,
@@ -99,12 +101,13 @@ async function onFormSubmit() {
         username.value = '';
         email.value = '';
         password.value = '';
+        confirmPassword.value = '';
         registerSuccess.value = true;
         errorMessage.value = '';
         variant.value = 'LOGIN';
       }
     } catch (error) {
-      console.log(error);
+      errorMessage.value = error.statusMessage;
     } finally {
       isLoading.value = false;
     }
@@ -153,12 +156,12 @@ async function onFormSubmit() {
   >
     {{ errorMessage }}
   </v-alert>
-  <v-form v-model="isValid" @submit.prevent="onFormSubmit">
+  <v-form ref="form" v-model="isValid" @submit.prevent="onFormSubmit">
     <div v-if="variant === 'REGISTER'">Username</div>
     <v-text-field
       v-if="variant === 'REGISTER'"
       v-model="username"
-      validate-on="blur"
+      validate-on="submit"
       :rules="[usernameRules]"
       :disabled="isLoading"
       placeholder="Username"
@@ -169,7 +172,7 @@ async function onFormSubmit() {
     <div>Email</div>
     <v-text-field
       v-model="email"
-      validate-on="blur"
+      validate-on="submit"
       :rules="[emailRules]"
       :disabled="isLoading"
       placeholder="Email"
@@ -179,17 +182,17 @@ async function onFormSubmit() {
     />
     <div class="flex flex-row justify-between">
       <div>Password</div>
-      <a
+      <div
         v-if="variant === 'LOGIN'"
-        class="text-blue-darken-1 text-xs underline"
-        href="#" rel="noopener noreferrer" target="_blank"
+        class="text-blue-darken-1 text-xs underline cursor-pointer"
+        @click="navigateTo('/login/reset')"
       >
         Forgot password?
-      </a>
+      </div>
     </div>
     <v-text-field
       v-model="password"
-      validate-on="input"
+      validate-on="submit"
       :rules="[passwordRules]"
       :disabled="isLoading"
       placeholder="Password"
@@ -221,7 +224,6 @@ async function onFormSubmit() {
       type="submit"
       :disabled="isLoading"
       color="blue-darken-1"
-      :class="{ 'opacity-50 cursor-not-allowed' : isLoading }"
       class="w-full mt-4"
     >
       {{ variant === 'LOGIN' ? "Login" : "Register" }}
