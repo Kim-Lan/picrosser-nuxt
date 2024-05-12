@@ -6,12 +6,6 @@ function verifyToken(token) {
   return jwt.verify(token, useRuntimeConfig().authEmailVerificationSecret);
 }
 
-async function hashPassword(password) {
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-  return hashedPassword;
-}
-
 export default defineEventHandler(async (event) => {
   const { token, newPassword } = await readBody(event);
 

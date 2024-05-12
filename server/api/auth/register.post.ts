@@ -12,12 +12,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-async function hashPassword(password) {
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-  return hashedPassword;
-}
-
 export default defineEventHandler(async (event) => {
   const { username, email, password } = await readBody(event);
 
@@ -44,7 +38,8 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const hashedPassword = hashPassword(password);
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
 
   const user = await User.create({ username, email , password: hashedPassword });
 
