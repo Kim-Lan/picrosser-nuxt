@@ -5,6 +5,10 @@ export interface UserDocument extends Document {
   email: string;
   username: string;
   password: string;
+  isVerified: boolean;
+  verificationToken: string;
+  verificationTokenExpire: Date;
+  resetPassword: boolean;
 }
 
 const USERNAME_INVALID_CHARACTERS = ' ?;:,.`\'"(){}[]|\\/';
@@ -39,6 +43,24 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     minLength: [8, 'Password must be at least 8 characters long'],
+  },
+  isVerified: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    required: false,
+  },
+  verificationTokenExpire: {
+    type: Date,
+    required: false,
+  },
+  resetPassword: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
 },
 {

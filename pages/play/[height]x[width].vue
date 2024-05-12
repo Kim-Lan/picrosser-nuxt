@@ -58,7 +58,7 @@ function solved() {
 </script>
 
 <template>
-  <div class="flex flex-col items-center gap-5 my-5 w-full font-sans">
+  <v-container class="flex flex-col items-center gap-5 my-5 w-full font-sans">
     <div class="flex flex-col items-center gap-5">
       <div class="flex flex-col items-center align-start">
         <div class="text-sm">
@@ -103,7 +103,7 @@ function solved() {
       :width="Number(width)"
       @solved="solved"
     />
-  </div>
+  </v-container>
 </template>
 
 <style lang="scss">

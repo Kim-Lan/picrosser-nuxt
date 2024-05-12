@@ -110,9 +110,11 @@ async function onFormSubmit() {
 
       if (result?.ok && !result.error) {
         console.log('Successfully Logged In');
+        errorMessage.value = '';
         registerSuccess.value = false;
         navigateTo('/');
       } else {
+        errorMessage.value = 'Something Went Wrong';
         console.log('Something Went Wrong');
       }
 
@@ -192,7 +194,8 @@ async function onFormSubmit() {
       :disabled="isLoading"
       color="blue-darken-1"
       :class="{ 'opacity-50 cursor-not-allowed' : isLoading }"
-      class="w-full mt-4">
+      class="w-full mt-4"
+    >
       {{ variant === 'LOGIN' ? "Login" : "Register" }}
     </v-btn>
 

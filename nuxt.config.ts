@@ -34,6 +34,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     mongodbUri: process.env.MONGODB_URI,
     authSecret: process.env.AUTH_SECRET,
+    authEmailVerificationSecret: process.env.AUTH_EMAIL_VERIFICATION_SECRET,
     googleAppPassword: process.env.GOOGLE_APP_PASSWORD,
   },
   nitro: {

@@ -3,10 +3,10 @@ const { data: authData } = useAuth();
 </script>
 
 <template>
-  <div>
+  <v-container>
     <div v-if="authData">Welcome {{  authData.user.username }}!</div>
     <div>Press "Play" to start playing!</div>
-  </div>
+  </v-container>
 </template>
 
 <style scoped></style>

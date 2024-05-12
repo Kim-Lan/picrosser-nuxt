@@ -36,9 +36,8 @@ export default NuxtAuthHandler({
         }
 
         return {
-          id: user._id,
-          email: user.email,
-          username: user.username,
+          ... user.toObject(),
+          password: undefined,
         };
       }
     })

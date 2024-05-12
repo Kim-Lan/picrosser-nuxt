@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const existingUser = await User.findOne({ username: body.username });
+  const existingUser = await User.findOne({ username: { '$regex': body.username, $options: 'i' }});
   if (existingUser) {
     throw createError({
       statusCode: 409,
@@ -47,7 +47,8 @@ export default defineEventHandler(async (event) => {
     from: '"Picrosser" <picrosser.com@gmail.com>',
     to: body.email,
     subject: '[Picrosser] Successfully Registered',
-    text: `You have successfully registered user: ${body.username}`,
+    text: `Welcome to Picrosser! \n\nYou have successfully registered with username: ${body.username}`,
+    html: `<h1>Welcome to Picrosser!</h1><p>You have successfully registered with username: ${body.username}</p>`
   });
 
   return {

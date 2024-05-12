@@ -15,8 +15,17 @@ function navigatePlay() {
 }
 
 async function onLogout() {
-  await signOut();
+  try {
+    await signOut({
+      redirect: false,
+    });
+  } catch(e) {
+    console.log(e);
+  } finally {
+    console.log('Signed out');
+  }
 }
+
 
 </script>
 
@@ -38,6 +47,7 @@ async function onLogout() {
         <Icon name="menu" size="1.75em" />
       </v-app-bar-nav-icon>
     </v-app-bar>
+
     <v-navigation-drawer
       v-model="drawer"
       location="right"
@@ -48,7 +58,8 @@ async function onLogout() {
       <v-btn v-if="!authData"><NuxtLink to="/login">Login</NuxtLink></v-btn>
       <v-btn v-if="authData" @click="onLogout">Logout</v-btn>
     </v-navigation-drawer>
-    <v-main style="--v-layout-top: 16px;" class="w-full">
+    <v-main style="--v-layout-top: 0px;" class="w-full">
+      <VerifyEmailAlert />
       <NuxtPage />
     </v-main>
   </v-app>
