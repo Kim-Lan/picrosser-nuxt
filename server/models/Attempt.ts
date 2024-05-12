@@ -1,10 +1,10 @@
 import mongoose from 'mongoose'
-const { Scheme } = mongoose;
+const { Schema, model } = mongoose;
 
 const AttemptSchema = new Schema({
   puzzleID: String,
   attemptNumber: Number,
-  user: UserSchema,
+  username: String,
   startTime: Date,
   endTime: Date,
   solved: Boolean
@@ -16,3 +16,5 @@ const AttemptSchema = new Schema({
     }
   }
 });
+
+export const Attempt = model('Attempt', AttemptSchema);

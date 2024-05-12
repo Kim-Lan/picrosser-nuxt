@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
-    'nuxt-vuefire',
+    '@sidebase/nuxt-auth',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         config.plugins.push(vuetify({ autoImport: true }))
@@ -25,6 +25,21 @@ export default defineNuxtConfig({
   //     })
   //   }
   // },
+  auth: {
+    baseURL: process.env.AUTH_ORIGIN,
+    provider: {
+      type: 'authjs'
+    }
+  },
+  runtimeConfig: {
+    mongodbUri: process.env.MONGODB_URI,
+    authSecret: process.env.AUTH_SECRET,
+    authEmailVerificationSecret: process.env.AUTH_EMAIL_VERIFICATION_SECRET,
+    googleAppPassword: process.env.GOOGLE_APP_PASSWORD,
+  },
+  nitro: {
+    plugins: ['~/server/database.ts']
+  },
   vite: {
     vue: {
       template: {
@@ -33,31 +48,12 @@ export default defineNuxtConfig({
     },
   },
   eslint: {
-
+    
   },
   build: {
     transpile: ['vuetify'],
   },
   buildModules: ['@nuxtjs/html-validator'],
-  runtimeConfig: {
-    mongodbUrl: process.env.MONGODB_URL,
-  },
-  vuefire: {
-    auth: {
-      enabled: true
-    },
-    config: {
-      apiKey: process.env.FIREBASE_API_KEY,
-      authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-      messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-      appId: process.env.FIREBASE_APP_ID,
-    },
-  },
-  nitro: {
-    // plugins: ['~/server/database.ts']
-  },
   ssr: false,
   colorMode: {
     classSuffix: ''

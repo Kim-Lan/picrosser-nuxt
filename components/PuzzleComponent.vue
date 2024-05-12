@@ -37,9 +37,8 @@ const cellSizeString = computed(() => {
     return 20 + 'px';
   } else if (props.width === 20) {
     return 18 + 'px';
-  } else if (props.width === 25) {
-    return 16 + 'px';
   }
+  return 16 + 'px';
 });
 
 const fontSizeString = computed(() => {
@@ -51,9 +50,8 @@ const fontSizeString = computed(() => {
     return 12 + 'pt';
   } else if (props.width === 20) {
     return 11 + 'pt';
-  } else if (props.width === 25) {
-    return 11 + 'pt';
   }
+  return 11 + 'pt';
 });
 
 // async function newPuzzleHandler() {

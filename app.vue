@@ -1,8 +1,8 @@
 <script setup>
-import { signInWithEmailAndPassword } from 'firebase/auth';
 const drawer = ref(false);
-const auth = useFirebaseAuth();
-const user = useCurrentUser();
+
+const { data: authData, signOut } = useAuth();
+
 const puzzle = usePuzzle();
 
 function navigatePlay() {
@@ -14,43 +14,49 @@ function navigatePlay() {
   }
 }
 
-function signIn() {
-  const email = "me@kim-lan.com";
-  const password ="password";
-  signInWithEmailAndPassword(auth, email, password);
+async function onLogout() {
+  try {
+    await signOut({
+      redirect: false,
+    });
+  } catch(e) {
+    console.log(e);
+  } finally {
+    console.log('Signed out');
+  }
 }
 
-function signOut() {
-  auth.signOut();
-}
 
 </script>
 
 <template>
   <v-app>
-    <v-app-bar :elevation="0" color="blue-grey-darken-4" class="font-mono" style="position: relative;">
+    <v-app-bar :elevation="0" color="blue-darken-1" class="font-mono" style="position: relative;">
       <v-app-bar-title class="font-weight-bold">
         <NuxtLink to="/">
           Picrosser
         </NuxtLink>
       </v-app-bar-title>
-      <v-btn class="mx-2 font-weight-bold" @click="navigatePlay">
-        Play
-      </v-btn>
+      <nav class="max-sm:hidden">
+        <v-btn class="mx-2 font-weight-bold" @click="navigatePlay">
+          Play
+        </v-btn>
+      </nav>
       <DarkModeToggle />
       <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer">
         <Icon name="menu" size="1.75em" />
       </v-app-bar-nav-icon>
     </v-app-bar>
+
     <v-navigation-drawer
       v-model="drawer"
       location="right"
       temporary
     >
-      <Settings />
-      <div v-if="user">Account: {{  user.uid }}</div>
-      <v-btn v-if="!user" @click="signIn">Login</v-btn>
-      <v-btn v-if="user" @click="signOut">Logout</v-btn>
+      <div v-if="authData">Logged in as {{ authData.user.username }}</div>
+      <!-- <Settings /> -->
+      <v-btn v-if="!authData"><NuxtLink to="/login">Login</NuxtLink></v-btn>
+      <v-btn v-if="authData" @click="onLogout">Logout</v-btn>
     </v-navigation-drawer>
     <v-main style="--v-layout-top: 0px;" class="w-full">
       <NuxtPage />
