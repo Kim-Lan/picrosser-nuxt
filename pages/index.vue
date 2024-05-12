@@ -4,6 +4,7 @@ const { data: authData } = useAuth();
 
 <template>
   <v-container>
+    <VerifyEmailAlert />
     <div v-if="authData">Welcome {{  authData.user.username }}!</div>
     <div>Press "Play" to start playing!</div>
   </v-container>

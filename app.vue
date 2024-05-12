@@ -59,7 +59,6 @@ async function onLogout() {
       <v-btn v-if="authData" @click="onLogout">Logout</v-btn>
     </v-navigation-drawer>
     <v-main style="--v-layout-top: 0px;" class="w-full">
-      <VerifyEmailAlert />
       <NuxtPage />
     </v-main>
   </v-app>

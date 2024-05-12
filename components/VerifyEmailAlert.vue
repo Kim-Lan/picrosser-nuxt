@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { data: authData } = useAuth();
 
-const isVerified = ref(false);
+const isVerified = ref(true);
 const isLoading = ref(false);
 const emailSent = ref(false);
 
@@ -48,7 +48,7 @@ async function onSendVerification() {
     v-if="authData && !isVerified"
     type="warning"
     text="Please verify your email."
-    class="m-4"
+    class="my-4"
   >
     <v-btn
       :disabled="isLoading || emailSent"

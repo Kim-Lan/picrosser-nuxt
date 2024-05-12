@@ -59,6 +59,7 @@ function solved() {
 
 <template>
   <v-container class="flex flex-col items-center gap-5 my-5 w-full font-sans">
+    <VerifyEmailAlert />
     <div class="flex flex-col items-center gap-5">
       <div class="flex flex-col items-center align-start">
         <div class="text-sm">
@@ -85,7 +86,7 @@ function solved() {
         class="w-60"
       ></v-select> -->
       <div class="flex flex-row items-center gap-5">
-        <v-btn size="small" @click="newPuzzleHandler" elevation="1" color="blue-darken-1" class="font-weight-bold">Start New</v-btn>
+        <v-btn size="small" elevation="1" @click="newPuzzleHandler" color="blue-darken-1" class="font-weight-bold">Start New</v-btn>
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold">Check</v-btn>
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold">Restart</v-btn>
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold">End</v-btn>

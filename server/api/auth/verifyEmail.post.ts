@@ -21,5 +21,5 @@ export default defineEventHandler(async (event) => {
     user.isVerified = true;
     user.save();
   }
-  console.log(user.isVerified);
+  return user.isVerified;
 })
