@@ -2,10 +2,9 @@
 type VARIANT = 'LOGIN' | 'REGISTER';
 const variant = ref<VARIANT>('LOGIN');
 
-const showPassword = ref(false);
-
 function toggleVariant() {
   errorMessage.value = '';
+  registerSuccess.value = false;
   if (variant.value === 'REGISTER') {
     variant.value = 'LOGIN';
   } else {
@@ -21,6 +20,10 @@ const errorMessage = ref('');
 const username = ref('');
 const email = ref('');
 const password = ref('');
+const confirmPassword = ref('');
+
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
 
 const { signIn } = useAuth();
 
@@ -61,6 +64,13 @@ function passwordRules(value) {
     if (value.length < 8) {
       return 'Password must be at least 8 characters long';
     }
+  }
+  return true;
+}
+
+function confirmPasswordRules(value) {
+  if (value !== password.value) {
+    return 'Passwords do not match';
   }
   return true;
 }
@@ -188,6 +198,24 @@ async function onFormSubmit() {
       density="compact"
       variant="outlined"
       @click:append-inner="showPassword = !showPassword"
+    />
+    <div
+      v-if="variant === 'REGISTER'"
+    >
+      Confirm Password
+    </div>
+    <v-text-field
+      v-if="variant === 'REGISTER'"
+      v-model="confirmPassword"
+      validate-on="submit"
+      :rules="[confirmPasswordRules]"
+      :disabled="isLoading"
+      placeholder="Confirm Password"
+      :type="showConfirmPassword ? 'text' : 'password'"
+      :append-inner-icon="showConfirmPassword ? 'mdi-eye' : 'mdi-eye-off'"
+      density="compact"
+      variant="outlined"
+      @click:append-inner="showConfirmPassword = !showConfirmPassword"
     />
     <v-btn
       type="submit"
