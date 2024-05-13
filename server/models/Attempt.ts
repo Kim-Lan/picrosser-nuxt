@@ -4,7 +4,7 @@ const { Schema, model } = mongoose;
 const AttemptSchema = new Schema({
   puzzleID: String,
   attemptNumber: Number,
-  username: String,
+  userID: String,
   startTime: Date,
   endTime: Date,
   solved: Boolean
