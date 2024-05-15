@@ -84,7 +84,7 @@ async function onFormSubmit() {
   if (variant.value === 'REGISTER') {
     try {
       isLoading.value = true;
-      const { data, error } = await $fetch('/api/auth/register', {
+      const { data, error } = await useFetch('/api/auth/register', {
         method: 'POST',
         body: {
           username: username.value,

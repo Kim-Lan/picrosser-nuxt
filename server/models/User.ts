@@ -9,6 +9,7 @@ export interface UserDocument extends Document {
   verificationToken: string;
   verificationTokenExpire: Date;
   resetPassword: boolean;
+  attempts: array;
 }
 
 const USERNAME_INVALID_CHARACTERS = ' ?;:,.`\'"(){}[]|\\/';
@@ -62,6 +63,10 @@ const UserSchema = new Schema({
     required: true,
     default: false,
   },
+  attempts: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Attempt',
+  }],
 },
 {
   timestamps: true,

@@ -3,6 +3,7 @@ const route = useRoute();
 const token = route.params.token;
 
 const isVerified = ref(true);
+const { status: authStatus, signOut }= useAuth()
 
 onMounted(() => verifyEmail());
 
@@ -15,6 +16,11 @@ async function verifyEmail() {
       }
     });
     isVerified.value = data.value;
+    if (authStatus.value === 'authenticated') {
+      await signOut({
+        redirect: false,
+      });
+    }
   } catch (error) {
     console.log(error);
   }

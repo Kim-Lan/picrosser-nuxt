@@ -5,7 +5,7 @@ const isVerified = ref(true);
 const isLoading = ref(false);
 const emailSent = ref(false);
 
-onMounted(() => checkVerified());
+// onMounted(() => checkVerified());
 
 async function checkVerified() {
   try {
@@ -45,7 +45,7 @@ async function onSendVerification() {
 
 <template>
   <v-alert
-    v-if="authData && !isVerified"
+    v-if="authData && !authData.user.isVerified"
     type="warning"
     text="Please verify your email."
     class="my-4"

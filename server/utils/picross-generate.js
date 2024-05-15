@@ -94,7 +94,6 @@ export function bitGenerate(size) {
   let dec, binString, solution1D, solution2D;
   do {
     dec = Math.floor(Math.random() * (2**(size**2) - 1) + 1);
-    console.log("dec " + dec);
     binString = dec.toString(2);
     solution1D = binString.padStart(size**2, '0').split('').reverse();
     solution2D = chunk(solution1D, size);

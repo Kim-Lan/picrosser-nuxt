@@ -53,7 +53,7 @@ async function onLogout() {
       location="right"
       temporary
     >
-      <div v-if="authData">Logged in as {{ authData.user.username }}</div>
+      <div v-if="authData">Logged in as {{ authData?.user?.username }}</div>
       <!-- <Settings /> -->
       <v-btn v-if="!authData"><NuxtLink to="/login">Login</NuxtLink></v-btn>
       <v-btn v-if="authData" @click="onLogout">Logout</v-btn>

@@ -2,32 +2,30 @@
 const route = useRoute();
 const height = route.params.height;
 const width = route.params.width;
-// const sizes = ['5x5', '10x10', '15x15', '20x20', '25x25'];
-const sizes = [
-  {
-    value: 5,
-    label: '5x5'
-  },
-  {
-    value: 10,
-    label: '10x10'
-  },
-  {
-    value: 15,
-    label: '15x15'
-  },
-  {
-    value: 20,
-    label: '20x20'
-  },
-  {
-    value: 25,
-    label: '25x25'
-  }
-];
-// const selectedSize = ref(`${height}x${height}`
-// );
 
+const { data: authData } = useAuth();
+// const sizes = [
+//   {
+//     value: 5,
+//     label: '5x5'
+//   },
+//   {
+//     value: 10,
+//     label: '10x10'
+//   },
+//   {
+//     value: 15,
+//     label: '15x15'
+//   },
+//   {
+//     value: 20,
+//     label: '20x20'
+//   },
+//   {
+//     value: 25,
+//     label: '25x25'
+//   }
+// ];
 const selectedSize = ref(height);
 const stopwatch = useStopwatch();
 stopwatch.reset();
@@ -35,25 +33,47 @@ stopwatch.reset();
 const puzzleComponent = ref(null);
 const statusMessage = ref('Keep going!');
 
-onMounted(() => newPuzzleHandler());
+// onMounted(() => newPuzzleHandler());
 
 async function newPuzzleHandler() {
   console.log('selected size ' + selectedSize.value);
   if (selectedSize.value != height) {
     navigateTo(`/play/${selectedSize.value}x${selectedSize.value}`);
   } else {
-    const newPuzzleID = await puzzleComponent.value.loadPuzzle();
+    const newPuzzleId = await puzzleComponent.value.getNewPuzzle();
     puzzleComponent.value.reset();
-    console.log("new puzzle id " + newPuzzleID);
-    navigateTo(route.path + '?id=' + newPuzzleID);
+    console.log("new puzzle id " + newPuzzleId);
+    navigateTo(route.path + '?id=' + newPuzzleId);
     statusMessage.value = 'Keep going!';
     stopwatch.start();
   }
 }
 
-function solved() {
+async function solved() {
   stopwatch.stop();
   statusMessage.value = 'SOLVED!!';
+
+  console.log(authData.value.user._id);
+
+  if (authData) {
+    try {
+      const data = useFetch('/api/puzzle/recordAttempt', {
+        method: 'POST',
+        body: {
+          puzzleId: route.query.id,
+          userId: authData.value.user._id,
+          startTimestamp: stopwatch.startTimestamp,
+          endTimestamp: stopwatch.endTimestamp,
+          isSolved: true,
+        },
+      });
+      if (data.value) {
+        console.log('recorded attempt');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 </script>
 
@@ -86,7 +106,7 @@ function solved() {
         class="w-60"
       ></v-select> -->
       <div class="flex flex-row items-center gap-5">
-        <v-btn size="small" elevation="1" @click="newPuzzleHandler" color="blue-darken-1" class="font-weight-bold">Start New</v-btn>
+        <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold" @click="newPuzzleHandler">Start New</v-btn>
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold">Check</v-btn>
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold">Restart</v-btn>
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold">End</v-btn>

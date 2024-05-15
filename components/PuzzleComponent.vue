@@ -10,7 +10,7 @@ const props = defineProps({
   }
 });
 
-defineExpose({ loadPuzzle, reset });
+defineExpose({ getNewPuzzle, reset });
 // onMounted(() => loadPuzzle());
 
 const emit = defineEmits(['solved']);
@@ -22,7 +22,7 @@ const rightKeys = ref(null);
 const topKeys = ref(null);
 const bottomKeys = ref(null);
 //const currentID = ref('');
-const puzzleID = ref('');
+const puzzleId = ref('');
 const isSolved = ref(false);
 const rowKeys = ref([]);
 const colKeys = ref([]);
@@ -55,33 +55,34 @@ const fontSizeString = computed(() => {
 });
 
 // async function newPuzzleHandler() {
-//   if (puzzleID.value === '' || isSolved.value === true) {
+//   if (puzzleId.value === '' || isSolved.value === true) {
 //     const id = await loadPuzzle();
 //   } else {
 //     alert('new puzzle?');
 //   }
 // }
 
-async function loadPuzzle() {
-  const data = await $fetch('/api/loadPuzzle', {
+async function getNewPuzzle() {
+  const data = await $fetch('/api/puzzle/getNewPuzzle', {
     method: 'GET',
     query: { height: props.height, width: props.width }
   })
-  puzzleID.value = data.puzzleID;
+  puzzleId.value = data.puzzleId;
   rowKeys.value = data.rowKeys;
   colKeys.value = data.colKeys;
   solution.value = data.solution;
-  puzzle.newPuzzle(props.height, props.width, puzzleID.value);
-  return puzzleID.value;
+  puzzle.newPuzzle(props.height, props.width, puzzleId.value);
+  return puzzleId.value;
 }
 
 function updateState(index, state) {
   const [row, col] = convertIndexTo2D(index, props.width);
   puzzle.userGrid[row][col] = state;
-  printGrid(puzzle.userGrid);
+  // printGrid(puzzle.userGrid);
 
-  if (checkSolution()) {
+  if (!isSolved.value && checkSolution()) {
     puzzle.setSolved(true);
+    isSolved.value = true;
     emit('solved');
   }
 }
@@ -120,7 +121,7 @@ function checkSolution() {
 }
 
 function onKeyPressed(direction, groupIndex, keyIndex, isPressed) {
-  console.log(`puzzle detected key press: ${direction} ${groupIndex} ${keyIndex}`);
+  // console.log(`puzzle detected key press: ${direction} ${groupIndex} ${keyIndex}`);
   if (direction === 'row') {
     leftKeys.value.pressKey(groupIndex, keyIndex, isPressed);
     rightKeys.value.pressKey(groupIndex, keyIndex, isPressed);
