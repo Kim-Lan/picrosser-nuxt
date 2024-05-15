@@ -10,7 +10,7 @@ const props = defineProps({
   },
 });
 
-defineExpose({ getNewPuzzle, recordAttempt, reset });
+defineExpose({ recordAttempt, setPuzzle, reset });
 // onMounted(() => loadPuzzle());
 
 const emit = defineEmits(['solved']);
@@ -54,26 +54,33 @@ const fontSizeString = computed(() => {
   return 11 + 'pt';
 });
 
-// async function newPuzzleHandler() {
-//   if (puzzleId.value === '' || isSolved.value === true) {
-//     const id = await loadPuzzle();
-//   } else {
-//     alert('new puzzle?');
-//   }
-// }
-
-async function getNewPuzzle() {
-  const data = await $fetch('/api/puzzle/getNewPuzzle', {
-    method: 'GET',
-    query: { height: props.height, width: props.width }
-  });
+function setPuzzle(data) {
   puzzleId.value = data.puzzleId;
   rowKeys.value = data.rowKeys;
   colKeys.value = data.colKeys;
   solution.value = data.solution;
   puzzle.newPuzzle(props.height, props.width, puzzleId.value);
-  return puzzleId.value;
 }
+
+// async function getNewPuzzle() {
+//   const data = await $fetch('/api/puzzle/getNewPuzzle', {
+//     method: 'GET',
+//     query: { height: props.height, width: props.width,  }
+//   });
+//   console.log(data);
+//   setPuzzle(data);
+//   return puzzleId.value;
+// }
+// 
+// async function getPuzzleById(id) {
+//   const { data } = await useFetch('/api/puzzle/getPuzzleById', {
+//     method: 'GET',
+//     query: { height: props.height, width: props.width, id },
+//   });
+//   console.log(data.value);
+//   setPuzzle(data.value);
+//   return puzzleId.value;
+// }
 
 async function recordAttempt(startTimestamp, endTimestamp) {
   const { data: authData } = useAuth();

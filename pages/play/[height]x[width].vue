@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 const route = useRoute();
-const router = useRouter();
 const height = route.params.height;
 const width = route.params.width;
 
@@ -36,17 +35,46 @@ stopwatch.reset();
 const puzzleComponent = ref(null);
 const statusMessage = ref('Keep going!');
 
-// onMounted(() => newPuzzleHandler());
+onMounted(() => onPageLoad());
+
+async function onPageLoad() {
+  const id = route.query.id;
+  if (id) {
+    await getPuzzleById(id);
+  }
+}
+
+async function getNewPuzzle() {
+  const data = await $fetch('/api/puzzle/getNewPuzzle', {
+    method: 'GET',
+    query: { height, width }
+  });
+  console.log(data);
+  puzzleComponent.value.setPuzzle(data);
+  return data.puzzleId;
+}
+
+async function getPuzzleById(id) {
+  const { data } = await useFetch('/api/puzzle/getPuzzleById', {
+    method: 'GET',
+    query: { height, width, id },
+  });
+  console.log(data.value);
+  puzzleComponent.value.setPuzzle(data.value);
+  return data.value.puzzleId;
+}
 
 async function newPuzzleHandler() {
   selectedSize.value = height;
+
   loadingIndicator.start();
-  const newPuzzleId = await puzzleComponent.value.getNewPuzzle();
+  const newPuzzleId = await getNewPuzzle();
   loadingIndicator.finish();
+
   puzzleComponent.value.reset();
   console.log("new puzzle id " + newPuzzleId);
-  // navigateTo(route.path + '?id=' + newPuzzleId);
-  router.push(`${route.path}?id=${newPuzzleId}`);
+  navigateTo(`${route.path}?id=${newPuzzleId}`);
+
   statusMessage.value = 'Keep going!';
   stopwatch.start();
 }
@@ -63,6 +91,11 @@ async function solved() {
 
   puzzleComponent.value.recordAttempt(stopwatch.startTimestamp, stopwatch.endTimestamp);
 }
+
+function reset() {
+  puzzleComponent.value.reset();
+}
+
 </script>
 
 <template>
@@ -100,7 +133,7 @@ async function solved() {
       <div class="flex flex-row items-center gap-5">
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold" @click="newPuzzleHandler">Start New</v-btn>
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold">Check</v-btn>
-        <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold">Restart</v-btn>
+        <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold" @click="reset">Restart</v-btn>
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold">End</v-btn>
       </div>
     </div>
