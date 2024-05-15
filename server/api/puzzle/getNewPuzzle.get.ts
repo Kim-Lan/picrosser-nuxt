@@ -1,9 +1,9 @@
-import { customAlphabet } from 'nanoid'
-import { printGrid } from '~/server/utils/grid'
-import { printArray } from '~/server/utils/arrayHelpers'
-import { getKeys, getGoalString } from '~/server/utils/picross'
-import { generate, bitGenerate } from '~/server/utils/picross-generate'
-import { Puzzle } from '~/server/models/Puzzle'
+import mongoose from 'mongoose';
+import { printGrid } from '~/server/utils/grid';
+import { printArray } from '~/server/utils/arrayHelpers';
+import { getKeys, getGoalString } from '~/server/utils/picross';
+import { generate, bitGenerate } from '~/server/utils/picross-generate';
+import { Puzzle } from '~/server/models/Puzzle';
 
 const SIZES = [5, 10, 15, 20, 25];
 
@@ -27,14 +27,15 @@ export default defineEventHandler(async (event) => {
   if (existingPuzzle) {
     puzzleId = existingPuzzle._id;
   } else {
-    const newPuzzle = await Puzzle.create({
-      width,
-      height,
-      rowKeys,
-      colKeys,
-      goal
-    });
-    puzzleId = newPuzzle._id;
+    // const newPuzzle = await Puzzle.create({
+    //   width,
+    //   height,
+    //   rowKeys,
+    //   colKeys,
+    //   goal
+    // });
+    // puzzleId = newPuzzle._id;
+    puzzleId = new mongoose.Types.ObjectId();
   }
 
   console.log("returning puzzle");

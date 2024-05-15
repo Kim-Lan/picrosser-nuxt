@@ -2,15 +2,15 @@
 const props = defineProps({
   height: {
     type: Number,
-    default: 5
+    default: 5,
   },
   width: {
     type: Number,
-    default: 5
-  }
+    default: 5,
+  },
 });
 
-defineExpose({ getNewPuzzle, reset });
+defineExpose({ getNewPuzzle, recordAttempt, reset });
 // onMounted(() => loadPuzzle());
 
 const emit = defineEmits(['solved']);
@@ -66,13 +66,42 @@ async function getNewPuzzle() {
   const data = await $fetch('/api/puzzle/getNewPuzzle', {
     method: 'GET',
     query: { height: props.height, width: props.width }
-  })
+  });
   puzzleId.value = data.puzzleId;
   rowKeys.value = data.rowKeys;
   colKeys.value = data.colKeys;
   solution.value = data.solution;
   puzzle.newPuzzle(props.height, props.width, puzzleId.value);
   return puzzleId.value;
+}
+
+async function recordAttempt(startTimestamp, endTimestamp) {
+  const { data: authData } = useAuth();
+  if (authData) {
+    try {
+      const data = await $fetch('/api/puzzle/recordAttempt', {
+        method: 'POST',
+        body: {
+          puzzle: {
+            id: puzzleId.value,
+            height: props.height,
+            width: props.width,
+            rowKeys: rowKeys.value,
+            colKeys: colKeys.value,
+            solution: solution.value,
+          },
+          userId: authData.value.user._id,
+          startTimestamp: startTimestamp,
+          endTimestamp: endTimestamp,
+        },
+      });
+      if (data.value) {
+        console.log('recorded attempt');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 function updateState(index, state) {

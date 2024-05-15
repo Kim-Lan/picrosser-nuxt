@@ -34,6 +34,7 @@ async function verifyEmail() {
       type="success"
     >
       Email verified!
+      <NuxtLink to="/login" class="underline">Please login again.</NuxtLink>
     </v-alert>
     <v-alert
       v-if="!isVerified"

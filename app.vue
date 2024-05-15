@@ -3,14 +3,17 @@ const drawer = ref(false);
 
 const { data: authData, signOut } = useAuth();
 
+const route = useRoute();
 const puzzle = usePuzzle();
 
 function navigatePlay() {
-  const { height, width } = puzzle.getSize();
-  if (height.value != 0 && width.value != 0) {
-    navigateTo(`/play/${height.value}x${width.value}`);
-  } else {
-    navigateTo('/play/5x5');
+  if (!route.path.includes('play')) {
+    const { height, width } = puzzle.getSize();
+    if (height.value != 0 && width.value != 0) {
+      navigateTo(`/play/${height.value}x${width.value}`);
+    } else {
+      navigateTo('/play/5x5');
+    }
   }
 }
 
@@ -31,6 +34,7 @@ async function onLogout() {
 
 <template>
   <v-app>
+    <NuxtLoadingIndicator color="#0D47A1" />
     <v-app-bar :elevation="0" color="blue-darken-1" class="font-mono" style="position: relative;">
       <v-app-bar-title class="font-weight-bold">
         <NuxtLink to="/">

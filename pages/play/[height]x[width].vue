@@ -1,7 +1,10 @@
 <script lang="ts" setup>
 const route = useRoute();
+const router = useRouter();
 const height = route.params.height;
 const width = route.params.width;
+
+const loadingIndicator = useLoadingIndicator();
 
 const { data: authData } = useAuth();
 // const sizes = [
@@ -36,16 +39,21 @@ const statusMessage = ref('Keep going!');
 // onMounted(() => newPuzzleHandler());
 
 async function newPuzzleHandler() {
-  console.log('selected size ' + selectedSize.value);
+  selectedSize.value = height;
+  loadingIndicator.start();
+  const newPuzzleId = await puzzleComponent.value.getNewPuzzle();
+  loadingIndicator.finish();
+  puzzleComponent.value.reset();
+  console.log("new puzzle id " + newPuzzleId);
+  // navigateTo(route.path + '?id=' + newPuzzleId);
+  router.push(`${route.path}?id=${newPuzzleId}`);
+  statusMessage.value = 'Keep going!';
+  stopwatch.start();
+}
+
+function changeSize() {
   if (selectedSize.value != height) {
     navigateTo(`/play/${selectedSize.value}x${selectedSize.value}`);
-  } else {
-    const newPuzzleId = await puzzleComponent.value.getNewPuzzle();
-    puzzleComponent.value.reset();
-    console.log("new puzzle id " + newPuzzleId);
-    navigateTo(route.path + '?id=' + newPuzzleId);
-    statusMessage.value = 'Keep going!';
-    stopwatch.start();
   }
 }
 
@@ -53,27 +61,7 @@ async function solved() {
   stopwatch.stop();
   statusMessage.value = 'SOLVED!!';
 
-  console.log(authData.value.user._id);
-
-  if (authData) {
-    try {
-      const data = useFetch('/api/puzzle/recordAttempt', {
-        method: 'POST',
-        body: {
-          puzzleId: route.query.id,
-          userId: authData.value.user._id,
-          startTimestamp: stopwatch.startTimestamp,
-          endTimestamp: stopwatch.endTimestamp,
-          isSolved: true,
-        },
-      });
-      if (data.value) {
-        console.log('recorded attempt');
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  puzzleComponent.value.recordAttempt(stopwatch.startTimestamp, stopwatch.endTimestamp);
 }
 </script>
 
@@ -81,20 +69,24 @@ async function solved() {
   <v-container class="flex flex-col items-center gap-5 my-5 w-full font-sans">
     <VerifyEmailAlert />
     <div class="flex flex-col items-center gap-5">
-      <div class="flex flex-col items-center align-start">
-        <div class="text-sm">
-          Puzzle Size
+      <div class="flex flex-row align-end gap-5">
+        <div class="flex flex-col items-center align-start">
+          <div class="text-sm">
+            Puzzle Size
+          </div>
+          <div class="select flex flex-col text-lg">
+            <select v-model="selectedSize">
+              <option value="5">5x5</option>
+              <option value="10">10x10</option>
+              <option value="15">15x15</option>
+              <option value="20">20x20</option>
+              <option value="25">25x25</option>
+            </select>
+          </div>
         </div>
-        <div class="select flex flex-col text-lg">
-          <select v-model="selectedSize">
-            <option value="5">5x5</option>
-            <option value="10">10x10</option>
-            <option value="15">15x15</option>
-            <option value="20">20x20</option>
-            <option value="25">25x25</option>
-          </select>
-        </div>
+        <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold" @click="changeSize">Change Size</v-btn>
       </div>
+
 
       <!-- <v-select
         v-model="selectedSize"
@@ -112,10 +104,10 @@ async function solved() {
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold">End</v-btn>
       </div>
     </div>
-    <div class="text-5xl font-bold font-mono">
+    <div v-if="route.query.id" class="text-5xl font-bold font-mono">
       {{ stopwatch.elapsedTime }}
     </div>
-    <div>
+    <div v-if="route.query.id">
       {{ statusMessage }}
     </div>
     <PuzzleComponent

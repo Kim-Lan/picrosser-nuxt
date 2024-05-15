@@ -6,36 +6,30 @@ const AttemptSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Puzzle',
     required: true,
+    immutable: true,
   },
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true,
+    immutable: true,
   },
   startTime: {
     type: Date,
     required: true,
+    immutable: true,
   },
   endTime: {
     type: Date,
     required: true,
     default: Date.now,
+    immutable: true,
   },
-  isSolved: {
-    type: Boolean,
+  totalTime: {
+    type: Number,
     required: true,
-    default: false,
+    immutable: true,
   }
-},
-{
-  methods: {
-    getResult() {
-      return isSolved ? endTime - startTime : -1; // -1 means DNF (Did Not Finish)
-    }
-  }
-},
-{
-  timestamps: true,
 });
 
 export const Attempt = model('Attempt', AttemptSchema);
