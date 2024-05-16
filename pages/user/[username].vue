@@ -2,6 +2,8 @@
 const route = useRoute();
 const username = route.params.username;
 
+const loadingIndicator = useLoadingIndicator();
+
 const user = ref(null);
 const errorMessage = ref('');
 
@@ -9,6 +11,7 @@ onMounted(() => fetchUser());
 
 async function fetchUser() {
   try {
+    loadingIndicator.start();
     const { data, error } = await useFetch('/api/user/getUser', {
       method: 'GET',
       query: { username },
@@ -19,6 +22,8 @@ async function fetchUser() {
     user.value = data.value;
   } catch (error) {
     errorMessage.value = error.statusMessage;
+  } finally {
+    loadingIndicator.finish();
   }
 }
 </script>
@@ -28,7 +33,13 @@ async function fetchUser() {
     <v-alert v-if="errorMessage" type="error">
       {{ errorMessage }}
     </v-alert>
-    {{ user }}
+    <div v-if="user" >
+      {{ user.username }}
+      {{ user.createdAt }}
+      <div v-for="(attempt, index) in user.attempts" :key="index">
+        {{ attempt }}
+      </div>
+    </div>
   </v-container>
 </template>
 
