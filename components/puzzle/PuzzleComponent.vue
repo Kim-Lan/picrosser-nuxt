@@ -179,6 +179,28 @@ function onKeyPressed(direction, groupIndex, keyIndex, isPressed) {
   }
 }
 
+function onKeyGroupDone(direction, groupIndex) {
+  if (direction === 'row') {
+    console.log(`filling row ${groupIndex}`)
+    for (let c = 0; c < props.width; c++) {
+      if (puzzle.userGrid[groupIndex][c] === '0') {
+        puzzle.userGrid[groupIndex][c] = '-1';
+        const index = convert2DToIndex(groupIndex, c, props.width);
+        cells.value[index].setState('-1');
+      }
+    }
+  } else {
+    console.log(`filling col ${groupIndex}`)
+    for (let r = 0; r < props.height; r++) {
+      if (puzzle.userGrid[r][groupIndex] === '0') {
+        puzzle.userGrid[r][groupIndex] = '-1';
+        const index = convert2DToIndex(r, groupIndex, props.width);
+        cells.value[index].setState('-1');
+      }
+    }
+  }
+}
+
 </script>
 
 <template>
@@ -200,10 +222,10 @@ function onKeyPressed(direction, groupIndex, keyIndex, isPressed) {
         @cell-change="updateState"
       />
     </div>
-    <KeyContainer id="left-keys" ref="leftKeys" :direction="'row'" :keys="rowKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @key-pressed="onKeyPressed" @contextmenu.prevent />
-    <KeyContainer id="right-keys" ref="rightKeys" :direction="'row'" :keys="rowKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @key-pressed="onKeyPressed" @contextmenu.prevent />
-    <KeyContainer id="top-keys" ref="topKeys" :direction="'col'" :keys="colKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @key-pressed="onKeyPressed" @contextmenu.prevent />
-    <KeyContainer id="bottom-keys" ref="bottomKeys" :direction="'col'" :keys="colKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @key-pressed="onKeyPressed" @contextmenu.prevent />
+    <KeyContainer id="left-keys" ref="leftKeys" :direction="'row'" :keys="rowKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @key-pressed="onKeyPressed" @key-group-done="onKeyGroupDone" @contextmenu.prevent />
+    <KeyContainer id="right-keys" ref="rightKeys" :direction="'row'" :keys="rowKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @key-pressed="onKeyPressed" @key-group-done="onKeyGroupDone" @contextmenu.prevent />
+    <KeyContainer id="top-keys" ref="topKeys" :direction="'col'" :keys="colKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @key-pressed="onKeyPressed" @key-group-done="onKeyGroupDone" @contextmenu.prevent />
+    <KeyContainer id="bottom-keys" ref="bottomKeys" :direction="'col'" :keys="colKeys" :width="props.width" :height="props.height" :cell-size="cellSizeString" @key-pressed="onKeyPressed" @key-group-done="onKeyGroupDone" @contextmenu.prevent />
   </div>
 </template>
 

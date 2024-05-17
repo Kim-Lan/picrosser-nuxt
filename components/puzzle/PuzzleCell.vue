@@ -14,7 +14,7 @@ const props = defineProps({
   // }
 });
 
-defineExpose({ reset });
+defineExpose({ reset, setState });
 
 const mouse = useMouse();
 

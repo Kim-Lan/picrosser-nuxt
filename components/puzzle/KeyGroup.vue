@@ -18,24 +18,26 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['keyPressed']);
+const settings = useSettings();
+
+const emit = defineEmits(['keyPressed', 'keyGroupDone']);
 defineExpose({ pressKey, getGroupIndex, reset });
 
 const keyComponents = ref([]);
 
 function onKeyPressed(keyIndex, isPressed) {
   emit('keyPressed', props.groupIndex, keyIndex, isPressed);
-  let keyGroupDone = true;
-  for (const key of keyComponents.value) {
-    if (!key.isPressed()) {
-      keyGroupDone = false;
-      if (keyGroupDone) {
 
+  if (settings.fillLine) {
+    let keyGroupDone = true;
+    for (const key of keyComponents.value) {
+      if (!key.isPressed()) {
+        keyGroupDone = false;
       }
     }
-  }
-  if (keyGroupDone) {
-
+    if (keyGroupDone) {
+      emit('keyGroupDone', props.groupIndex);
+    }
   }
 }
 

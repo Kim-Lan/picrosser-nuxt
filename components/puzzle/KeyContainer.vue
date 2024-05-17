@@ -22,13 +22,17 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['keyPressed']);
+const emit = defineEmits(['keyPressed', 'keyGroupDone']);
 defineExpose({ pressKey, reset });
 
 const keyGroups = ref([]);
 
 function onKeyPressed(groupIndex, keyIndex, isPressed) {
   emit('keyPressed', props.direction, groupIndex, keyIndex, isPressed);
+}
+
+function onKeyGroupDone(groupIndex) {
+  emit('keyGroupDone', props.direction, groupIndex);
 }
 
 function pressKey(groupIndex, keyIndex, isPressed) {
@@ -59,6 +63,7 @@ function reset() {
       :cell-size="cellSize"
       @key-pressed="onKeyPressed"
       class="key-group"
+      @key-group-done="onKeyGroupDone"
       :class="{
         'first-row': direction === 'row' && groupIndex === 0,
         'first-col': direction === 'col' && groupIndex === 0,

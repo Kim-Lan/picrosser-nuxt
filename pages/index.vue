@@ -5,7 +5,10 @@ const { data: authData } = useAuth();
 <template>
   <v-container>
     <VerifyEmailAlert />
-    <div v-if="authData">
+    <div
+      v-if="authData"
+      class="font-mono text-xl my-4"
+    >
       Welcome
       <NuxtLink
         :to="{ name: 'user-username', params: { username: authData.user.username }}"
