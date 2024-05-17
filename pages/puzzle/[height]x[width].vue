@@ -54,7 +54,7 @@ async function fetchPuzzle() {
       >
         <thead>
           <tr>
-            <th>Start Date & Time</th>
+            <th>Date & Time</th>
             <th class="text-center">User</th>
             <th class="text-center">Result</th>
           </tr>
