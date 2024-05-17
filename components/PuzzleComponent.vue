@@ -11,7 +11,6 @@ const props = defineProps({
 });
 
 defineExpose({ getNewPuzzle, getPuzzleById, recordAttempt, setPuzzle, reset, checkErrors });
-// onMounted(() => loadPuzzle());
 
 const emit = defineEmits(['solved']);
 const puzzle = usePuzzle();
@@ -21,7 +20,6 @@ const leftKeys = ref(null);
 const rightKeys = ref(null);
 const topKeys = ref(null);
 const bottomKeys = ref(null);
-//const currentID = ref('');
 const puzzleId = ref('');
 const isSolved = ref(false);
 const rowKeys = ref([]);
