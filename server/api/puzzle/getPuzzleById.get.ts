@@ -17,6 +17,6 @@ export default defineEventHandler(async (event) => {
     height: puzzle.height,
     rowKeys: puzzle.rowKeys,
     colKeys: puzzle.colKeys,
-    solution: getSolutionGrid(puzzle.goal),
+    solution: getSolutionGrid(puzzle.goal, puzzle.width),
   };
 })
