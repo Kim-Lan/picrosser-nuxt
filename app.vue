@@ -74,43 +74,6 @@ async function onLogout() {
       <NuxtPage />
     </v-main>
   </v-app>
-
-  <!-- <main class="min-h-screen font-mono">
-    <nav class="navbar flex flex-row flex-wrap justify-between bg-slate-800 w-screen py-3 px-7 text-stone-100">
-      <div class="btn btn-ghost normal-case antialiased text-2xl tracking-wide hover:text-slate-200 hover:bg-primary">
-        <NuxtLink to="/">
-          Picrosser
-        </NuxtLink>
-      </div>
-      <div class="navbar-end space-x-2 text-stone-100">
-        <div class="btn btn-ghost hover:bg-primary">
-          <NuxtLink to="/play">
-            Play
-          </NuxtLink>
-        </div>
-        <DarkModeToggle />
-        <div class="btn btn-ghost hover:bg-primary">
-          <input id="drawer" type="checkbox" class="drawer-toggle" />
-          <label for="drawer">
-            <Icon name="menu" size="1.75em" class="swap-off" />
-          </label>
-        </div>
-      </div>
-    </nav>
-    <div class="drawer">
-      <div
-      class="p-8 min-h-full bg-stone-100 dark:bg-slate-800 drawer-content"
-      >
-        <NuxtPage />
-      </div>
-      <div class="drawer-side">
-        <label for="drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-        <div class="bg-slate-800">
-          Drawer
-        </div>
-      </div>
-    </div>
-  </main> -->
 </template>
 
 <style>

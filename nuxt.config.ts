@@ -74,5 +74,11 @@ export default defineNuxtConfig({
   },
   imports: {
     dirs: ['server/utils', 'utils']
-  }
+  },
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false,
+    },
+  ],
 })
