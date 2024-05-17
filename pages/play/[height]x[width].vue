@@ -5,7 +5,6 @@ const width = route.params.width;
 
 const loadingIndicator = useLoadingIndicator();
 
-const { data: authData } = useAuth();
 // const sizes = [
 //   {
 //     value: 5,
@@ -35,46 +34,57 @@ stopwatch.reset();
 const puzzleComponent = ref(null);
 const statusMessage = ref('Keep going!');
 
+const isSolved = ref(false);
+
 onMounted(() => onPageLoad());
 
 async function onPageLoad() {
   const id = route.query.id;
   if (id) {
-    await getPuzzleById(id);
+    loadingIndicator.start();
+    await puzzleComponent.value.getPuzzleById(id);
+    loadingIndicator.finish();
+    start();
   }
 }
 
-async function getNewPuzzle() {
-  const data = await $fetch('/api/puzzle/getNewPuzzle', {
-    method: 'GET',
-    query: { height, width }
-  });
-  console.log(data);
-  puzzleComponent.value.setPuzzle(data);
-  return data.puzzleId;
-}
-
-async function getPuzzleById(id) {
-  const { data } = await useFetch('/api/puzzle/getPuzzleById', {
-    method: 'GET',
-    query: { height, width, id },
-  });
-  console.log(data.value);
-  puzzleComponent.value.setPuzzle(data.value);
-  return data.value.puzzleId;
-}
+// async function getNewPuzzle() {
+//   const { data } = await useFetch('/api/puzzle/getNewPuzzle', {
+//     method: 'GET',
+//     query: { height, width }
+//   });
+//   console.log(data.value);
+//   puzzleComponent.value.setPuzzle(data.value);
+//   return data.value.puzzleId;
+// }
+// 
+// async function getPuzzleById(id) {
+//   loadingIndicator.start();
+//   const { data } = await useFetch('/api/puzzle/getPuzzleById', {
+//     method: 'GET',
+//     query: { height, width, id },
+//   });
+//   console.log(data.value);
+//   puzzleComponent.value.setPuzzle(data.value);
+//   loadingIndicator.finish();
+//   return data.value.puzzleId;
+// }
 
 async function newPuzzleHandler() {
   selectedSize.value = height;
 
   loadingIndicator.start();
-  const newPuzzleId = await getNewPuzzle();
+  const newPuzzleId = await puzzleComponent.value.getNewPuzzle();
   loadingIndicator.finish();
 
-  puzzleComponent.value.reset();
   console.log("new puzzle id " + newPuzzleId);
   navigateTo(`${route.path}?id=${newPuzzleId}`);
+  start();
+}
 
+function start() {
+  puzzleComponent.value.reset();
+  isSolved.value = false;
   statusMessage.value = 'Keep going!';
   stopwatch.start();
 }
@@ -86,6 +96,7 @@ function changeSize() {
 }
 
 async function solved() {
+  isSolved.value = true;
   stopwatch.stop();
   statusMessage.value = 'SOLVED!!';
 
@@ -94,6 +105,23 @@ async function solved() {
 
 function reset() {
   puzzleComponent.value.reset();
+  statusMessage.value = 'Keep going!';
+}
+
+function check() {
+  const error = puzzleComponent.value.checkErrors();
+  statusMessage.value = `You have ${error} error(s) so far`;
+}
+
+function end() {
+  stopwatch.reset();
+  puzzleComponent.value.reset();
+  puzzleComponent.value.setPuzzle({
+    rowKeys: [],
+    colKeys: [],
+    solution: []
+  });
+  navigateTo(`/play/${selectedSize.value}x${selectedSize.value}`);
 }
 
 </script>
@@ -132,9 +160,9 @@ function reset() {
       ></v-select> -->
       <div class="flex flex-row items-center gap-5">
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold" @click="newPuzzleHandler">Start New</v-btn>
-        <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold">Check</v-btn>
-        <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold" @click="reset">Restart</v-btn>
-        <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold">End</v-btn>
+        <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold" :disabled="isSolved" @click="check">Check</v-btn>
+        <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold" :disabled="isSolved" @click="reset">Restart</v-btn>
+        <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold" :disabled="isSolved" @click="end">End</v-btn>
       </div>
     </div>
     <div v-if="route.query.id" class="text-5xl font-bold font-mono">

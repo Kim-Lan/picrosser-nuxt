@@ -10,7 +10,7 @@ const props = defineProps({
   },
 });
 
-defineExpose({ recordAttempt, setPuzzle, reset });
+defineExpose({ getNewPuzzle, getPuzzleById, recordAttempt, setPuzzle, reset, checkErrors });
 // onMounted(() => loadPuzzle());
 
 const emit = defineEmits(['solved']);
@@ -60,27 +60,28 @@ function setPuzzle(data) {
   colKeys.value = data.colKeys;
   solution.value = data.solution;
   puzzle.newPuzzle(props.height, props.width, puzzleId.value);
+  isSolved.value = false;
 }
 
-// async function getNewPuzzle() {
-//   const data = await $fetch('/api/puzzle/getNewPuzzle', {
-//     method: 'GET',
-//     query: { height: props.height, width: props.width,  }
-//   });
-//   console.log(data);
-//   setPuzzle(data);
-//   return puzzleId.value;
-// }
-// 
-// async function getPuzzleById(id) {
-//   const { data } = await useFetch('/api/puzzle/getPuzzleById', {
-//     method: 'GET',
-//     query: { height: props.height, width: props.width, id },
-//   });
-//   console.log(data.value);
-//   setPuzzle(data.value);
-//   return puzzleId.value;
-// }
+async function getNewPuzzle() {
+  const data = await $fetch('/api/puzzle/getNewPuzzle', {
+    method: 'GET',
+    query: { height: props.height, width: props.width,  }
+  });
+  // console.log(data);
+  setPuzzle(data);
+  return puzzleId.value;
+}
+
+async function getPuzzleById(id) {
+  const { data } = await useFetch('/api/puzzle/getPuzzleById', {
+    method: 'GET',
+    query: { height: props.height, width: props.width, id },
+  });
+  // console.log(data.value);
+  setPuzzle(data.value);
+  return puzzleId.value;
+}
 
 async function recordAttempt(startTimestamp, endTimestamp) {
   const { data: authData } = useAuth();
@@ -130,7 +131,6 @@ function reset() {
 }
 
 function resetCells() {
-  // cells.value = [];
   for (const cell of cells.value) {
     cell.reset();
   }
@@ -154,6 +154,20 @@ function checkSolution() {
     }
   }
   return true;
+}
+
+function checkErrors() {
+  let errors = 0;
+  for (let i = 0; i < props.height; i++) {
+    for (let j = 0; j < props.width; j++) {
+      if (puzzle.userGrid[i][j] === '-1' && solution.value[i][j] === '1') {
+        errors++;
+      } else if (puzzle.userGrid[i][j] === '1' && solution.value[i][j] === '0') {
+        errors++;
+      }
+    }
+  }
+  return errors;
 }
 
 function onKeyPressed(direction, groupIndex, keyIndex, isPressed) {

@@ -1,28 +1,26 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 const route = useRoute();
-const username = route.params.username;
+const height = route.params.height;
+const width = route.params.width;
+const id = route.query.id;
 
 const loadingIndicator = useLoadingIndicator();
 const errorMessage = ref('');
 
-const user = ref({});
 const attempts = ref([]);
 
-onMounted(() => fetchUser());
+onMounted(() => fetchPuzzle());
 
-async function fetchUser() {
+async function fetchPuzzle() {
   try {
     loadingIndicator.start();
-    const { data, error } = await useFetch('/api/user/getUser', {
+    const { data, error } = await useFetch('/api/puzzle/getPuzzleRecordById', {
       method: 'GET',
-      query: { username },
+      query: { height, width, id }
     });
     if (error.value) {
       errorMessage.value = error.value.statusMessage;
     }
-    user.value = {
-      createdAt: data.value.createdAt,
-    };
     attempts.value = data.value.attempts.reverse();
   } catch (error) {
     errorMessage.value = error.statusMessage;
@@ -39,16 +37,25 @@ async function fetchUser() {
     </v-alert>
     <div class="flex flex-col align-center mt-4 gap-6">
       <div class="w-full flex flex-col align-center">
-        <div class="text-2xl">{{ username }}</div>
-        <div>Joined {{ new Date(user.createdAt).toLocaleDateString() }}</div>
+        <div class="text-2xl">{{ height }}x{{ width }} Puzzle</div>
+        <div>{{ id }}</div>
       </div>
+      <NuxtLink
+        :to="{
+          name: 'play-heightxwidth',
+          params: { height, width },
+          query: { id },
+        }"
+      >
+        <v-btn color="blue-darken-1">Play</v-btn>
+      </NuxtLink>
       <v-table
         class="w-1/2 max-lg:w-3/4 max-md:w-full"
       >
         <thead>
           <tr>
             <th>Start Date & Time</th>
-            <th class="text-center">Puzzle</th>
+            <th class="text-center">User</th>
             <th class="text-center">Result</th>
           </tr>
         </thead>
@@ -60,13 +67,12 @@ async function fetchUser() {
             <td class="text-center">
               <NuxtLink
                 :to="{
-                  name: 'puzzle-heightxwidth',
-                  params: { height: attempt.puzzle.height, width: attempt.puzzle.width },
-                  query: { id: attempt.puzzle._id },
+                  name: 'user-username',
+                  params: { username: attempt.user.username },
                 }"
                 class="underline"  
               >
-                {{  attempt.puzzle.height }}x{{ attempt.puzzle.width }}
+                {{  attempt.user.username }}
               </NuxtLink>
             </td>
             <td class="text-center">
@@ -78,5 +84,3 @@ async function fetchUser() {
     </div>
   </v-container>
 </template>
-
-<style scoped></style>

@@ -19,12 +19,12 @@ export const usePuzzle = defineStore('puzzle', () => {
   const userGrid = ref([]);
   const userKeys = ref([]);
   const actionHistory = ref([]);
-  const solved = ref(false);
+  const isSolved = ref(false);
 
   function newPuzzle(h: number, w: number, id?: string) {
     height.value = h;
     width.value = w;
-    solved.value = false;
+    isSolved.value = false;
     userGrid.value = createGrid(height.value, width.value);
     userKeys.value = [];
     actionHistory.value = [];
@@ -41,7 +41,7 @@ export const usePuzzle = defineStore('puzzle', () => {
   }
 
   function setSolved(value) {
-    solved.value = value;
+    isSolved.value = value;
   }
 
   return {
@@ -51,7 +51,7 @@ export const usePuzzle = defineStore('puzzle', () => {
     userGrid,
     userKeys,
     actionHistory,
-    solved,
+    isSolved,
     newPuzzle,
     getSize,
     resetState,

@@ -1,10 +1,16 @@
 import { Puzzle } from '~/server/models/Puzzle';
-import { getSolutionGrid } from '~/server/utils/picross';
 
 export default defineEventHandler(async (event) => {
   const { height, width, id } = await getQuery(event);
 
-  const puzzle = await Puzzle.findOne({ _id: id, width, height });
+  const puzzle = await Puzzle.findOne({ _id: id, width, height })
+    .populate({
+      path: 'attempts',
+      populate: {
+        path: 'user',
+        select: 'username',
+      },
+    });
   if (!puzzle) {
     throw createError({
       statusCode: 400,
@@ -13,10 +19,6 @@ export default defineEventHandler(async (event) => {
   }
   return {
     puzzleId: puzzle._id,
-    width: puzzle.width,
-    height: puzzle.height,
-    rowKeys: puzzle.rowKeys,
-    colKeys: puzzle.colKeys,
-    solution: getSolutionGrid(puzzle.goal),
+    attempts: puzzle.attempts,
   };
 })
