@@ -8,6 +8,39 @@ const errorMessage = ref('');
 const user = ref({});
 const attempts = ref([]);
 
+const headers = [
+  {
+    title: 'Date & Time',
+    align: 'start',
+    sortable: true,
+    key: 'date',
+    value: item => `${item.startTime}`,
+  },
+  {
+    title: 'Puzzle',
+    align: 'start',
+    sortable: true,
+    key: 'puzzle',
+    value: item => `${item.puzzle.height}`
+  },
+  {
+    title: 'Result',
+    align: 'start',
+    sortable: true,
+    key: 'result',
+    value: item => `${item.totalTime}`
+  }
+];
+
+const itemsPerPageOptions = [
+  {value: 5, title: '5'},
+  {value: 10, title: '10'},
+  {value: 25, title: '25'},
+  {value: 50, title: '50'},
+  {value: 100, title: '100'},
+  {value: -1, title: '$vuetify.dataFooter.itemsPerPageAll'}
+]
+
 onMounted(() => fetchUser());
 
 async function fetchUser() {
@@ -42,7 +75,39 @@ async function fetchUser() {
         <div class="text-2xl">{{ username }}</div>
         <div>Joined {{ new Date(user.createdAt).toLocaleDateString() }}</div>
       </div>
-      <v-table
+      <div class="w-1/2 max-lg:w-3/4 max-md:w-full">
+        <v-data-table
+          :headers="headers"
+          :items="attempts"
+          :items-per-page-options="itemsPerPageOptions"
+          items-per-page="5"
+        >
+          <template #item="{ item: attempt }">
+            <tr>
+              <td>
+                {{ new Date(attempt.startTime).toLocaleString().replace(',', '') }}
+              </td>
+              <td>
+                <NuxtLink
+                  :to="{
+                    name: 'puzzle-heightxwidth',
+                    params: { height: attempt.puzzle.height, width: attempt.puzzle.width },
+                    query: { id: attempt.puzzle._id },
+                  }"
+                  class="underline"  
+                >
+                  {{  attempt.puzzle.height }}x{{ attempt.puzzle.width }}
+                </NuxtLink>
+              </td>
+              <td>
+                {{ formatTime(attempt.totalTime) }}
+              </td>
+            </tr>
+          </template>
+        </v-data-table>
+      </div>
+      
+      <!-- <v-table
         class="w-1/2 max-lg:w-3/4 max-md:w-full"
       >
         <thead>
@@ -74,7 +139,7 @@ async function fetchUser() {
             </td>
           </tr>
         </tbody>
-      </v-table>
+      </v-table> -->
     </div>
   </v-container>
 </template>

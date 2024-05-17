@@ -9,6 +9,30 @@ const errorMessage = ref('');
 
 const attempts = ref([]);
 
+const headers = [
+  {
+    title: 'Date & Time',
+    align: 'start',
+    sortable: true,
+    key: 'date',
+    value: item => `${new Date(item.startTime)}`,
+  },
+  {
+    title: 'User',
+    align: 'start',
+    sortable: true,
+    key: 'user',
+    value: item => `${Number(item.user.username)}`
+  },
+  {
+    title: 'Result',
+    align: 'start',
+    sortable: true,
+    key: 'result',
+    value: item => `${Number(item.totalTime)}`
+  }
+];
+
 onMounted(() => fetchPuzzle());
 
 async function fetchPuzzle() {
@@ -49,7 +73,35 @@ async function fetchPuzzle() {
       >
         <v-btn color="blue-darken-1">Play</v-btn>
       </NuxtLink>
-      <v-table
+      <div class="w-1/2 max-lg:w-3/4 max-md:w-full">
+        <v-data-table
+          :headers="headers"
+          :items="attempts"
+        >
+          <template #item="{ item: attempt }">
+            <tr>
+              <td>
+                {{ new Date(attempt.startTime).toLocaleString().replace(',', '') }}
+              </td>
+              <td>
+                <NuxtLink
+                  :to="{
+                    name: 'user-username',
+                    params: { username: attempt.user.username },
+                  }"
+                  class="underline"  
+                >
+                  {{  attempt.user.username }}
+                </NuxtLink>
+              </td>
+              <td>
+                {{ formatTime(attempt.totalTime) }}
+              </td>
+            </tr>
+          </template>
+        </v-data-table>
+      </div>
+      <!-- <v-table
         class="w-1/2 max-lg:w-3/4 max-md:w-full"
       >
         <thead>
@@ -80,7 +132,7 @@ async function fetchPuzzle() {
             </td>
           </tr>
         </tbody>
-      </v-table>
+      </v-table> -->
     </div>
   </v-container>
 </template>
