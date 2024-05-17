@@ -8,6 +8,8 @@ const errorMessage = ref('');
 const user = ref({});
 const attempts = ref([]);
 
+const sizeFilter = ref('');
+
 const headers = [
   {
     title: 'Date & Time',
@@ -21,7 +23,7 @@ const headers = [
     align: 'start',
     sortable: true,
     key: 'puzzle',
-    value: item => `${item.puzzle.height}`
+    value: item => `${item.puzzle.height}x${item.puzzle.width}`
   },
   {
     title: 'Result',
@@ -76,10 +78,16 @@ async function fetchUser() {
         <div>Joined {{ new Date(user.createdAt).toLocaleDateString() }}</div>
       </div>
       <div class="w-1/2 max-lg:w-3/4 max-md:w-full">
+        <v-select
+          v-model="sizeFilter"
+          label="Filter by Size"
+          :items="['5x5', '10x10', '15x15', '20x20', '25x25']"
+        ></v-select>
         <v-data-table
           :headers="headers"
           :items="attempts"
           :items-per-page-options="itemsPerPageOptions"
+          :search="sizeFilter"
           items-per-page="5"
         >
           <template #item="{ item: attempt }">
