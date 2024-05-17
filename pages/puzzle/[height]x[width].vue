@@ -9,29 +9,43 @@ const errorMessage = ref('');
 
 const attempts = ref([]);
 
+const search = ref('');
+
 const headers = [
   {
     title: 'Date & Time',
     align: 'start',
     sortable: true,
+    filterable: false,
     key: 'date',
-    value: item => `${new Date(item.startTime)}`,
+    value: item => `${item.startTime}`,
   },
   {
     title: 'User',
     align: 'start',
     sortable: true,
+    filterable: true,
     key: 'user',
-    value: item => `${Number(item.user.username)}`
+    value: item => `${item.user.username}`
   },
   {
     title: 'Result',
     align: 'start',
     sortable: true,
+    filterable: false,
     key: 'result',
-    value: item => `${Number(item.totalTime)}`
+    value: item => `${item.totalTime}`
   }
 ];
+
+const itemsPerPageOptions = [
+  {value: 5, title: '5'},
+  {value: 10, title: '10'},
+  {value: 25, title: '25'},
+  {value: 50, title: '50'},
+  {value: 100, title: '100'},
+  {value: -1, title: '$vuetify.dataFooter.itemsPerPageAll'}
+]
 
 onMounted(() => fetchPuzzle());
 
@@ -73,10 +87,20 @@ async function fetchPuzzle() {
       >
         <v-btn color="blue-darken-1">Play</v-btn>
       </NuxtLink>
-      <div class="w-1/2 max-lg:w-3/4 max-md:w-full">
+      <div class="w-1/2 max-lg:w-3/4 max-md:w-full flex flex-col gap-6">
+        <v-text-field
+          v-model="search"
+          label="Search User"
+          prepend-inner-icon="mdi-magnify"
+          variant="outlined"
+          hide-details
+          single-line
+        ></v-text-field>
         <v-data-table
           :headers="headers"
           :items="attempts"
+          :items-per-page-options="itemsPerPageOptions"
+          :search="search"
         >
           <template #item="{ item: attempt }">
             <tr>
