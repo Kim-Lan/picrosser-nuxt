@@ -35,7 +35,7 @@ async function onLogout() {
 <template>
   <v-app>
     <NuxtLoadingIndicator color="#0D47A1" />
-    <v-app-bar :elevation="0" color="blue-darken-1" class="font-mono" style="position: relative;">
+    <v-app-bar :elevation="0" color="blue-darken-1" class="font-mono" >
       <v-app-bar-title class="font-weight-bold">
         <NuxtLink to="/">
           Picrosser
@@ -70,7 +70,7 @@ async function onLogout() {
       <v-btn v-if="!authData"><NuxtLink to="/login">Login</NuxtLink></v-btn>
       <v-btn v-if="authData" @click="onLogout">Logout</v-btn>
     </v-navigation-drawer>
-    <v-main style="--v-layout-top: 0px;" class="w-full">
+    <v-main class="w-full">
       <NuxtPage />
     </v-main>
   </v-app>
