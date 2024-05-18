@@ -31,7 +31,7 @@ async function onLogout() {
       </NuxtLink>
     </div>
     <Settings />
-    <v-btn v-if="!authData" color="blue-darken-1"><NuxtLink to="/login">Login</NuxtLink></v-btn>
+    <v-btn v-if="!authData" color="blue-darken-1"><NuxtLink to="/login">Login / Register</NuxtLink></v-btn>
     <v-btn v-if="authData" color="blue-darken-1" @click="onLogout">Logout</v-btn>
   </div>
 </template>
