@@ -21,9 +21,14 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  // return {
+  //   ... user.toObject(),
+  //   password: undefined
+  // }
+
   return {
     username,
-    createdAt: user.createdAt,
-    attempts: user.attempts,
+    createdAt: user.toObject().createdAt,
+    attempts: user.toObject().attempts,
   }
 })

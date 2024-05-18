@@ -181,7 +181,7 @@ function onKeyPressed(direction, groupIndex, keyIndex, isPressed) {
 
 function onKeyGroupDone(direction, groupIndex) {
   if (direction === 'row') {
-    console.log(`filling row ${groupIndex}`)
+    // console.log(`filling row ${groupIndex}`)
     for (let c = 0; c < props.width; c++) {
       if (puzzle.userGrid[groupIndex][c] === '0') {
         puzzle.userGrid[groupIndex][c] = '-1';
@@ -190,7 +190,7 @@ function onKeyGroupDone(direction, groupIndex) {
       }
     }
   } else {
-    console.log(`filling col ${groupIndex}`)
+    // console.log(`filling col ${groupIndex}`)
     for (let r = 0; r < props.height; r++) {
       if (puzzle.userGrid[r][groupIndex] === '0') {
         puzzle.userGrid[r][groupIndex] = '-1';

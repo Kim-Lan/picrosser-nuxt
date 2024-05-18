@@ -47,6 +47,7 @@ export default defineEventHandler(async (event) => {
   }
 
   user.attempts.push(attempt._id);
+  await user.updateStats(puzzle.height, puzzle.width, attempt.totalTime);
   await user.save();
 
   puzzleDocument.attempts.push(attempt._id);

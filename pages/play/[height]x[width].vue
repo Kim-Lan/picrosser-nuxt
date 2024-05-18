@@ -77,7 +77,6 @@ async function newPuzzleHandler() {
   const newPuzzleId = await puzzleComponent.value.getNewPuzzle();
   loadingIndicator.finish();
 
-  console.log("new puzzle id " + newPuzzleId);
   navigateTo(`${route.path}?id=${newPuzzleId}`);
   start();
 }

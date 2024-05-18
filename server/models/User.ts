@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import { Attempt } from '~/server/models/Attempt';
+import { arraySum, minArray, maxArray } from '~/server/utils/arrayHelpers';
 const { Schema, model } = mongoose;
 
 export interface UserDocument extends Document {
@@ -10,6 +12,8 @@ export interface UserDocument extends Document {
   verificationTokenExpire: Date;
   resetPassword: boolean;
   attempts: array;
+  currentStats: object;
+  recordStats: object;
 }
 
 const USERNAME_INVALID_CHARACTERS = ' ?;:,.`\'"(){}[]|\\/';
@@ -67,6 +71,163 @@ const UserSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Attempt',
   }],
+  currentStats: {
+    '5x5': {
+      last: Number,
+      meanOfThree: Number,
+      averageOfFive: Number,
+      averageOfTwelve: Number,
+    },
+    '10x10': {
+      last: Number,
+      meanOfThree: Number,
+      averageOfFive: Number,
+      averageOfTwelve: Number,
+    },
+    '15x15': {
+      last: Number,
+      meanOfThree: Number,
+      averageOfFive: Number,
+      averageOfTwelve: Number,
+    },
+    '20x20': {
+      last: Number,
+      meanOfThree: Number,
+      averageOfFive: Number,
+      averageOfTwelve: Number,
+    },
+    '25x25': {
+      last: Number,
+      meanOfThree: Number,
+      averageOfFive: Number,
+      averageOfTwelve: Number,
+    },
+  },
+  recordStats: {
+    '5x5': {
+      best: Number,
+      meanOfThree: Number,
+      averageOfFive: Number,
+      averageOfTwelve: Number,
+    },
+    '10x10': {
+      best: Number,
+      meanOfThree: Number,
+      averageOfFive: Number,
+      averageOfTwelve: Number,
+    },
+    '15x15': {
+      best: Number,
+      meanOfThree: Number,
+      averageOfFive: Number,
+      averageOfTwelve: Number,
+    },
+    '20x20': {
+      best: Number,
+      meanOfThree: Number,
+      averageOfFive: Number,
+      averageOfTwelve: Number,
+    },
+    '25x25': {
+      best: Number,
+      meanOfThree: Number,
+      averageOfFive: Number,
+      averageOfTwelve: Number,
+    },
+  }
+},
+{
+  methods: {
+    async updateStats(height, width, result) {
+      const dimensions = `${height}x${width}`;
+      let meanOfThree = -1;
+
+      const best = this.recordStats[dimensions].best;
+      if (!best) {
+        this.recordStats[dimensions].best = result;
+      } else if (result < best) {
+        this.recordStats[dimensions].best = result;
+      }
+
+      if (this.attempts.length >= 3) {
+        const lastThreeTimes = await this.getRecentTimes(3, height, width);
+        if (lastThreeTimes.length === 3) {
+          meanOfThree = Math.floor(arraySum(lastThreeTimes) / 3);
+          console.log(`mean of three: ${meanOfThree}`);
+          const recordMeanOfThree = this.recordStats[dimensions].meanOfThree;
+          if (!recordMeanOfThree) {
+            this.recordStats[dimensions].meanOfThree = meanOfThree;
+          } else if (meanOfThree < recordMeanOfThree) {
+            this.recordStats[dimensions].meanOfThree = meanOfThree;
+          }
+        }
+      }
+
+      let averageOfFive = -1;
+      if (this.attempts.length >= 5) {
+        const lastFiveTimes = await this.getRecentTimes(5, height, width);
+
+        if (lastFiveTimes.length === 5) {
+          const minIndex = lastFiveTimes.indexOf(minArray(lastFiveTimes));
+          lastFiveTimes.splice(minIndex, 1);
+          const maxIndex = lastFiveTimes.indexOf(maxArray(lastFiveTimes));
+          lastFiveTimes.splice(maxIndex, 1);
+          console.log(lastFiveTimes);
+          averageOfFive = Math.floor(arraySum(lastFiveTimes) / 3);
+          console.log(`average of five: ${averageOfFive}`);
+
+          const recordAverageOfFive = this.recordStats[dimensions].averageOfFive;
+          if (!recordAverageOfFive) {
+            this.recordStats[dimensions].averageOfFive = averageOfFive;
+          } else if (averageOfFive < recordAverageOfFive) {
+            this.recordStats[dimensions].averageOfFive = averageOfFive;
+          }
+        }
+      }
+      
+      let averageOfTwelve = -1;
+      if (this.attempts.length >= 12) {
+        const lastTwelveTimes = await this.getRecentTimes(12, height, width);
+
+        if (lastTwelveTimes.length === 12) {
+          const minIndex = lastTwelveTimes.indexOf(minArray(lastTwelveTimes));
+          lastTwelveTimes.splice(minIndex, 1);
+          const maxIndex = lastTwelveTimes.indexOf(maxArray(lastTwelveTimes));
+          lastTwelveTimes.splice(maxIndex, 1);
+          console.log(lastTwelveTimes);
+          averageOfTwelve = Math.floor(arraySum(lastTwelveTimes) / 10);
+          console.log(`average of twelve: ${averageOfTwelve}`);
+
+          const recordAverageOfTwelve = this.recordStats[dimensions].averageOfTwelve;
+          if (!recordAverageOfTwelve) {
+            this.recordStats[dimensions].averageOfTwelve = averageOfTwelve;
+          } else if (averageOfTwelve < recordAverageOfTwelve) {
+            this.recordStats[dimensions].averageOfTwelve = averageOfTwelve;
+          }
+        }
+      }
+
+      this.currentStats[dimensions] = {
+        last: result,
+        meanOfThree,
+        averageOfFive,
+        averageOfTwelve,
+      };
+    },
+    async getRecentTimes(n, height, width) {
+      const recent = [];
+      let i = 0;
+      while(recent.length < n && i < this.attempts.length) {
+        const attemptId = this.attempts[this.attempts.length - 1 - i];
+        const attempt = await Attempt.findById(attemptId).populate('puzzle', 'height width');
+        if (attempt.puzzle.height === height && attempt.puzzle.width === width) {
+          recent.push(attempt.totalTime);
+        }
+        i++;
+      }
+      return recent;
+    }
+  }
 },
 {
   timestamps: true,
