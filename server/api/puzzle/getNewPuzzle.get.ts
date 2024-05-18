@@ -27,15 +27,15 @@ export default defineEventHandler(async (event) => {
   if (existingPuzzle) {
     puzzleId = existingPuzzle._id;
   } else {
-    // const newPuzzle = await Puzzle.create({
-    //   width,
-    //   height,
-    //   rowKeys,
-    //   colKeys,
-    //   goal
-    // });
-    // puzzleId = newPuzzle._id;
-    puzzleId = new mongoose.Types.ObjectId();
+    const newPuzzle = await Puzzle.create({
+      width,
+      height,
+      rowKeys,
+      colKeys,
+      goal
+    });
+    puzzleId = newPuzzle._id;
+    // puzzleId = new mongoose.Types.ObjectId();
   }
 
   console.log("returning puzzle");

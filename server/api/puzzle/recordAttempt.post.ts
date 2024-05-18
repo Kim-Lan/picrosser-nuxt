@@ -14,22 +14,26 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  let puzzleDocument = await Puzzle.findOne({ _id: puzzle.id});
+  const puzzleDocument = await Puzzle.findOne({ _id: puzzle.id});
   if (!puzzleDocument) {
-    puzzleDocument = await Puzzle.create({
-      _id: puzzle.id,
-      width: puzzle.width,
-      height: puzzle.height,
-      rowKeys: puzzle.rowKeys,
-      colKeys: puzzle.colKeys,
-      goal: getGoalString(puzzle.solution),
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Puzzle not found'
     })
-    if (!puzzleDocument) {
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Failed to create puzzle',
-      })
-    }
+    // puzzleDocument = await Puzzle.create({
+    //   _id: puzzle.id,
+    //   width: puzzle.width,
+    //   height: puzzle.height,
+    //   rowKeys: puzzle.rowKeys,
+    //   colKeys: puzzle.colKeys,
+    //   goal: getGoalString(puzzle.solution),
+    // })
+    // if (!puzzleDocument) {
+    //   throw createError({
+    //     statusCode: 500,
+    //     statusMessage: 'Failed to create puzzle',
+    //   })
+    // }
   }
 
   const attempt = await Attempt.create({
