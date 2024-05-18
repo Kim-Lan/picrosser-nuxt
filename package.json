@@ -25,7 +25,6 @@
     "next-auth": "4.21.1",
     "nodemailer": "^6.9.13",
     "nuxt-icon": "^0.6.10",
-    "nuxt-security": "^2.0.0-beta.5",
     "pinia": "^2.1.7",
     "sass": "^1.72.0",
     "vue": "^3.4.21",

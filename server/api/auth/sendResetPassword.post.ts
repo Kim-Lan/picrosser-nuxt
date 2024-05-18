@@ -66,8 +66,8 @@ export default defineEventHandler(async (event) => {
     from: '"Picrosser" <picrosser.com@gmail.com>',
     to: email,
     subject: '[Picrosser] Reset Password',
-    text: `Picrosser\n\nPlease follow this link to reset your password. Link expires in 24 hours.\n\nhttp://localhost:3000/login/reset/${jwt}`,
-    html: `<h1>Picrosser</h1><p>Please follow this link to reset your password. Link expires in 24 hours.</p><p><a href="http://localhost:3000/login/reset/${jwt}">http://localhost:3000/login/reset/${jwt}</a></p>`,
+    text: `Picrosser\n\nPlease follow this link to reset your password. Link expires in 24 hours.\n\nhttps://picrosser.com/login/reset/${jwt}`,
+    html: `<h1>Picrosser</h1><p>Please follow this link to reset your password. Link expires in 24 hours.</p><p><a href="https://picrosser.com/login/reset/${jwt}">https://picrosser.com/login/reset/${jwt}</a></p>`,
   });
   if (err) {
     throw createError({

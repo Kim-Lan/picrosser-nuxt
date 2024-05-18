@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { Attempt } from '~/server/models/Attempt';
+import { Puzzle } from '~/server/models/Puzzle'
 import { arraySum, minArray, maxArray } from '~/server/utils/arrayHelpers';
 const { Schema, model } = mongoose;
 
@@ -137,6 +138,7 @@ const UserSchema = new Schema({
   }
 },
 {
+  timestamps: true,
   methods: {
     async updateStats(height, width, result) {
       const dimensions = `${height}x${width}`;
@@ -228,9 +230,6 @@ const UserSchema = new Schema({
       return recent;
     }
   }
-},
-{
-  timestamps: true,
 });
 
 export const User = model<UserDocument>('User', UserSchema);

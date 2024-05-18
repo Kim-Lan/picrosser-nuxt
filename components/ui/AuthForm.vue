@@ -118,7 +118,9 @@ async function onFormSubmit() {
       const result = await signIn('credentials', {
         email: email.value,
         password: password.value,
-        redirect: false,
+      },
+      {
+        redirect: false
       });
 
       if (result?.ok && !result.error) {

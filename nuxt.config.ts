@@ -11,7 +11,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
     '@sidebase/nuxt-auth',
-    'nuxt-security',
+    // 'nuxt-security',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         config.plugins.push(vuetify({ autoImport: true }))
@@ -26,11 +26,11 @@ export default defineNuxtConfig({
   //     })
   //   }
   // },
-  security: {
-    headers: {
-      crossOriginEmbedderPolicy: process.env.NODE_ENV === 'development' ? 'unsafe-none' : 'require-corp',
-    },
-  },
+  // security: {
+  //   headers: {
+  //     crossOriginEmbedderPolicy: process.env.NODE_ENV === 'development' ? 'unsafe-none' : 'require-corp',
+  //   },
+  // },
   auth: {
     baseURL: process.env.AUTH_ORIGIN,
     provider: {

@@ -1,4 +1,6 @@
 import { User } from '~/server/models/User';
+import { Attempt } from '~/server/models/Attempt';
+import { Puzzle } from '~/server/models/Puzzle';
 
 export default defineEventHandler(async (event) => {
   const { username } = await getQuery(event);
@@ -11,6 +13,7 @@ export default defineEventHandler(async (event) => {
       populate: {
         path: 'puzzle',
         select: '_id width height',
+        model: Puzzle,
       }
     });
 

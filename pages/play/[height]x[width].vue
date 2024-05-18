@@ -126,7 +126,7 @@ function end() {
 </script>
 
 <template>
-  <v-container class="flex flex-col items-center gap-5 my-5 w-full font-sans">
+  <v-container class="flex flex-col items-center gap-5 mt-5 mb-96 w-full font-sans">
     <VerifyEmailAlert />
     <div class="flex flex-col items-center gap-5">
       <div class="flex flex-row align-end gap-5">
