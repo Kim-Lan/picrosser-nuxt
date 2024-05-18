@@ -73,31 +73,31 @@ const UserSchema = new Schema({
   }],
   currentStats: {
     '5x5': {
-      last: Number,
+      single: Number,
       meanOfThree: Number,
       averageOfFive: Number,
       averageOfTwelve: Number,
     },
     '10x10': {
-      last: Number,
+      single: Number,
       meanOfThree: Number,
       averageOfFive: Number,
       averageOfTwelve: Number,
     },
     '15x15': {
-      last: Number,
+      single: Number,
       meanOfThree: Number,
       averageOfFive: Number,
       averageOfTwelve: Number,
     },
     '20x20': {
-      last: Number,
+      single: Number,
       meanOfThree: Number,
       averageOfFive: Number,
       averageOfTwelve: Number,
     },
     '25x25': {
-      last: Number,
+      single: Number,
       meanOfThree: Number,
       averageOfFive: Number,
       averageOfTwelve: Number,
@@ -105,31 +105,31 @@ const UserSchema = new Schema({
   },
   recordStats: {
     '5x5': {
-      best: Number,
+      single: Number,
       meanOfThree: Number,
       averageOfFive: Number,
       averageOfTwelve: Number,
     },
     '10x10': {
-      best: Number,
+      single: Number,
       meanOfThree: Number,
       averageOfFive: Number,
       averageOfTwelve: Number,
     },
     '15x15': {
-      best: Number,
+      single: Number,
       meanOfThree: Number,
       averageOfFive: Number,
       averageOfTwelve: Number,
     },
     '20x20': {
-      best: Number,
+      single: Number,
       meanOfThree: Number,
       averageOfFive: Number,
       averageOfTwelve: Number,
     },
     '25x25': {
-      best: Number,
+      single: Number,
       meanOfThree: Number,
       averageOfFive: Number,
       averageOfTwelve: Number,
@@ -142,11 +142,11 @@ const UserSchema = new Schema({
       const dimensions = `${height}x${width}`;
       let meanOfThree = -1;
 
-      const best = this.recordStats[dimensions].best;
+      const best = this.recordStats[dimensions].single;
       if (!best) {
-        this.recordStats[dimensions].best = result;
+        this.recordStats[dimensions].single = result;
       } else if (result < best) {
-        this.recordStats[dimensions].best = result;
+        this.recordStats[dimensions].single = result;
       }
 
       if (this.attempts.length >= 3) {
@@ -208,7 +208,7 @@ const UserSchema = new Schema({
       }
 
       this.currentStats[dimensions] = {
-        last: result,
+        single: result,
         meanOfThree,
         averageOfFive,
         averageOfTwelve,

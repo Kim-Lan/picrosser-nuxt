@@ -1,16 +1,20 @@
-<script lang="ts" setup>
+<script setup>
 const route = useRoute();
 const username = route.params.username;
 
 const loadingIndicator = useLoadingIndicator();
 const errorMessage = ref('');
 
-const user = ref({});
+const user = ref({
+  createdAt: null,
+});
 const attempts = ref([]);
 
-const sizeFilter = ref('');
+const SIZES = ['5x5', '10x10', '15x15', '20x20', '25x25'];
 
-const headers = [
+const attemptTableSizeFilter = ref('');
+
+const attemptTableHeaders = [
   {
     title: 'Date & Time',
     align: 'start',
@@ -68,26 +72,29 @@ async function fetchUser() {
 </script>
 
 <template>
-  <v-container class="font-mono">
+  <v-container class="font-mono w-1/2 max-lg:w-3/4 max-md:w-full">
     <v-alert v-if="errorMessage" type="error">
       {{ errorMessage }}
     </v-alert>
-    <div class="flex flex-col align-center mt-4 gap-6">
+    <div class="flex flex-col align-center mt-4 gap-8">
       <div class="w-full flex flex-col align-center">
         <div class="text-2xl">{{ username }}</div>
         <div>Joined {{ new Date(user.createdAt).toLocaleDateString() }}</div>
       </div>
-      <div class="w-1/2 max-lg:w-3/4 max-md:w-full">
+
+      <UserStatsTable :username="username" />
+
+      <div class="mt-12">
         <v-select
-          v-model="sizeFilter"
+          v-model="attemptTableSizeFilter"
           label="Filter by Size"
-          :items="['5x5', '10x10', '15x15', '20x20', '25x25']"
+          :items="SIZES"
         ></v-select>
         <v-data-table
-          :headers="headers"
+          :headers="attemptTableHeaders"
           :items="attempts"
           :items-per-page-options="itemsPerPageOptions"
-          :search="sizeFilter"
+          :search="attemptTableSizeFilter"
           items-per-page="5"
         >
           <template #item="{ item: attempt }">
