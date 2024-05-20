@@ -4,6 +4,7 @@ useHead({
   meta: [
     { name: 'description', content: 'A website to play the picross puzzle game online.'}
   ],
+  link: [{ rel: 'icon', type: 'image/png', href: '/favicon.png' }],
 })
 
 const route = useRoute();
