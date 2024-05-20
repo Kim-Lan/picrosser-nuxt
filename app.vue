@@ -1,4 +1,11 @@
 <script setup>
+useHead({
+  title: 'Picrosser',
+  meta: [
+    { name: 'description', content: 'A website to play the picross puzzle game online.'}
+  ],
+})
+
 const route = useRoute();
 const puzzle = usePuzzle();
 const drawer = ref(false);
