@@ -5,9 +5,7 @@ const username = route.params.username;
 const loadingIndicator = useLoadingIndicator();
 const errorMessage = ref('');
 
-const user = ref({
-  createdAt: null,
-});
+const user = ref(null);
 const attempts = ref([]);
 
 const SIZES = ['5x5', '10x10', '15x15', '20x20', '25x25'];
@@ -59,12 +57,15 @@ async function fetchUser() {
     if (error.value) {
       errorMessage.value = error.value.statusMessage;
     }
-    user.value = {
-      createdAt: data.value.createdAt,
-    };
-    attempts.value = data.value.attempts.reverse();
+    if (data.value) {
+      user.value = {
+        username: data.value.username,
+        createdAt: data.value.createdAt,
+      };
+      attempts.value = data.value.attempts.reverse();
+    }
   } catch (error) {
-    errorMessage.value = error.statusMessage;
+    console.log(error);
   } finally {
     loadingIndicator.finish();
   }
@@ -76,9 +77,9 @@ async function fetchUser() {
     <v-alert v-if="errorMessage" type="error">
       {{ errorMessage }}
     </v-alert>
-    <div class="flex flex-col align-center mt-4 gap-8">
+    <div v-if="user" class="flex flex-col align-center mt-4 gap-8">
       <div class="w-full flex flex-col align-center">
-        <div class="text-2xl">{{ username }}</div>
+        <div class="text-2xl">{{ user.username }}</div>
         <div>Joined {{ new Date(user.createdAt).toLocaleDateString() }}</div>
       </div>
 

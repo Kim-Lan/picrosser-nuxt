@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
   // }
 
   return {
-    username,
+    username: user.toObject().username,
     createdAt: user.toObject().createdAt,
     attempts: user.toObject().attempts,
   }
