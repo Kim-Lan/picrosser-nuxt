@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const { username } = await getQuery(event);
 
   const user = await User
-    .findOne({ username })
+    .findOne({ username: { '$regex': username, $options: 'i' } })
     .populate({
       path: 'attempts',
       select: '_id startTime totalTime',
