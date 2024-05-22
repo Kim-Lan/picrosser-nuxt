@@ -52,9 +52,19 @@ function navigatePlay() {
     >
       <NavigationDrawerContents />
     </v-navigation-drawer>
+
     <v-main class="w-full">
       <NuxtPage />
     </v-main>
+
+    <v-footer class="flex flex-col justify-center max-h-16">
+      <div>
+        In development by Kim-Lan
+      </div>
+      <NuxtLink to="https://github.com/Kim-Lan/picrosser-nuxt">
+        <v-btn prepend-icon="mdi-github" size="medium" variant="plain" aria-label="github"></v-btn>
+      </NuxtLink>
+    </v-footer>
   </v-app>
 </template>
 
