@@ -37,7 +37,6 @@ async function fetchUserStats() {
     method: 'GET',
     query: { username: props.username }
   });
-  console.log(data.value);
   currentStats.value = data.value.currentStats;
   recordStats.value = data.value.recordStats;
 }
