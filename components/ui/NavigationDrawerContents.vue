@@ -12,6 +12,20 @@ async function onLogout() {
     console.log('Signed out');
   }
 }
+
+const route = useRoute();
+const puzzle = usePuzzle();
+
+function navigatePlay() {
+  if (!route.path.includes('play')) {
+    const { height, width } = puzzle.getSize();
+    if (height.value != 0 && width.value != 0) {
+      navigateTo(`/play/${height.value}x${width.value}`);
+    } else {
+      navigateTo('/play/5x5');
+    }
+  }
+}
 </script>
 
 <template>
@@ -30,6 +44,13 @@ async function onLogout() {
         {{ authData?.user?.username }}
       </NuxtLink>
     </div>
+
+    <div class="w-full hidden max-sm:block">
+      <v-btn class="w-full font-weight-bold" variant="plain" @click="navigatePlay">
+        Play
+      </v-btn>
+    </div>
+
     <Settings />
     <v-btn v-if="!authData" color="blue-darken-1"><NuxtLink to="/login">Login / Register</NuxtLink></v-btn>
     <v-btn v-if="authData" color="blue-darken-1" @click="onLogout">Logout</v-btn>

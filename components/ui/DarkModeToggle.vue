@@ -13,7 +13,7 @@ function toggleTheme() {
 </script>
 
 <template>
-  <v-btn @click="toggleTheme" aria-label="toggle theme" icon="mdi-theme-light-dark">
+  <v-btn aria-label="toggle theme" icon="mdi-theme-light-dark" @click="toggleTheme">
   </v-btn>
   <!-- <div class="btn btn-ghost hover:bg-primary">
     <label class="swap swap-rotate">
