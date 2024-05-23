@@ -54,7 +54,7 @@ function navigatePlay() {
       <NavigationDrawerContents />
     </v-navigation-drawer>
 
-    <v-main class="w-max mx-auto">
+    <v-main>
       <NuxtPage />
     </v-main>
 
