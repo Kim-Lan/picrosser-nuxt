@@ -58,7 +58,7 @@ function navigatePlay() {
       <NuxtPage />
     </v-main>
 
-    <v-footer class="flex flex-col justify-center max-h-16 mt-16">
+    <v-footer class="box-content flex flex-col max-h-16 mt-16">
       <div>
         In development by Kim-Lan
       </div>
