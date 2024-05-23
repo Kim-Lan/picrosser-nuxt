@@ -62,9 +62,16 @@ function navigatePlay() {
       <div>
         In development by Kim-Lan
       </div>
-      <NuxtLink to="https://github.com/Kim-Lan/picrosser-nuxt">
-        <v-btn prepend-icon="mdi-github" size="medium" variant="plain" aria-label="github"></v-btn>
-      </NuxtLink>
+      <div class="flex flex-row align-center">
+        <NuxtLink to="https://github.com/Kim-Lan/picrosser-nuxt" target="_blank">
+          <v-btn icon="mdi-github" size="medium" variant="plain" aria-label="github button"></v-btn>
+        </NuxtLink>
+        <NuxtLink to="https://ko-fi.com/kimlan" target="_blank">
+          <v-btn size="medium" variant="plain" aria-label="ko-fi button">
+            <img src="https://storage.ko-fi.com/cdn/brandasset/kofi_s_logo_nolabel.png" alt="ko-fi" width="40px" height="40px" />
+          </v-btn>
+        </NuxtLink>
+      </div>
     </v-footer>
   </v-app>
 </template>
