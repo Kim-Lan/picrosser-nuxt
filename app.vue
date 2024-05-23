@@ -40,7 +40,8 @@ function navigatePlay() {
       </nav>
       <DarkModeToggle />
       <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer">
-        <Icon name="menu" size="1.75em" />
+        <!-- <Icon name="menu" size="1.75em" /> -->
+        <v-icon>mdi-menu</v-icon>
       </v-app-bar-nav-icon>
     </v-app-bar>
 
@@ -53,7 +54,7 @@ function navigatePlay() {
       <NavigationDrawerContents />
     </v-navigation-drawer>
 
-    <v-main class="w-full">
+    <v-main class="w-max mx-auto">
       <NuxtPage />
     </v-main>
 
@@ -69,4 +70,7 @@ function navigatePlay() {
 </template>
 
 <style>
+.v-application__wrap {
+  max-width: none !important;
+}
 </style>

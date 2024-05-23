@@ -126,7 +126,7 @@ function end() {
 </script>
 
 <template>
-  <v-container class="flex flex-col items-center gap-5 mt-5 mb-96 w-full font-sans">
+  <v-container class="flex flex-col items-center gap-5 mt-5 mb-96 max-sm:mb-16 w-full font-sans">
     <VerifyEmailAlert />
     <div class="flex flex-col items-center gap-5">
       <div class="flex flex-row align-end gap-5">
@@ -157,7 +157,7 @@ function end() {
         item-value="value"
         class="w-60"
       ></v-select> -->
-      <div class="flex flex-row items-center gap-5">
+      <div class="flex flex-row flex-wrap items-center gap-5">
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold" @click="newPuzzleHandler">Start New</v-btn>
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold" :disabled="isSolved" @click="check">Check</v-btn>
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold" :disabled="isSolved" @click="reset">Restart</v-btn>
