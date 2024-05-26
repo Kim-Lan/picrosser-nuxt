@@ -10,6 +10,11 @@ const props = defineProps({
   },
 });
 
+onMounted(() => {
+  document.addEventListener('keydown', onKeyboardDown);
+});
+
+
 defineExpose({ getNewPuzzle, getPuzzleById, recordAttempt, setPuzzle, reset, checkErrors });
 
 const emit = defineEmits(['solved']);
@@ -25,6 +30,9 @@ const isSolved = ref(false);
 const rowKeys = ref([]);
 const colKeys = ref([]);
 const solution = ref([]);
+let actionHistory = new ActionList();
+
+provide('actionHistory', actionHistory);
 
 const cellSizeString = computed(() => {
   if (props.width === 5) {
@@ -57,6 +65,7 @@ function setPuzzle(data) {
   rowKeys.value = data.rowKeys;
   colKeys.value = data.colKeys;
   solution.value = data.solution;
+  actionHistory = new ActionList();
   puzzle.newPuzzle(props.height, props.width, puzzleId.value);
   isSolved.value = false;
 }
@@ -110,7 +119,9 @@ async function recordAttempt(startTimestamp, endTimestamp) {
   }
 }
 
-function updateState(index, state) {
+function updateState(index, state, prev) {
+  actionHistory.push('cell', index, -1, prev, state);
+
   const [row, col] = convertIndexTo2D(index, props.width);
   puzzle.userGrid[row][col] = state;
   // printGrid(puzzle.userGrid);
@@ -171,12 +182,11 @@ function checkErrors() {
 function onKeyPressed(direction, groupIndex, keyIndex, isPressed) {
   // console.log(`puzzle detected key press: ${direction} ${groupIndex} ${keyIndex}`);
   if (direction === 'row') {
-    leftKeys.value.pressKey(groupIndex, keyIndex, isPressed);
-    rightKeys.value.pressKey(groupIndex, keyIndex, isPressed);
+    actionHistory.push('row-key', groupIndex, keyIndex, !isPressed, isPressed);
   } else {
-    topKeys.value.pressKey(groupIndex, keyIndex, isPressed);
-    bottomKeys.value.pressKey(groupIndex, keyIndex, isPressed);
+    actionHistory.push('col-key', groupIndex, keyIndex, !isPressed, isPressed);
   }
+  setKey(direction, groupIndex, keyIndex, isPressed);
 }
 
 function onKeyGroupDone(direction, groupIndex) {
@@ -201,6 +211,73 @@ function onKeyGroupDone(direction, groupIndex) {
   }
 }
 
+function setCell(index, newState) {
+  const [rowIndex, colIndex] = convertIndexTo2D(index, props.width);
+  puzzle.userGrid[rowIndex][colIndex] = newState;
+  cells.value[index].setStateSilent(newState);
+}
+
+function setKey(direction, groupIndex, keyIndex, isPressed) {
+  if (direction === 'row') {
+    leftKeys.value.pressKey(groupIndex, keyIndex, isPressed);
+    rightKeys.value.pressKey(groupIndex, keyIndex, isPressed);
+  } else {
+    topKeys.value.pressKey(groupIndex, keyIndex, isPressed);
+    bottomKeys.value.pressKey(groupIndex, keyIndex, isPressed);
+  }
+}
+
+function applyAction(action) {
+  if (!action) return;
+
+  if (action.isCell()) {
+    console.log("applying cell action: " + action.getIndexA() + " = " + action.getNewValue());
+    setCell(action.getIndexA(), action.getNewValue());
+  } else {
+    const tag = action.getTag().slice(0,3);
+    setKey(tag, action.getIndexA(), action.getIndexB(), action.getNewValue());
+  }
+}
+
+function applyInverseAction(action) {
+  if (action.isCell()) {
+    console.log(`applying inverse cell action: ${action.getIndexA()}: ${action.getPrevValue()} => ${action.getNewValue()}`);
+    setCell(action.getIndexA(), action.getPrevValue());
+  } else {
+    const tag = action.getTag().slice(0,3);
+    setKey(tag, action.getIndexA(), action.getIndexB(), action.getPrevValue());
+  }
+}
+
+function onKeyboardDown(e) {
+  if (e.key == 'z' || e.key == 'Z') {
+    if (e.ctrlKey) {
+      if (e.shiftKey) {
+        console.log('ctrl shift z pressed');
+        const next = actionHistory.redo();
+        let prev = '';
+        if (next) {
+          console.log('redoing');
+          if (next.isCell()) {
+            const [rowIndex, colIndex] = convertIndexTo2D(next.getIndexA(), props.width);
+            prev = puzzle.userGrid[rowIndex][colIndex];
+            console.log('redo cell action: ' + next.getIndexA() + 'prev value ' + prev);
+            // actionHistory.addInverse(next, prev);
+          } else {
+
+          }
+          applyAction(next);
+        }
+      } else {
+        console.log('ctrl z pressed');
+        const action = actionHistory.undo();
+        if (action) {
+          applyInverseAction(action);
+        } 
+      }
+    }
+  }
+}
 </script>
 
 <template>

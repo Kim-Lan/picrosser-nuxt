@@ -61,9 +61,7 @@ function reset() {
       :group-index="groupIndex"
       :keys="group"
       :cell-size="cellSize"
-      @key-pressed="onKeyPressed"
       class="key-group"
-      @key-group-done="onKeyGroupDone"
       :class="{
         'first-row': direction === 'row' && groupIndex === 0,
         'first-col': direction === 'col' && groupIndex === 0,
@@ -72,6 +70,8 @@ function reset() {
         'last-row': direction === 'row' && (groupIndex + 1) % height === 0,
         'last-col': direction === 'col' && (groupIndex + 1) % width === 0
       }"
+      @key-pressed="onKeyPressed"
+      @key-group-done="onKeyGroupDone"
     />
   </div>
 </template>

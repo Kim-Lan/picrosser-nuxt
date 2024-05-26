@@ -14,19 +14,12 @@ const props = defineProps({
   // }
 });
 
-defineExpose({ reset, setState });
+defineExpose({ reset, setState, setStateSilent });
 
 const mouse = useMouse();
 
 const cellState = ref('');
 const emit = defineEmits(['cellChange']);
-
-const top = computed(() => {
-  return ((props.rowIndex * 16) + 1) + 'px'
-});
-const left = computed(() => {
-  return ((props.colIndex * 16) + 1) + 'px'
-});
 
 function onPointerDown(event) {
   mouse.onPressed(event);
@@ -52,7 +45,11 @@ function onPointerEnter() {
 function setState(string) {
   const prev = cellState.value;
   cellState.value = string;
-  emitCellChange();
+  emitCellChange(prev);
+}
+
+function setStateSilent(string) {
+  cellState.value = string;
 }
 
 function toggleState(string) {
@@ -63,10 +60,11 @@ function reset() {
   cellState.value = '0';
 }
 
-function emitCellChange() {
+function emitCellChange(prev) {
   emit('cellChange',
     props.index,
-    cellState.value
+    cellState.value,
+    prev
   );
 }
 
