@@ -231,7 +231,7 @@ function applyAction(action) {
   if (!action) return;
 
   if (action.isCell()) {
-    console.log("applying cell action: " + action.getIndexA() + " = " + action.getNewValue());
+    // console.log("applying cell action: " + action.getIndexA() + " = " + action.getNewValue());
     setCell(action.getIndexA(), action.getNewValue());
   } else {
     const tag = action.getTag().slice(0,3);
@@ -241,7 +241,7 @@ function applyAction(action) {
 
 function applyInverseAction(action) {
   if (action.isCell()) {
-    console.log(`applying inverse cell action: ${action.getIndexA()}: ${action.getPrevValue()} => ${action.getNewValue()}`);
+    // console.log(`applying inverse cell action: ${action.getIndexA()}: ${action.getPrevValue()} => ${action.getNewValue()}`);
     setCell(action.getIndexA(), action.getPrevValue());
   } else {
     const tag = action.getTag().slice(0,3);
@@ -253,23 +253,14 @@ function onKeyboardDown(e) {
   if (e.key == 'z' || e.key == 'Z') {
     if (e.ctrlKey) {
       if (e.shiftKey) {
-        console.log('ctrl shift z pressed');
+        // console.log('ctrl shift z pressed');
         const next = actionHistory.redo();
-        let prev = '';
         if (next) {
-          console.log('redoing');
-          if (next.isCell()) {
-            const [rowIndex, colIndex] = convertIndexTo2D(next.getIndexA(), props.width);
-            prev = puzzle.userGrid[rowIndex][colIndex];
-            console.log('redo cell action: ' + next.getIndexA() + 'prev value ' + prev);
-            // actionHistory.addInverse(next, prev);
-          } else {
-
-          }
+          // console.log('redoing');
           applyAction(next);
         }
       } else {
-        console.log('ctrl z pressed');
+        // console.log('ctrl z pressed');
         const action = actionHistory.undo();
         if (action) {
           applyInverseAction(action);
