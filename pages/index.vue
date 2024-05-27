@@ -1,5 +1,19 @@
 <script lang="ts" setup>
 const { data: authData } = useAuth();
+
+const route = useRoute();
+const puzzle = usePuzzle();
+
+function navigatePlay() {
+  if (!route.path.includes('play')) {
+    const { height, width } = puzzle.getSize();
+    if (height.value != 0 && width.value != 0) {
+      navigateTo(`/play/${height.value}x${width.value}`);
+    } else {
+      navigateTo('/play/5x5');
+    }
+  }
+}
 </script>
 
 <template>
@@ -17,7 +31,11 @@ const { data: authData } = useAuth();
         {{  authData?.user?.username }}
       </NuxtLink>!
     </div>
-    <div>Press "Play" to start playing!</div>
+    <div>Press
+      <v-btn class="mx-2 font-weight-bold" color="blue-darken-1" @click="navigatePlay">
+        Play
+      </v-btn>
+      to start playing!</div>
   </v-container>
 </template>
 
