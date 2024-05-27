@@ -32,8 +32,9 @@ const loadingIndicator = useLoadingIndicator();
 //   }
 // ];
 const selectedSize = ref(height);
+
 const stopwatch = useStopwatch();
-stopwatch.reset();
+const puzzle = usePuzzle();
 
 const puzzleComponent = ref(null);
 const statusMessage = ref('Keep going!');
@@ -49,6 +50,11 @@ async function onPageLoad() {
     await puzzleComponent.value.getPuzzleById(id);
     loadingIndicator.finish();
     start();
+  } else if (puzzle.puzzleId && !puzzle.isSolved) {
+    loadingIndicator.start();
+    await puzzleComponent.value.getPuzzleById(puzzle.puzzleId);
+    loadingIndicator.finish();
+    navigateTo(`${route.path}?id=${puzzle.puzzleId}`);
   }
 }
 

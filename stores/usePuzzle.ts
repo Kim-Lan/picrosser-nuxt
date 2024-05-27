@@ -5,7 +5,7 @@ import { useStorage } from '@vueuse/core'
 // interface PuzzleState {
 //   height: number
 //   width: number
-//   puzzleID: string
+//   puzzleId: string
 //   userGrid: array
 //   userKeys: array
 //   actionHistory: array
@@ -15,7 +15,7 @@ import { useStorage } from '@vueuse/core'
 export const usePuzzle = defineStore('puzzle', () => {
   const height = useStorage('height', 5);
   const width = useStorage('width', 5);
-  const puzzleID = ref('');
+  const puzzleId = ref('');
   const userGrid = ref([]);
   const userKeys = ref([]);
   const isSolved = ref(false);
@@ -26,7 +26,7 @@ export const usePuzzle = defineStore('puzzle', () => {
     isSolved.value = false;
     userGrid.value = createGrid(height.value, width.value);
     userKeys.value = [];
-    puzzleID.value = id;
+    puzzleId.value = id;
   }
 
   function resetState() {
@@ -45,7 +45,7 @@ export const usePuzzle = defineStore('puzzle', () => {
   return {
     height,
     width,
-    puzzleID,
+    puzzleId,
     userGrid,
     userKeys,
     isSolved,
