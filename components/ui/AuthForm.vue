@@ -111,23 +111,18 @@ async function onFormSubmit() {
       const result = await signIn('credentials', {
         email: email.value,
         password: password.value,
-      },
-      {
-        redirect: false
+        redirect: false,
       });
 
       if (result?.ok && !result.error) {
-        console.log('Successfully Logged In');
         errorMessage.value = '';
         registerSuccess.value = false;
         navigateTo('/');
       } else {
         errorMessage.value = 'Something Went Wrong';
-        console.log('Something Went Wrong');
       }
-
     } catch (error) {
-      console.log(error);
+      errorMessage.value = error.statusMessage;
     } finally {
       isLoading.value = false;
     }
