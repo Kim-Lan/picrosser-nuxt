@@ -84,7 +84,7 @@ async function onFormSubmit() {
   if (variant.value === 'REGISTER') {
     try {
       isLoading.value = true;
-      const { data, error } = await useFetch('/api/auth/register', {
+      await $fetch('/api/auth/register', {
         method: 'POST',
         body: {
           username: username.value,
@@ -92,20 +92,13 @@ async function onFormSubmit() {
           password: password.value,
         },
       });
-      if (error.value) {
-        console.log(error.value);
-        errorMessage.value = error.value.statusMessage;
-      }
-      if (data.value) {
-        console.log('Successfully registered');
-        username.value = '';
-        email.value = '';
-        password.value = '';
-        confirmPassword.value = '';
-        registerSuccess.value = true;
-        errorMessage.value = '';
-        variant.value = 'LOGIN';
-      }
+      username.value = '';
+      email.value = '';
+      password.value = '';
+      confirmPassword.value = '';
+      registerSuccess.value = true;
+      errorMessage.value = '';
+      variant.value = 'LOGIN';
     } catch (error) {
       errorMessage.value = error.statusMessage;
     } finally {

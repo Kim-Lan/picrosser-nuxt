@@ -21,22 +21,15 @@ async function onFormSubmit() {
   }
   try {
     isLoading.value = true;
-    const { data, error }= await useFetch('/api/auth/sendResetPassword', {
+    await $fetch('/api/auth/sendResetPassword', {
       method: 'POST',
       body: {
         email: email.value
       }
     });
-    if (error.value) {
-      console.log(error.value);
-      sendResetSuccess.value = false;
-      errorMessage.value = error.value.statusMessage;
-    }
-    if (data.value) {
-      console.log(data.value);
-      sendResetSuccess.value = true;
-    }
+    sendResetSuccess.value = true;
   } catch (error) {
+    sendResetSuccess.value = false;
     errorMessage.value = error.statusMessage;
   } finally {
     isLoading.value = false;

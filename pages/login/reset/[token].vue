@@ -39,24 +39,18 @@ async function onFormSubmit() {
   }
   try {
     isLoading.value = true;
-    const { data, error } = await useFetch('/api/auth/resetPassword', {
+    await $fetch('/api/auth/resetPassword', {
       method: 'POST',
       body: {
         token,
         newPassword: password.value,
       }
     });
-    if (error.value) {
-      console.log(error.value);
-      errorMessage.value = error.value.statusMessage;
-    }
-    if (data.value) {
-      console.log('Successfully reset password');
-      password.value = '';
-      confirmPassword.value = '';
-      resetSuccess.value = true;
-      errorMessage.value = '';
-    }
+    console.log('Successfully reset password');
+    password.value = '';
+    confirmPassword.value = '';
+    resetSuccess.value = true;
+    errorMessage.value = '';
   } catch (error) {
     errorMessage.value = error.statusMessage;
   } finally {
