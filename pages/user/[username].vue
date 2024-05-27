@@ -3,7 +3,7 @@ const route = useRoute();
 const username = route.params.username;
 
 useHead({
-  title: `${username} user page | Picrosser`,
+  title: `${username} user page`,
 })
 
 const loadingIndicator = useLoadingIndicator();

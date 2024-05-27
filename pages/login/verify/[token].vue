@@ -3,7 +3,7 @@ const route = useRoute();
 const token = route.params.token;
 
 useHead({
-  title: 'Email Verification | Picrosser',
+  title: 'Email Verification',
 })
 
 const isVerified = ref(true);

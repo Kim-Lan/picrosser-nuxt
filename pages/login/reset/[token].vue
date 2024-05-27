@@ -3,7 +3,7 @@ const route = useRoute();
 const token = route.params.token;
 
 useHead({
-  title: 'Reset Password | Picrosser',
+  title: 'Reset Password',
 })
 
 const isLoading = ref(false);

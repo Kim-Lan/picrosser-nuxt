@@ -4,7 +4,7 @@ definePageMeta({
 });
 
 useHead({
-  title: 'Reset Password | Picrosser',
+  title: 'Reset Password',
 })
 
 const sendResetSuccess = ref(false);

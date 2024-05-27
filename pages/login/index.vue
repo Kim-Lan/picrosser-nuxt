@@ -4,7 +4,7 @@ definePageMeta({
 });
 
 useHead({
-  title: 'Login to Picrosser | Picrosser',
+  title: 'Login to Picrosser',
 })
 
 </script>

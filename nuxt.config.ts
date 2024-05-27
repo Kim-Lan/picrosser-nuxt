@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
     '@sidebase/nuxt-auth',
-    // 'nuxt-security',
+    '@nuxtjs/seo',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         config.plugins.push(vuetify({ autoImport: true }))
@@ -24,11 +24,27 @@ export default defineNuxtConfig({
   //     })
   //   }
   // },
-  // security: {
-  //   headers: {
-  //     crossOriginEmbedderPolicy: process.env.NODE_ENV === 'development' ? 'unsafe-none' : 'require-corp',
-  //   },
-  // },
+  site: {
+    url: 'https://picrosser.com',
+    name: 'Picrosser',
+    description: 'A website to play the puzzle game Picross, also known as nonograms, online in your browser.',
+    defaultLocale: 'en',
+  },
+  sitemap: {
+    urls: [
+      '/play/5x5',
+      '/play/10x10',
+      '/play/15x15',
+      '/play/20x20',
+      '/play/25x25',
+    ],
+  },
+  ogImage: {
+    enabled: false,
+  },
+  schemaOrg: {
+    enabled: false
+  },
   auth: {
     baseURL: process.env.AUTH_ORIGIN,
     provider: {
