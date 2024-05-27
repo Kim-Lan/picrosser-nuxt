@@ -3,6 +3,10 @@ definePageMeta({
   middleware: 'guest',
 });
 
+useHead({
+  title: 'Reset Password | Picrosser',
+})
+
 const sendResetSuccess = ref(false);
 const errorMessage = ref('');
 

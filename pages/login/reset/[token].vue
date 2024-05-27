@@ -2,6 +2,10 @@
 const route = useRoute();
 const token = route.params.token;
 
+useHead({
+  title: 'Reset Password | Picrosser',
+})
+
 const isLoading = ref(false);
 const isValid = ref(false);
 const resetSuccess = ref(false);

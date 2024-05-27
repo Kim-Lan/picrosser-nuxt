@@ -2,6 +2,10 @@
 const route = useRoute();
 const token = route.params.token;
 
+useHead({
+  title: 'Email Verification | Picrosser',
+})
+
 const isVerified = ref(true);
 const { status: authStatus, signOut }= useAuth()
 

@@ -3,6 +3,10 @@ const route = useRoute();
 const height = route.params.height;
 const width = route.params.width;
 
+useHead({
+  title: `Play ${height}x${width} Picross puzzles online! | Picrosser`,
+})
+
 const loadingIndicator = useLoadingIndicator();
 
 // const sizes = [

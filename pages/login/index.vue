@@ -2,6 +2,11 @@
 definePageMeta({
   middleware: 'guest',
 });
+
+useHead({
+  title: 'Login to Picrosser | Picrosser',
+})
+
 </script>
 
 <template>

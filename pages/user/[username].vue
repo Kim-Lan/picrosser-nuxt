@@ -2,6 +2,10 @@
 const route = useRoute();
 const username = route.params.username;
 
+useHead({
+  title: `${username} user page | Picrosser`,
+})
+
 const loadingIndicator = useLoadingIndicator();
 const errorMessage = ref('');
 

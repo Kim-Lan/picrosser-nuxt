@@ -4,6 +4,11 @@ const height = route.params.height;
 const width = route.params.width;
 const id = route.query.id;
 
+useHead({
+  title: `Puzzle page for ${height}x${width} Picross | Picrosser`,
+})
+
+
 const loadingIndicator = useLoadingIndicator();
 const errorMessage = ref('');
 
