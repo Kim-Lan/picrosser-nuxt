@@ -8,8 +8,6 @@ async function onLogout() {
     });
   } catch(e) {
     console.log(e);
-  } finally {
-    console.log('Signed out');
   }
 }
 
