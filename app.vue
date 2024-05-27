@@ -1,6 +1,6 @@
 <script setup>
 useHead({
-  title: 'Picrosser - Play the puzzle game Picross online!',
+  title: 'Play Picross the puzzle game online! | Picrosser',
   meta: [
     { name: 'description', content: 'A website to play the puzzle game Picross, also known as nonograms, online in your browser.'}
   ],
