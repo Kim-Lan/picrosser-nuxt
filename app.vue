@@ -1,8 +1,8 @@
 <script setup>
 useHead({
-  title: 'Picrosser',
+  title: 'Picrosser - Play the puzzle game Picross online!',
   meta: [
-    { name: 'description', content: 'A website to play the picross puzzle game online.'}
+    { name: 'description', content: 'A website to play the puzzle game Picross, also known as nonograms, online in your browser.'}
   ],
   link: [{ rel: 'icon', type: 'image/png', href: '/favicon.png' }],
 })
