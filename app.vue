@@ -1,11 +1,4 @@
 <script setup>
-<<<<<<< HEAD
-=======
-useHead({
-  title: 'Play Picross the puzzle game online!',
-})
-
->>>>>>> fc437c0df25b620c6012ffb94a485a94f516ceca
 const route = useRoute();
 const puzzle = usePuzzle();
 const drawer = ref(false);
