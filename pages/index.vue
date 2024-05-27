@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+useHead({
+  title: 'Play Picross the puzzle game online!',
+})
+
 const { data: authData } = useAuth();
 
 const route = useRoute();

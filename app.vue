@@ -1,12 +1,4 @@
 <script setup>
-useHead({
-  title: 'Play Picross the puzzle game online!',
-  meta: [
-    { name: 'description', content: 'A website to play the puzzle game Picross, also known as nonograms, online in your browser.'}
-  ],
-  link: [{ rel: 'icon', type: 'image/png', href: '/favicon.png' }],
-})
-
 const route = useRoute();
 const puzzle = usePuzzle();
 const drawer = ref(false);
