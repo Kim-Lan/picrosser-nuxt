@@ -74,8 +74,8 @@ export class ActionList {
 
     this.tail = newAction;
     this.current = newAction;
-    console.log("adding action: " + newAction.toString());
-    console.log(JSON.stringify(this));
+    // console.log("adding action: " + newAction.toString());
+    // console.log(JSON.stringify(this));
     return newAction;
   }
 
