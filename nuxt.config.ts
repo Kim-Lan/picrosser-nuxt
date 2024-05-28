@@ -81,7 +81,7 @@ export default defineNuxtConfig({
     transpile: ['vuetify'],
   },
   buildModules: ['@nuxtjs/html-validator'],
-  ssr: false,
+  ssr: true,
   colorMode: {
     classSuffix: ''
   },
