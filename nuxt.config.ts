@@ -24,6 +24,13 @@ export default defineNuxtConfig({
   //     })
   //   }
   // },
+  app: {
+    head: {
+      charset: 'utf-8',
+      viewport: 'width=device-width, initial-scale=1',
+      link: [{ rel: 'icon', type: 'image/png', href: '/favicon.png' }],
+    }
+  },
   site: {
     url: 'https://picrosser.com',
     name: 'Picrosser',
@@ -43,7 +50,7 @@ export default defineNuxtConfig({
     enabled: false,
   },
   schemaOrg: {
-    enabled: false
+    enabled: false,
   },
   auth: {
     baseURL: process.env.AUTH_ORIGIN,
