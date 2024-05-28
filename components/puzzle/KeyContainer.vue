@@ -84,6 +84,7 @@ function reset() {
   border: $thick-border;
   background-color: white;
   box-sizing: border-box;
+  user-select: none;
 }
 
 .v-theme--dark {
