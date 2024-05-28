@@ -46,12 +46,6 @@ export default defineNuxtConfig({
       '/play/25x25',
     ],
   },
-  ogImage: {
-    enabled: false,
-  },
-  schemaOrg: {
-    enabled: false,
-  },
   auth: {
     baseURL: process.env.AUTH_ORIGIN,
     provider: {
@@ -81,7 +75,6 @@ export default defineNuxtConfig({
     transpile: ['vuetify'],
   },
   buildModules: ['@nuxtjs/html-validator'],
-  ssr: true,
   colorMode: {
     classSuffix: ''
   },
