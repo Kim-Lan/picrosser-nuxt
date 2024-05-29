@@ -60,7 +60,7 @@ function navigatePlay() {
         </NuxtLink>
         <NuxtLink to="https://ko-fi.com/kimlan" target="_blank">
           <v-btn size="medium" variant="plain" aria-label="ko-fi button">
-            <img src="https://storage.ko-fi.com/cdn/brandasset/kofi_s_logo_nolabel.png" alt="ko-fi" width="40px" height="40px" />
+            <img src="~/assets/images/kofi-logo.png" alt="ko-fi" width="40px" height="40px" />
           </v-btn>
         </NuxtLink>
       </div>
