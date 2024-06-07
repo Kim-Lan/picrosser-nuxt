@@ -36,6 +36,7 @@ export default NuxtAuthHandler({
         }
 
         return {
+          id: user.toObject()._id,
           username: user.toObject().username,
           email: user.toObject().email,
           isVerified: user.toObject().isVerified,

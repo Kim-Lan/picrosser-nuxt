@@ -1,45 +1,44 @@
 <script lang="ts" setup>
 useHead({
-  title: 'Play Picross the puzzle game online!',
+  title: 'Play Picrosser online!',
 })
 
 const { data: authData } = useAuth();
-
-const route = useRoute();
-const puzzle = usePuzzle();
-
-function navigatePlay() {
-  if (!route.path.includes('play')) {
-    const { height, width } = puzzle.getSize();
-    if (height.value != 0 && width.value != 0) {
-      navigateTo(`/play/${height.value}x${width.value}`);
-    } else {
-      navigateTo('/play/5x5');
-    }
-  }
-}
 </script>
 
 <template>
   <v-container>
     <VerifyEmailAlert />
     <div
-      v-if="authData"
-      class="font-mono text-xl my-4"
+      class="font-mono text-xl my-4 text-center"
     >
       Welcome
-      <NuxtLink
-        :to="{ name: 'user-username', params: { username: authData.user.username }}"
-        class="underline"  
-      >
-        {{  authData?.user?.username }}
-      </NuxtLink>!
+        <NuxtLink
+          v-if="authData"
+          :to="{ name: 'user-username', params: { username: authData.user.username }}"
+          class="underline"  
+        >
+          {{  authData?.user?.username }}
+        </NuxtLink>
+        <span v-else>to Picrosser</span>!
     </div>
-    <div>Press
+    <!-- <div>Press
       <v-btn class="mx-2 font-weight-bold" color="blue-darken-1" @click="navigatePlay">
         Play
       </v-btn>
-      to start playing!</div>
+      to start playing!
+    </div> -->
+    <div class="flex flex-col align-center gap-8">
+      <v-img :width="250" src="~/assets/images/example-puzzle.png" />
+      <div class="flex flex-row align-center justify-center gap-4">
+        <v-btn class="w-1/2 font-weight-bold" color="blue-darken-1" @click="navigateTo('/play')">
+          Play
+        </v-btn>
+        <v-btn class="w-1/2 font-weight-bold" color="blue-darken-1" @click="navigateTo('/tutorial')">
+          Tutorial
+        </v-btn>
+      </div>
+    </div>
   </v-container>
 </template>
 

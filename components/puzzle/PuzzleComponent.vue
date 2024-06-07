@@ -14,11 +14,11 @@ onMounted(() => {
   document.addEventListener('keydown', onKeyboardDown);
 });
 
-
 defineExpose({ getNewPuzzle, getPuzzleById, recordAttempt, setPuzzle, reset, checkErrors });
 
 const emit = defineEmits(['solved']);
 const puzzle = usePuzzle();
+const { data: authData } = useAuth();
 
 const cells = ref([]);
 const leftKeys = ref(null);
@@ -91,7 +91,6 @@ async function getPuzzleById(id) {
 }
 
 async function recordAttempt(startTimestamp, endTimestamp) {
-  const { data: authData } = useAuth();
   if (authData) {
     try {
       const data = await $fetch('/api/puzzle/recordAttempt', {
@@ -105,16 +104,16 @@ async function recordAttempt(startTimestamp, endTimestamp) {
             colKeys: colKeys.value,
             solution: solution.value,
           },
-          userId: authData.value.user._id,
+          userId: authData.value.user.id,
           startTimestamp: startTimestamp,
           endTimestamp: endTimestamp,
         },
       });
       if (data.value) {
-        console.log('recorded attempt');
+        // console.log('recorded attempt');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 }
@@ -124,7 +123,7 @@ function updateState(index, state, prev) {
 
   const [row, col] = convertIndexTo2D(index, props.width);
   puzzle.userGrid[row][col] = state;
-  printGrid(puzzle.userGrid);
+  // printGrid(puzzle.userGrid);
 
   if (!isSolved.value && checkSolution()) {
     puzzle.setSolved(true);
@@ -191,7 +190,7 @@ function onKeyPressed(direction, groupIndex, keyIndex, isPressed) {
 
 function onKeyGroupDone(direction, groupIndex) {
   if (direction === 'row') {
-    console.log(`filling row ${groupIndex}`)
+    // console.log(`filling row ${groupIndex}`)
     for (let c = 0; c < props.width; c++) {
       if (puzzle.userGrid[groupIndex][c] === '0') {
         puzzle.userGrid[groupIndex][c] = '-1';
@@ -200,7 +199,7 @@ function onKeyGroupDone(direction, groupIndex) {
       }
     }
   } else {
-    console.log(`filling col ${groupIndex}`)
+    // console.log(`filling col ${groupIndex}`)
     for (let r = 0; r < props.height; r++) {
       if (puzzle.userGrid[r][groupIndex] === '0') {
         puzzle.userGrid[r][groupIndex] = '-1';
@@ -212,11 +211,11 @@ function onKeyGroupDone(direction, groupIndex) {
 }
 
 function setCell(index, newState) {
-  console.log(`setting cell index ${index} to ${newState}`);
+  // console.log(`setting cell index ${index} to ${newState}`);
   const [rowIndex, colIndex] = convertIndexTo2D(index, props.width);
   puzzle.userGrid[rowIndex][colIndex] = newState;
   cells.value[index].setStateSilent(newState);
-  printGrid(puzzle.userGrid);
+  // printGrid(puzzle.userGrid);
 }
 
 function setKey(direction, groupIndex, keyIndex, isPressed) {

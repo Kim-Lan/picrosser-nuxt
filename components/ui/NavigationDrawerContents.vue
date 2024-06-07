@@ -10,20 +10,6 @@ async function onLogout() {
     console.log(e);
   }
 }
-
-const route = useRoute();
-const puzzle = usePuzzle();
-
-function navigatePlay() {
-  if (!route.path.includes('play')) {
-    const { height, width } = puzzle.getSize();
-    if (height.value != 0 && width.value != 0) {
-      navigateTo(`/play/${height.value}x${width.value}`);
-    } else {
-      navigateTo('/play/5x5');
-    }
-  }
-}
 </script>
 
 <template>
@@ -43,9 +29,12 @@ function navigatePlay() {
       </NuxtLink>
     </div>
 
-    <div class="w-full hidden max-sm:block">
-      <v-btn class="w-full font-weight-bold" variant="plain" @click="navigatePlay">
+    <div class="flex flex-col align-center w-full gap-2">
+      <v-btn class="w-full font-weight-bold" elevation=1 @click="navigateTo('/play')">
         Play
+      </v-btn>
+      <v-btn class="w-full font-weight-bold" elevation=1 @click="navigateTo('/tutorial')">
+        Tutorial
       </v-btn>
     </div>
 

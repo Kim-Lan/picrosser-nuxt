@@ -1,19 +1,5 @@
 <script setup>
-const route = useRoute();
-const puzzle = usePuzzle();
 const drawer = ref(false);
-
-function navigatePlay() {
-  if (!route.path.includes('play')) {
-    const { height, width } = puzzle.getSize();
-    if (height.value != 0 && width.value != 0) {
-      navigateTo(`/play/${height.value}x${width.value}`);
-    } else {
-      navigateTo('/play/5x5');
-    }
-  }
-}
-
 </script>
 
 <template>
@@ -26,8 +12,11 @@ function navigatePlay() {
         </NuxtLink>
       </v-app-bar-title>
       <nav class="max-sm:hidden">
-        <v-btn class="mx-2 font-weight-bold" @click="navigatePlay">
+        <v-btn class="font-weight-bold" @click="navigateTo('/play')">
           Play
+        </v-btn>
+        <v-btn class="font-weight-bold" @click="navigateTo('/tutorial')">
+          Tutorial
         </v-btn>
       </nav>
       <DarkModeToggle />

@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  console.log("loading puzzle " + height + "x" + width);
+  // console.log("loading puzzle " + height + "x" + width);
   const solution = (width == 5) ? bitGenerate(width) : generate(height, width);
   const { rowKeys, colKeys } = getKeys(solution);
   const goal = getGoalString(solution);
@@ -38,11 +38,11 @@ export default defineEventHandler(async (event) => {
     // puzzleId = new mongoose.Types.ObjectId();
   }
 
-  console.log("returning puzzle");
-  console.log("id " + puzzleId);
-  printArray(rowKeys);
-  printArray(colKeys);
-  printGrid(solution);
+  // console.log("returning puzzle");
+  // console.log("id " + puzzleId);
+  // printArray(rowKeys);
+  // printArray(colKeys);
+  // printGrid(solution);
   return {
     puzzleId,
     rowKeys,

@@ -4,7 +4,7 @@ const height = route.params.height;
 const width = route.params.width;
 
 useHead({
-  title: `Play ${height}x${width} Picross puzzles online!`,
+  title: `Play ${height}x${width} Picrosser online!`,
 })
 
 const loadingIndicator = useLoadingIndicator();

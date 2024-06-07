@@ -1,7 +1,6 @@
 import { Attempt } from '~/server/models/Attempt';
 import { User } from '~/server/models/User';
 import { Puzzle } from '~/server/models/Puzzle';
-import { getGoalString } from '~/server/utils/picross';
 
 export default defineEventHandler(async (event) => {
   const { puzzle, userId, startTimestamp, endTimestamp } = await readBody(event);

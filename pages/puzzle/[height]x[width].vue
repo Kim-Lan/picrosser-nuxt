@@ -5,7 +5,7 @@ const width = route.params.width;
 const id = route.query.id;
 
 useHead({
-  title: `Puzzle page for ${height}x${width} Picross`,
+  title: `${height}x${width} Puzzle`,
 })
 
 
