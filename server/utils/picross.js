@@ -1,4 +1,4 @@
-import { getColumn, convertIndexTo2D, copyGrid } from './grid.js'
+import { getColumn, copyGrid } from './grid.js'
 import { arraySum } from './arrayHelpers.js'
 import chunk from "lodash.chunk"
 
@@ -92,6 +92,13 @@ export function checkMaxBlocks(grid, row, col, maxRowBlocks, maxColBlocks) {
       return false;
   }
   return true;
+}
+
+export function checkMaxColBlocks(grid, row, col, maxBlocks) {
+  const temp = copyGrid(grid);
+  temp[row][col] = FILLED_VALUE;
+  const colBlocks = getBlocks(getColumn(temp, col));
+  return colBlocks.length <= maxBlocks;
 }
 
 export function gridToNon(grid) {

@@ -1,8 +1,5 @@
-import mongoose from 'mongoose';
-import { printGrid } from '~/server/utils/grid';
-import { printArray } from '~/server/utils/arrayHelpers';
 import { getKeys, getGoalString } from '~/server/utils/picross';
-import { generate, bitGenerate } from '~/server/utils/picross-generate';
+import { generate, bitGenerate, generate25x25 } from '~/server/utils/picross-generate';
 import { Puzzle } from '~/server/models/Puzzle';
 
 const SIZES = [5, 10, 15, 20, 25];
@@ -18,7 +15,14 @@ export default defineEventHandler(async (event) => {
   }
 
   // console.log("loading puzzle " + height + "x" + width);
-  const solution = (width == 5) ? bitGenerate(width) : generate(height, width);
+  let solution;
+  if (height == 5 && width == 5) {
+    solution = bitGenerate(width);
+  } else if (height == 25 && width == 25) {
+    solution = generate25x25();
+  } else {
+    solution = generate(height, width);
+  }
   const { rowKeys, colKeys } = getKeys(solution);
   const goal = getGoalString(solution);
 

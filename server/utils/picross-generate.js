@@ -2,11 +2,122 @@ import fs from 'fs'
 import path from 'path'
 import chunk from 'lodash.chunk'
 import { execSync } from 'child_process'
+import { rando } from '@nastyox/rando.js';
 import { createGrid, convertIndexTo2D, convert2DToIndex, getColumn, printGrid } from './grid.js'
-import { hasEmpty, hasSpace, getKeys, getGoalString, gridToNon } from './picross.js'
+import { hasEmpty, hasSpace, getKeys, getGoalString, gridToNon, checkMaxBlocks, checkMaxColBlocks } from './picross.js'
 import { range, printArray } from './arrayHelpers.js'
+import { partition } from './partition.js'
 
+const EMPTY_VALUE = '0';
 const FILLED_VALUE = '1';
+
+export function generate25x25() {
+  let solution;
+  do {
+    solution = fill25x25();
+  } while (!checkTotalBlockCount(solution, 99, 99) || !checkUnique(solution));
+  console.log(gridToNon(solution));
+  return solution;
+}
+
+function fill25x25() {
+  const solution1D = Array(25*25).fill('0');
+
+  const rowIndex = [...Array(25).keys()];
+  const colIndex = [...Array(25).keys()];
+
+  while (rowIndex.length > 0 && colIndex.length > 0) {
+    // Fill a row
+    let indexOfIndex = Math.floor(rando() * rowIndex.length);
+    let r = rowIndex.splice(indexOfIndex, 1)[0];
+    let blocks = partition(25, 2, 1, 24);
+    let spaceFirst = rando();
+    let value = EMPTY_VALUE;
+    if (spaceFirst < 0.5) {
+      value = FILLED_VALUE;
+    }
+    let c = 0;
+    for (let i = 0; i < blocks.length; i++) {
+      for (let j = 0; j < blocks[i]; j++) {
+        solution1D[convert2DToIndex(r, c, 25)] = value;
+        c++;
+      }
+      if (value === EMPTY_VALUE) {
+        value = FILLED_VALUE;
+      } else {
+        value = EMPTY_VALUE;
+      }
+    }
+
+    // Fill a column
+    indexOfIndex = Math.floor(rando() * colIndex.length);
+    c = colIndex.splice(indexOfIndex, 1)[0];
+    blocks = partition(25, 2, 1, 24);
+    spaceFirst = rando();
+    value = EMPTY_VALUE
+    if (spaceFirst < 0.5) {
+      value = FILLED_VALUE;
+    }
+    r = 0;
+    for (let i = 0; i < blocks.length; i++) {
+      for (let j = 0; j < blocks[i]; j++) {
+        solution1D[convert2DToIndex(r, c, 25)] = value;
+        r++;
+      }
+      if (value === EMPTY_VALUE) {
+        value = FILLED_VALUE;
+      } else {
+        value = EMPTY_VALUE;
+      }
+    }
+    // console.log('grid');
+    // printGrid(chunk(solution1D, 25));
+  }
+
+  let filledIndex = [];
+  let emptyIndex = [];
+  solution1D.forEach((val, index) => {
+    if (val === '1') {
+      filledIndex.push(index);
+    } else {
+      emptyIndex.push(index);
+    }
+  })
+  while (filledIndex.length !== 313) {
+    if (filledIndex.length > 313) {
+      const indexOfIndex = Math.floor(rando() * filledIndex.length);
+      const index = filledIndex[indexOfIndex];
+      solution1D[index] = '0';
+      emptyIndex.push(filledIndex.splice(indexOfIndex, 1)[0]);
+    } else {
+      const indexOfIndex = Math.floor(rando() * emptyIndex.length);
+      const index = emptyIndex[indexOfIndex];
+      solution1D[index] = '1';
+      filledIndex.push(emptyIndex.splice(indexOfIndex, 1)[0]);
+    }
+  }
+  // console.log(filledIndex.length);
+
+  const solution2D = chunk(solution1D, 25);
+  // const nonStr = gridToNon(solution2D);
+  // console.log(nonStr);
+  return solution2D;
+}
+
+export function checkTotalBlockCount(grid, maxRowBlockCount, maxColBlockCount) {
+  const { rowKeys, colKeys } = getKeys(grid);
+
+  let countRowKeys = 0;
+  rowKeys.forEach((row) => 
+    row.forEach(() => countRowKeys++)
+  );
+
+  let countColKeys = 0;
+  colKeys.forEach((col) => 
+    col.forEach(() => countColKeys++)
+  );
+  return countRowKeys <= maxRowBlockCount && countColKeys <= maxColBlockCount;
+}
 
 export function generate(height, width) {
   let solution;
@@ -24,12 +135,12 @@ function chooseCells(height, width) {
   const chosen2D = createGrid(height, width);
   const indexArray = range(total);
 
-  const maxRowBlocks = getMaxBlocks(width);
-  const maxColBlocks = getMaxBlocks(height);
+  // const maxRowBlocks = getMaxBlocks(width);
+  // const maxColBlocks = getMaxBlocks(height);
 
   // fill one cell in every row
   for (let r = 0; r < height; r++) {
-    const chosenColIndex = Math.floor(Math.random() * width);
+    const chosenColIndex = rando(0, width - 1); //Math.floor(Math.random() * width);
     const index = convert2DToIndex(r, chosenColIndex, width);
     indexArray.splice(indexArray.indexOf(index), 1);
     chosen1D.push(index);
@@ -46,7 +157,7 @@ function chooseCells(height, width) {
       }
     }
     if (empty) {
-      const chosenRowIndex = Math.floor(Math.random() * height);
+      const chosenRowIndex = rando(0, height - 1); //Math.floor(Math.random() * height);
       const index = convert2DToIndex(chosenRowIndex, c, width);
       indexArray.splice(indexArray.indexOf(index), 1);
       chosen1D.push(index);
@@ -56,32 +167,36 @@ function chooseCells(height, width) {
 
   let count = 0;
   while (chosen1D.length < Math.round(total / 2) && indexArray.length > 0) {
-      const chosenIndex = Math.floor(Math.random() * indexArray.length);
+      const chosenIndex = rando(0, indexArray.length - 1); //Math.floor(Math.random() * indexArray.length);
       const index = indexArray[chosenIndex]
       const [row, col] = convertIndexTo2D(index, height, width);
 
       if (hasSpace(chosen2D, row, col)) {
-        if (checkMaxBlocks(chosen2D, row, col, maxRowBlocks[row], maxColBlocks[col])) {
+        // if (checkMaxBlocks(chosen2D, row, col, maxRowBlocks[row], maxColBlocks[col])) {
           chosen2D[row][col] = FILLED_VALUE;
           chosen1D.push(indexArray.splice(chosenIndex, 1)[0]);
           count = 0;
-        }
+        // }
       } else {
         indexArray.splice(chosenIndex, 1); // remove index if there is a full row or column
       }
+      // count++;
+      // if (count > indexArray.length) {
+      //   break;
+      // }
       count++;
-      if (count > indexArray.length) {
+      if (count > 1000) {
         break;
       }
   }
-  //return chosen1D.length === Math.round(total / 2) ? chosen2D : [];
+  // return chosen1D.length === Math.round(total / 2) ? chosen2D : [];
   return chosen2D;
 }
 
 function getMaxBlocks(size) {
   const maxBlocks = [];
   for (let i = 0; i < size; i++) {
-    maxBlocks[i] = Math.ceil(Math.random() * 6); //between 1 and 6 blocks
+    maxBlocks[i] = rando(1, 6); //Math.ceil(Math.random() * 6); // between 1 and 6 blocks
   }
   return maxBlocks;
 }
