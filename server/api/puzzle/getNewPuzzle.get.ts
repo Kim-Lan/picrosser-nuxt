@@ -1,5 +1,5 @@
 import { getKeys, getGoalString } from '~/server/utils/picross';
-import { generate, bitGenerate, generate25x25 } from '~/server/utils/picross-generate';
+import { generate, bitGenerate } from '~/server/utils/picross-generate';
 import { Puzzle } from '~/server/models/Puzzle';
 
 const SIZES = [5, 10, 15, 20, 25];
@@ -14,12 +14,35 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  if (height == 25 && width == 25) {
+    const puzzle = await Puzzle.aggregate([
+      {
+        $match: { height: 25, width: 25 }
+      },
+      {
+        $sample: { size: 1 }
+      }
+    ]).exec();
+    if (!puzzle[0]) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Failed to find puzzle'
+      })
+    }
+    return {
+      puzzleId: puzzle[0]._id,
+      rowKeys: puzzle[0].rowKeys,
+      colKeys: puzzle[0].colKeys,
+      solution: puzzle[0].goal,
+    }
+  }
+
   // console.log("loading puzzle " + height + "x" + width);
   let solution;
   if (height == 5 && width == 5) {
     solution = bitGenerate(width);
-  } else if (height == 25 && width == 25) {
-    solution = generate25x25();
+  // } else if (height == 25 && width == 25) {
+  //   solution = generate25x25();
   } else {
     solution = generate(height, width);
   }
