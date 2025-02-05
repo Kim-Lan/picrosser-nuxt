@@ -24,4 +24,4 @@ logs
 .vscode
 
 server/modules
-server/generate/test.non
+server/generate
