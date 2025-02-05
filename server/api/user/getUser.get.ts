@@ -1,5 +1,4 @@
 import { User } from '~/server/models/User';
-import { Attempt } from '~/server/models/Attempt';
 import { Puzzle } from '~/server/models/Puzzle';
 
 export default defineEventHandler(async (event) => {
@@ -24,14 +23,11 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // return {
-  //   ... user.toObject(),
-  //   password: undefined,
-  // }
-
   return {
-    username: user.toObject().username,
-    createdAt: user.toObject().createdAt,
-    attempts: user.toObject().attempts,
+    username: user.username,
+    createdAt: user.createdAt,
+    attempts: user.attempts,
+    currentStats: user.currentStats,
+    recordStats: user.recordStats,
   }
 })

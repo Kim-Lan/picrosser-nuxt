@@ -1,7 +1,5 @@
-import mongoose from 'mongoose'
 import { Puzzle } from '~/server/models/Puzzle'
 import { getSolutionGrid } from '~/server/utils/picross'
-import { printGrid } from '~/server/utils/grid'
 
 export default defineEventHandler(async (event) => {
   const { puzzleId, gridJSON } = getQuery(event);

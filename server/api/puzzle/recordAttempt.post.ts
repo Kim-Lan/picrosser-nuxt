@@ -19,20 +19,6 @@ export default defineEventHandler(async (event) => {
       statusCode: 500,
       statusMessage: 'Puzzle not found'
     })
-    // puzzleDocument = await Puzzle.create({
-    //   _id: puzzle.id,
-    //   width: puzzle.width,
-    //   height: puzzle.height,
-    //   rowKeys: puzzle.rowKeys,
-    //   colKeys: puzzle.colKeys,
-    //   goal: getGoalString(puzzle.solution),
-    // })
-    // if (!puzzleDocument) {
-    //   throw createError({
-    //     statusCode: 500,
-    //     statusMessage: 'Failed to create puzzle',
-    //   })
-    // }
   }
 
   const attempt = await Attempt.create({
@@ -50,7 +36,8 @@ export default defineEventHandler(async (event) => {
   }
 
   user.attempts.push(attempt._id);
-  await user.updateStats(puzzle.height, puzzle.width, attempt.totalTime);
+  await user.save();
+  await user.updateStats(puzzleDocument.height, puzzleDocument.width, attempt.totalTime);
   await user.save();
 
   puzzleDocument.attempts.push(attempt._id);

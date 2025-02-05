@@ -1,5 +1,5 @@
+import md5 from 'blueimp-md5'
 import { Puzzle } from '~/server/models/Puzzle'
-import { hashSolution } from '~/server/utils/picross-generate'
 
 export default defineEventHandler(async (event) => {
   const { height, width, id } = await getQuery(event);
@@ -17,6 +17,6 @@ export default defineEventHandler(async (event) => {
     height: puzzle.height,
     rowKeys: puzzle.rowKeys,
     colKeys: puzzle.colKeys,
-    hashedSolution: hashSolution(puzzle.goal),
+    hashedSolution: md5(puzzle.goal),
   };
 })

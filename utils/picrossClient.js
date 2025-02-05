@@ -1,4 +1,4 @@
-export function getGridString(grid) {
+export function getGridWithoutXString(grid) {
   const gridWithoutX = [];
   for (let r = 0; r < grid.length; r++) {
     const row = [];

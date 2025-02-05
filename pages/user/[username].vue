@@ -11,6 +11,8 @@ const errorMessage = ref('');
 
 const user = ref(null);
 const attempts = ref([]);
+const currentStats = ref(null);
+const recordStats = ref(null);
 
 const SIZES = ['5x5', '10x10', '15x15', '20x20', '25x25'];
 
@@ -49,7 +51,10 @@ const itemsPerPageOptions = [
   {value: -1, title: '$vuetify.dataFooter.itemsPerPageAll'}
 ]
 
-onMounted(() => fetchUser());
+onBeforeMount(async () => {
+  await nextTick();
+  fetchUser();
+});
 
 async function fetchUser() {
   try {
@@ -57,6 +62,7 @@ async function fetchUser() {
     const { data, error } = await useFetch('/api/user/getUser', {
       method: 'GET',
       query: { username },
+      immediate: true,
     });
     if (error.value) {
       errorMessage.value = error.value.statusMessage;
@@ -67,8 +73,11 @@ async function fetchUser() {
         createdAt: data.value.createdAt,
       };
       attempts.value = data.value.attempts.reverse();
+      currentStats.value = data.value.currentStats;
+      recordStats.value = data.value.recordStats;
     }
   } catch (error) {
+    errorMessage.value = error;
     console.log(error);
   } finally {
     loadingIndicator.finish();
@@ -87,7 +96,7 @@ async function fetchUser() {
         <div>Joined {{ new Date(user.createdAt).toLocaleDateString() }}</div>
       </div>
 
-      <UserStatsTable :username="username" />
+      <UserStatsTable :current-stats="currentStats" :record-stats="recordStats" />
 
       <div class="mt-12">
         <v-select
@@ -163,5 +172,3 @@ async function fetchUser() {
     </div>
   </v-container>
 </template>
-
-<style scoped></style>

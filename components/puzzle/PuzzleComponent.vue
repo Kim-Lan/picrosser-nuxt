@@ -1,5 +1,6 @@
 <script setup>
 import md5 from 'blueimp-md5'
+
 const props = defineProps({
   height: {
     type: Number,
@@ -148,19 +149,9 @@ function resetKeys() {
 }
 
 function checkSolution() {
-  const gridStr = getGridString(puzzle.userGrid);
+  const gridStr = getGridWithoutXString(puzzle.userGrid);
   const hashedGrid = md5(gridStr);
   return hashedGrid === hashedSolution.value;
-  // for (let i = 0; i < props.height; i++) {
-  //   for (let j = 0; j < props.width; j++) {
-  //     if (puzzle.userGrid[i][j] !== '1' && solution.value[i][j] === '1') {
-  //       return false;
-  //     } else if (puzzle.userGrid[i][j] === '1' && solution.value[i][j] === '0') {
-  //       return false;
-  //     }
-  //   }
-  // }
-  // return true;
 }
 
 async function checkErrors() {
@@ -174,20 +165,6 @@ async function checkErrors() {
   });
   return data.errorCount;
 }
-
-// function checkErrors() {
-//   let errors = 0;
-//   for (let i = 0; i < props.height; i++) {
-//     for (let j = 0; j < props.width; j++) {
-//       if (puzzle.userGrid[i][j] === '-1' && solution.value[i][j] === '1') {
-//         errors++;
-//       } else if (puzzle.userGrid[i][j] === '1' && solution.value[i][j] === '0') {
-//         errors++;
-//       }
-//     }
-//   }
-//   return errors;
-// }
 
 function onKeyPressed(direction, groupIndex, keyIndex, isPressed) {
   // console.log(`puzzle detected key press: ${direction} ${groupIndex} ${keyIndex}`);

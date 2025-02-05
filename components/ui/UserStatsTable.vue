@@ -1,17 +1,21 @@
 <script setup>
 const props = defineProps({
-  username: {
-    type: String,
-    default: '',
+  currentStats: {
+    type: Object,
+    default: null
+  },
+  recordStats: {
+    type: Object,
+    default: null
   }
 });
 
-onMounted(() => fetchUserStats());
+// onBeforeMount(() => fetchUserStats());
 
 const SIZES = ['5x5', '10x10', '15x15', '20x20', '25x25'];
 
-const currentStats = ref(null);
-const recordStats = ref(null);
+// const currentStats = ref(null);
+// const recordStats = ref(null);
 
 const statTableHeaders = [
   {
@@ -32,14 +36,14 @@ const statTableHeaders = [
   },
 ];
 
-async function fetchUserStats() {
-  const { data, error } = await useFetch('/api/user/getUserStats', {
-    method: 'GET',
-    query: { username: props.username }
-  });
-  currentStats.value = data.value.currentStats;
-  recordStats.value = data.value.recordStats;
-}
+// async function fetchUserStats() {
+//   const { data, error } = await useFetch('/api/user/getUserStats', {
+//     method: 'GET',
+//     query: { username: props.username }
+//   });
+//   currentStats.value = data.value.currentStats;
+//   recordStats.value = data.value.recordStats;
+// }
 
 </script>
 
