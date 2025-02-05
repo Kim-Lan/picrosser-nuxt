@@ -41,7 +41,7 @@ export function getGoalString(grid) {
 }
 
 export function getSolutionGrid(goal, width) {
-  return chunk(goal, width);
+  return chunk(goal.split(''), width);
 }
 
 export function hasEmpty(grid) {

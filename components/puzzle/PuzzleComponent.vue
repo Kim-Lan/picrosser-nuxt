@@ -15,7 +15,7 @@ onMounted(() => {
   document.addEventListener('keydown', onKeyboardDown);
 });
 
-defineExpose({ getNewPuzzle, getPuzzleById, recordAttempt, setPuzzle, reset });
+defineExpose({ getNewPuzzle, getPuzzleById, recordAttempt, setPuzzle, reset, checkErrors });
 
 const emit = defineEmits(['solved']);
 const puzzle = usePuzzle();
@@ -161,6 +161,18 @@ function checkSolution() {
   //   }
   // }
   // return true;
+}
+
+async function checkErrors() {
+  console.log
+  const data = await $fetch('/api/puzzle/checkErrors', {
+    method: 'GET',
+    query: {
+      puzzleId: puzzleId.value,
+      gridJSON: JSON.stringify(puzzle.userGrid),
+    },
+  });
+  return data.errorCount;
 }
 
 // function checkErrors() {

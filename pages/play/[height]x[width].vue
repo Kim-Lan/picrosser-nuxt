@@ -117,10 +117,14 @@ function reset() {
   statusMessage.value = 'Keep going!';
 }
 
-// function check() {
-//   const error = puzzleComponent.value.checkErrors();
-//   statusMessage.value = `You have ${error} error(s) so far`;
-// }
+async function check() {
+  const errorCount = await puzzleComponent.value.checkErrors();
+  if (errorCount === 1) {
+    statusMessage.value = `You have ${errorCount} error so far`;
+  } else {
+    statusMessage.value = `You have ${errorCount} errors so far`;
+  }
+}
 
 function end() {
   stopwatch.reset();
@@ -169,7 +173,7 @@ function end() {
       ></v-select> -->
       <div class="flex flex-row flex-wrap items-center gap-5">
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold" @click="newPuzzleHandler">Start New</v-btn>
-        <!-- <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold" :disabled="isSolved" @click="check">Check</v-btn> -->
+        <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold" :disabled="isSolved" @click="check">Check</v-btn>
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold" :disabled="isSolved" @click="reset">Restart</v-btn>
         <v-btn size="small" elevation="1" color="blue-darken-1" class="font-weight-bold" :disabled="isSolved" @click="end">End</v-btn>
       </div>
