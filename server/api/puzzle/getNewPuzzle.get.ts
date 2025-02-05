@@ -60,7 +60,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const hashedSolution = hashSolution(puzzle.goal);
+  const hashedSolution = md5(puzzle.goal);
 
   return {
     puzzleId: puzzle._id,
