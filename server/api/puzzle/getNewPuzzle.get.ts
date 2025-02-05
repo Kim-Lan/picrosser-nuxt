@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   }
 
   if (height == 5) {
-    solution = bitGenerate(height);
+    const solution = bitGenerate(height);
 
     const { rowKeys, colKeys } = getKeys(solution);
     const goal = getGoalString(solution);
