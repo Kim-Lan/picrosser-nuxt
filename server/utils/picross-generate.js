@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import md5 from 'blueimp-md5'
 import chunk from 'lodash.chunk'
 import { execSync } from 'child_process'
 import { rando } from '@nastyox/rando.js';
@@ -29,4 +30,8 @@ export function checkUnique(grid) {
   fs.writeFileSync(testPath, data);
   const check1 = (execSync(naughtyPath + ' -u < ' + testPath)).toString();
   return check1.includes('UNIQUE');
+}
+
+export function hashSolution(goal) {
+  return md5(goal);
 }

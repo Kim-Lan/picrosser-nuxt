@@ -77,11 +77,11 @@ function reset() {
 </template>
 
 <style lang="scss">
-@import '~/assets/styles/variables.scss';
+@use '~/assets/styles/variables';
 
 .key-container {
   border-collapse: collapse;
-  border: $thick-border;
+  border: variables.$thick-border;
   background-color: white;
   box-sizing: border-box;
   user-select: none;
@@ -106,12 +106,12 @@ function reset() {
     align-items: center;
 
     &:not(.last-row) {
-      border-bottom: $thin-border;
+      border-bottom: variables.$thin-border;
     }
 
     &.five-row {
       &:not(.last-row) {
-        border-bottom: $thick-border;
+        border-bottom: variables.$thick-border;
       }
     }
   }
@@ -130,12 +130,12 @@ function reset() {
     align-items: center;
 
     &:not(.last-col) {
-      border-right: $thin-border;
+      border-right: variables.$thin-border;
     }
 
     &.five-col {
       &:not(.last-col) {
-        border-right: $thick-border;
+        border-right: variables.$thick-border;
       }
     }
   }
@@ -172,7 +172,7 @@ function reset() {
 
 #top-keys {
   grid-area: 1 / 2;
-  border-top: $thick-border;
+  border-top: variables.$thick-border;
   border-bottom: 0;
 
   .key-group {
@@ -182,7 +182,7 @@ function reset() {
 
 #bottom-keys {
   grid-area: 3 / 2;
-  border-bottom: $thick-border;
+  border-bottom: variables.$thick-border;
   border-top: 0;
 
   .key-group {
@@ -192,7 +192,7 @@ function reset() {
 
 #left-keys {
   grid-area: 2 / 1;
-  border-left: $thick-border;
+  border-left: variables.$thick-border;
   border-right: 0;
 
   .key-group {
@@ -202,7 +202,7 @@ function reset() {
 
 #right-keys {
   grid-area: 2 / 3;
-  border-right: $thick-border;
+  border-right: variables.$thick-border;
   border-left: 0;
 
   .key-group {

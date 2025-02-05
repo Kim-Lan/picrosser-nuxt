@@ -1,13 +1,13 @@
-import { getKeys, getGoalString } from '~/server/utils/picross';
-import { generate, bitGenerate } from '~/server/utils/picross-generate';
-import { Puzzle } from '~/server/models/Puzzle';
+import { getKeys, getGoalString } from '~/server/utils/picross'
+import { bitGenerate, hashSolution } from '~/server/utils/picross-generate'
+import { Puzzle } from '~/server/models/Puzzle'
 
 const SIZES = [5, 10, 15, 20, 25];
 
 export default defineEventHandler(async (event) => {
   const { height, width} = getQuery(event);
 
-  if (!SIZES.includes(Number(width)) || width !== height) {
+  if (!SIZES.includes(parseInt(width)) || width !== height) {
     throw createError({
       statusCode: 400,
       statusMessage: 'Invalid dimensions',
@@ -34,32 +34,37 @@ export default defineEventHandler(async (event) => {
       });
       puzzleId = newPuzzle._id;
     }
+
+    const hashedSolution = hashSolution(goal);
     return {
       puzzleId,
       rowKeys,
       colKeys,
-      solution
+      hashedSolution
     };
   }
 
-  const puzzle = await Puzzle.aggregate([
+  const puzzle = (await Puzzle.aggregate([
     {
       $match: { height: parseInt(height), width: parseInt(width) }
     },
     {
       $sample: { size: 1 }
     }
-  ]).exec();
-  if (!puzzle[0]) {
+  ]).exec())[0];
+  if (!puzzle) {
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to find puzzle'
     })
   }
+
+  const hashedSolution = hashSolution(puzzle.goal);
+
   return {
-    puzzleId: puzzle[0]._id,
-    rowKeys: puzzle[0].rowKeys,
-    colKeys: puzzle[0].colKeys,
-    solution: puzzle[0].goal,
+    puzzleId: puzzle._id,
+    rowKeys: puzzle.rowKeys,
+    colKeys: puzzle.colKeys,
+    hashedSolution
   }
 })

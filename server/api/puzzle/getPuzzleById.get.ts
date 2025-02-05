@@ -1,5 +1,5 @@
-import { Puzzle } from '~/server/models/Puzzle';
-import { getSolutionGrid } from '~/server/utils/picross';
+import { Puzzle } from '~/server/models/Puzzle'
+import { hashSolution } from '~/server/utils/picross-generate'
 
 export default defineEventHandler(async (event) => {
   const { height, width, id } = await getQuery(event);
@@ -17,6 +17,6 @@ export default defineEventHandler(async (event) => {
     height: puzzle.height,
     rowKeys: puzzle.rowKeys,
     colKeys: puzzle.colKeys,
-    solution: getSolutionGrid(puzzle.goal, puzzle.width),
+    hashedSolution: hashSolution(puzzle.goal),
   };
 })

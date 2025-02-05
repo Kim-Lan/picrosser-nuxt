@@ -1,6 +1,6 @@
-import { User } from '~/server/models/User';
-import bcrypt from 'bcrypt';
-import nodemailer from 'nodemailer';
+import { User } from '~/server/models/User'
+import bcrypt from 'bcrypt'
+import nodemailer from 'nodemailer'
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
 
   const user = await User.create({ username, email , password: hashedPassword });
 
-  const info = await transporter.sendMail({
+  await transporter.sendMail({
     from: '"Picrosser" <picrosser.com@gmail.com>',
     to: email,
     subject: '[Picrosser] Successfully Registered',

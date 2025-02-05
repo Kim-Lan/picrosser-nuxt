@@ -1,4 +1,5 @@
 <script setup>
+import md5 from 'blueimp-md5'
 const props = defineProps({
   height: {
     type: Number,
@@ -14,7 +15,7 @@ onMounted(() => {
   document.addEventListener('keydown', onKeyboardDown);
 });
 
-defineExpose({ getNewPuzzle, getPuzzleById, recordAttempt, setPuzzle, reset, checkErrors });
+defineExpose({ getNewPuzzle, getPuzzleById, recordAttempt, setPuzzle, reset });
 
 const emit = defineEmits(['solved']);
 const puzzle = usePuzzle();
@@ -29,7 +30,7 @@ const puzzleId = ref('');
 const isSolved = ref(false);
 const rowKeys = ref([]);
 const colKeys = ref([]);
-const solution = ref([]);
+const hashedSolution = ref('');
 let actionHistory = new ActionList();
 
 provide('actionHistory', actionHistory);
@@ -64,7 +65,7 @@ function setPuzzle(data) {
   puzzleId.value = data.puzzleId;
   rowKeys.value = data.rowKeys;
   colKeys.value = data.colKeys;
-  solution.value = data.solution;
+  hashedSolution.value = data.hashedSolution;
   actionHistory = new ActionList();
   puzzle.newPuzzle(props.height, props.width, puzzleId.value);
   isSolved.value = false;
@@ -81,12 +82,12 @@ async function getNewPuzzle() {
 }
 
 async function getPuzzleById(id) {
-  const { data } = await useFetch('/api/puzzle/getPuzzleById', {
+  const data = await $fetch('/api/puzzle/getPuzzleById', {
     method: 'GET',
     query: { height: props.height, width: props.width, id },
   });
-  // console.log(data.value);
-  setPuzzle(data.value);
+  // console.log(data);
+  setPuzzle(data);
   return puzzleId.value;
 }
 
@@ -97,12 +98,7 @@ async function recordAttempt(startTimestamp, endTimestamp) {
         method: 'POST',
         body: {
           puzzle: {
-            id: puzzleId.value,
-            height: props.height,
-            width: props.width,
-            rowKeys: rowKeys.value,
-            colKeys: colKeys.value,
-            solution: solution.value,
+            id: puzzleId.value
           },
           userId: authData.value.user.id,
           startTimestamp: startTimestamp,
@@ -152,31 +148,34 @@ function resetKeys() {
 }
 
 function checkSolution() {
-  for (let i = 0; i < props.height; i++) {
-    for (let j = 0; j < props.width; j++) {
-      if (puzzle.userGrid[i][j] !== '1' && solution.value[i][j] === '1') {
-        return false;
-      } else if (puzzle.userGrid[i][j] === '1' && solution.value[i][j] === '0') {
-        return false;
-      }
-    }
-  }
-  return true;
+  const gridStr = getGridString(puzzle.userGrid);
+  const hashedGrid = md5(gridStr);
+  return hashedGrid === hashedSolution.value;
+  // for (let i = 0; i < props.height; i++) {
+  //   for (let j = 0; j < props.width; j++) {
+  //     if (puzzle.userGrid[i][j] !== '1' && solution.value[i][j] === '1') {
+  //       return false;
+  //     } else if (puzzle.userGrid[i][j] === '1' && solution.value[i][j] === '0') {
+  //       return false;
+  //     }
+  //   }
+  // }
+  // return true;
 }
 
-function checkErrors() {
-  let errors = 0;
-  for (let i = 0; i < props.height; i++) {
-    for (let j = 0; j < props.width; j++) {
-      if (puzzle.userGrid[i][j] === '-1' && solution.value[i][j] === '1') {
-        errors++;
-      } else if (puzzle.userGrid[i][j] === '1' && solution.value[i][j] === '0') {
-        errors++;
-      }
-    }
-  }
-  return errors;
-}
+// function checkErrors() {
+//   let errors = 0;
+//   for (let i = 0; i < props.height; i++) {
+//     for (let j = 0; j < props.width; j++) {
+//       if (puzzle.userGrid[i][j] === '-1' && solution.value[i][j] === '1') {
+//         errors++;
+//       } else if (puzzle.userGrid[i][j] === '1' && solution.value[i][j] === '0') {
+//         errors++;
+//       }
+//     }
+//   }
+//   return errors;
+// }
 
 function onKeyPressed(direction, groupIndex, keyIndex, isPressed) {
   // console.log(`puzzle detected key press: ${direction} ${groupIndex} ${keyIndex}`);
@@ -299,7 +298,7 @@ function onKeyboardDown(e) {
 </template>
 
 <style lang="scss">
-@import '~/assets/styles/variables.scss';
+@use '~/assets/styles/variables';
 
 .puzzle-container {
   box-sizing: border-box;
@@ -308,7 +307,7 @@ function onKeyboardDown(e) {
   line-height: calc(v-bind('cellSizeString') - 2px);
   font-size: v-bind('fontSizeString');
   border-collapse: collapse;
-  color: $grid-border;
+  color: variables.$grid-border;
   // gap: 1px;
 }
 
@@ -316,9 +315,9 @@ function onKeyboardDown(e) {
   box-sizing: border-box;
   grid-area: 2 / 2;
   border-collapse: collapse;
-  background-color: $grid-border;
+  background-color: variables.$grid-border;
 
-  border: $thick-border;
+  border: variables.$thick-border;
 
   display: grid;
   grid-template-rows: repeat(v-bind('props.height'), v-bind('cellSizeString'));
@@ -330,15 +329,15 @@ function onKeyboardDown(e) {
     position: relative;
 
     &:not(.last-row) {
-      border-bottom: $thin-border;
+      border-bottom: variables.$thin-border;
     }
 
     &:not(.last-col) {
-      border-right: $thin-border;
+      border-right: variables.$thin-border;
     }
 
     &:hover {
-      background-color: $grid-hover;
+      background-color: variables.$grid-hover;
     }
   }
 }
@@ -355,7 +354,7 @@ function onKeyboardDown(e) {
   box-sizing: border-box;
   display: block;
   position: absolute;
-  background-color: $grid-border;
+  background-color: variables.$grid-border;
   width: 100%;
   height: 100%;
   content: '';
@@ -382,13 +381,13 @@ function onKeyboardDown(e) {
 
 div.five-row {
   &:not(.last-row) {
-    border-bottom: $thick-border;
+    border-bottom: variables.$thick-border;
   }
 }
 
 div.five-col {
   &:not(.last-col) {
-    border-right: $thick-border;
+    border-right: variables.$thick-border;
   }
 }
 
