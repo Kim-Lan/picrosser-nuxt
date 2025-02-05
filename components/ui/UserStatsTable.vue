@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({
+defineProps({
   currentStats: {
     type: Object,
     default: null
@@ -10,12 +10,7 @@ const props = defineProps({
   }
 });
 
-// onBeforeMount(() => fetchUserStats());
-
 const SIZES = ['5x5', '10x10', '15x15', '20x20', '25x25'];
-
-// const currentStats = ref(null);
-// const recordStats = ref(null);
 
 const statTableHeaders = [
   {
@@ -35,15 +30,6 @@ const statTableHeaders = [
     children: [ { title: 'Single' }, { title: 'Mean of 3' }, { title: 'Average of 5' }, { title: 'Average of 12' }]
   },
 ];
-
-// async function fetchUserStats() {
-//   const { data, error } = await useFetch('/api/user/getUserStats', {
-//     method: 'GET',
-//     query: { username: props.username }
-//   });
-//   currentStats.value = data.value.currentStats;
-//   recordStats.value = data.value.recordStats;
-// }
 
 </script>
 

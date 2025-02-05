@@ -1,7 +1,6 @@
-import mongoose from 'mongoose';
-import { Attempt } from '~/server/models/Attempt';
-import { Puzzle } from '~/server/models/Puzzle'
-import { arraySum, minArray, maxArray } from '~/server/utils/arrayHelpers';
+import mongoose from 'mongoose'
+import { Attempt } from '~/server/models/Attempt'
+import { arraySum, minArray, maxArray } from '~/server/utils/arrayHelpers'
 const { Schema, model } = mongoose;
 
 export interface UserDocument extends Document {
@@ -155,7 +154,7 @@ const UserSchema = new Schema({
         const lastThreeTimes = await this.getRecentTimes(3, height, width);
         if (lastThreeTimes.length === 3) {
           meanOfThree = Math.floor(arraySum(lastThreeTimes) / 3);
-          console.log(`mean of three: ${meanOfThree}`);
+          // console.log(`mean of three: ${meanOfThree}`);
           const recordMeanOfThree = this.recordStats[dimensions].meanOfThree;
           if (!recordMeanOfThree) {
             this.recordStats[dimensions].meanOfThree = meanOfThree;
@@ -174,9 +173,9 @@ const UserSchema = new Schema({
           lastFiveTimes.splice(minIndex, 1);
           const maxIndex = lastFiveTimes.indexOf(maxArray(lastFiveTimes));
           lastFiveTimes.splice(maxIndex, 1);
-          console.log(lastFiveTimes);
+          // console.log(lastFiveTimes);
           averageOfFive = Math.floor(arraySum(lastFiveTimes) / 3);
-          console.log(`average of five: ${averageOfFive}`);
+          // console.log(`average of five: ${averageOfFive}`);
 
           const recordAverageOfFive = this.recordStats[dimensions].averageOfFive;
           if (!recordAverageOfFive) {
@@ -196,9 +195,9 @@ const UserSchema = new Schema({
           lastTwelveTimes.splice(minIndex, 1);
           const maxIndex = lastTwelveTimes.indexOf(maxArray(lastTwelveTimes));
           lastTwelveTimes.splice(maxIndex, 1);
-          console.log(lastTwelveTimes);
+          // console.log(lastTwelveTimes);
           averageOfTwelve = Math.floor(arraySum(lastTwelveTimes) / 10);
-          console.log(`average of twelve: ${averageOfTwelve}`);
+          // console.log(`average of twelve: ${averageOfTwelve}`);
 
           const recordAverageOfTwelve = this.recordStats[dimensions].averageOfTwelve;
           if (!recordAverageOfTwelve) {
@@ -227,7 +226,6 @@ const UserSchema = new Schema({
         }
         i++;
       }
-      console.log(recent);
       return recent;
     }
   }
