@@ -25,7 +25,3 @@ logs
 
 server/modules
 server/generate/test.non
-server/generate/JSON
-server/generate/id_list.txt
-server/generate/index.txt
-server/generate/example.non
